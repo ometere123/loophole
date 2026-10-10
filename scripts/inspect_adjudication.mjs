@@ -18,16 +18,38 @@ async function rpc(method, params) {
   return body.result;
 }
 
+async function probe(method, params) {
+  try {
+    return {supported: true, result: await rpc(method, params)};
+  } catch (error) {
+    return {supported: false, error: String(error)};
+  }
+}
+
+const diagnostics = [
+  ['gen_getTransactionReceipt', hash => [hash]],
+  ['gen_getTransactionStatus', hash => [hash]],
+  ['gen_getConsensusData', hash => [hash]],
+  ['gen_getTransactionFee', hash => [hash]],
+  ['gen_getTransactionFees', hash => [hash]],
+  ['gen_getTransactionData', hash => [hash]],
+  ['gen_getTransactionAllData', hash => [hash]],
+  ['gen_getTransactionExecution', hash => [hash]],
+  ['gen_getTransactionLogs', hash => [hash]],
+  ['gen_getTransactionHistory', hash => [hash]],
+  ['gen_getTransactionLifecycle', hash => [hash]],
+  ['gen_dbg_traceTransaction', hash => [hash]],
+];
+
 const chainId = await rpc('eth_chainId', []);
 const rows = [];
 for (const hash of hashes) {
   const receipt = await rpc('eth_getTransactionByHash', [hash]);
   if (!receipt) throw new Error(`transaction not found: ${hash}`);
-  let trace;
-  try {
-    trace = await rpc('gen_dbg_traceTransaction', [hash]);
-  } catch (error) {
-    trace = {unavailable: String(error)};
+  const evmReceipt = await probe('eth_getTransactionReceipt', [hash]);
+  const lifecycle = {};
+  for (const [method, params] of diagnostics) {
+    lifecycle[method] = await probe(method, params(hash));
   }
   rows.push({
     hash,
@@ -46,7 +68,8 @@ for (const hash of hashes) {
     triggered_transactions: receipt.triggered_transactions ?? [],
     value_credited: receipt.value_credited ?? false,
     consensus_error: receipt.consensus_data?.error ?? null,
-    trace,
+    evm_receipt: evmReceipt,
+    lifecycle_diagnostics: lifecycle,
   });
 }
 console.log(JSON.stringify({rpc: rpcUrl, rows}, null, 2));
