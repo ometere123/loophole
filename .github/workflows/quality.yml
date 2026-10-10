@@ -22,6 +22,8 @@ jobs:
       - name: Run protocol state-machine tests
         run: python -m pytest tests/test_protocol.py -m "not direct" -q
       - name: Run GenVM Direct Mode tests
+        env:
+          GENVM_GITHUB_TOKEN: ${{ github.token }}
         run: python -m pytest tests/direct -m direct -q
       - name: Run source invariants
         run: python scripts/preflight.py

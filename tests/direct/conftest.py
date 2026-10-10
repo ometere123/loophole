@@ -25,9 +25,17 @@ CACHE = Path.home() / ".cache" / "gltest-direct"
 METADATA = CACHE / f"genvm-{VERSION}.json"
 
 
+def _github_headers(accept: str = "application/vnd.github+json") -> dict[str, str]:
+    headers = {"Accept": accept, "User-Agent": "loophole-direct-mode"}
+    token = os.environ.get("GENVM_GITHUB_TOKEN") or os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    return headers
+
+
 def _release_asset() -> dict:
     url = f"https://api.github.com/repos/genlayerlabs/genvm/releases/tags/{VERSION}"
-    request = urllib.request.Request(url, headers={"Accept": "application/vnd.github+json", "User-Agent": "loophole-direct-mode"})
+    request = urllib.request.Request(url, headers=_github_headers())
     with urllib.request.urlopen(request, timeout=30) as response:
         release = json.loads(response.read().decode("utf-8"))
     for asset in release.get("assets", []):
@@ -50,21 +58,34 @@ def _download_artifacts(version: str) -> Path:
     CACHE.mkdir(parents=True, exist_ok=True)
     asset = _release_asset()
     expected = str(asset.get("digest", "")).removeprefix("sha256:")
-    if len(expected) != 64:
+    size = asset.get("size")
+    if len(expected) != 64 or any(c not in "0123456789abcdefABCDEF" for c in expected):
         raise RuntimeError(f"GenVM release {VERSION} did not publish a SHA-256 digest for {ASSET}")
     destination = CACHE / f"genvm-universal-{VERSION}.tar.xz"
-    if destination.exists() and _sha256(destination) != expected:
-        destination.unlink()
-    if not destination.exists():
-        request = urllib.request.Request(asset["browser_download_url"], headers={"User-Agent": "loophole-direct-mode"})
+    metadata = None
+    if METADATA.exists():
+        try:
+            metadata = json.loads(METADATA.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            metadata = None
+    cache_matches = (
+        destination.exists()
+        and metadata == {"version": VERSION, "asset": ASSET, "sha256": expected, "size": size}
+        and _sha256(destination) == expected
+    )
+    if not cache_matches:
+        destination.unlink(missing_ok=True)
+        METADATA.unlink(missing_ok=True)
+        request = urllib.request.Request(asset["url"], headers=_github_headers("application/octet-stream"))
         temporary = destination.with_suffix(destination.suffix + ".download")
+        temporary.unlink(missing_ok=True)
         with urllib.request.urlopen(request, timeout=600) as response, temporary.open("wb") as stream:
             shutil.copyfileobj(response, stream, length=1024 * 1024)
-        if _sha256(temporary) != expected:
+        if (size is not None and temporary.stat().st_size != int(size)) or _sha256(temporary) != expected:
             temporary.unlink(missing_ok=True)
             raise RuntimeError(f"SHA-256 mismatch for GenVM {VERSION} {ASSET}")
         temporary.replace(destination)
-    METADATA.write_text(json.dumps({"version": VERSION, "asset": ASSET, "sha256": expected, "size": asset.get("size")}, indent=2) + "\n", encoding="utf-8")
+    METADATA.write_text(json.dumps({"version": VERSION, "asset": ASSET, "sha256": expected, "size": size}, indent=2) + "\n", encoding="utf-8")
     return destination
 
 
