@@ -24,6 +24,9 @@ if "emit(on='finalized')" not in s or "emit(on='finalized')" not in j:errors.app
 if 'genlayer-js' not in (root/'frontend/package.json').read_text(): errors.append('Missing GenLayerJS')
 if json.loads((root/'package.json').read_text())['devDependencies']['genlayer']!='0.39.1':errors.append('Incorrect CLI pin')
 if 'window.ethereum' not in (root/'frontend/src/lib/genlayer.ts').read_text():errors.append('Missing injected wallet')
+wallet_source=(root/'frontend/src/lib/genlayer.ts').read_text()
+if "client.connect('studionet')" in wallet_source:errors.append('Wallet writes must not use the SDK extension connection helper')
+if 'wallet_getSnaps' in wallet_source or 'wallet_requestSnaps' in wallet_source:errors.append('Unsupported wallet extension API in frontend')
 for path in ('frontend/src/app/page.tsx','frontend/src/app/create/page.tsx','frontend/src/app/profile/page.tsx','frontend/src/app/challenge/[id]/page.tsx','frontend/src/app/globals.css'):
     if not (root/path).exists():errors.append(f'Missing frontend {path}')
 for directory in (root/'frontend',):

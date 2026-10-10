@@ -32,7 +32,10 @@ export async function writeVault(method:string,args:unknown[],value:bigint|undef
  if(state.account.toLowerCase()!==address.toLowerCase())throw new Error('Wallet changed. Reconnect before signing.');
  const client=createClient({chain:studionet,account:address as `0x${string}`,provider:window.ethereum as any});
  // Stable Studionet uses the GenLayerJS 1.1.x write API. Deliberately no 61997 fee API here.
- await (client as any).connect('studionet');
+ // Do not call client.connect(): genlayer-js 1.1.8 routes that helper through
+ // an optional wallet-extension API. The chain is already selected and
+ // checked above, so writeContract can use the injected EIP-1193 provider
+ // directly through eth_sendTransaction.
  const tx={address:addr,functionName:method,args:args as CalldataEncodable[],value:value??0n};
   onUpdate({phase:'awaiting_wallet',title:method});
  const hash=await client.writeContract(tx);
