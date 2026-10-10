@@ -1,0 +1,5 @@
+'use client';
+import Link from 'next/link';import {AlertTriangle,Loader2,RefreshCw,Sparkles} from 'lucide-react';
+export function Loading({message='Fetching finalized chain state…'}:{message?:string}){return <div className="state-panel"><span className="state-graphic loading-graphic"><Loader2 size={38}/></span><h3>Reading the rulebook</h3><p>{message}</p></div>}
+export function ErrorState({message,retry}:{message:string;retry?:()=>void}){return <div className="state-panel"><span className="state-graphic">🫠</span><h3>We hit a little snag</h3><p>{message}</p>{retry&&<button onClick={retry} className="button button-outline"><RefreshCw size={17}/> Try again</button>}</div>}
+export function EmptyState({title='No challenges here yet',description='The playground is waiting for its first rule-breaker.',create=true}:{title?:string;description?:string;create?:boolean}){return <div className="state-panel"><span className="state-graphic">🪄</span><h3>{title}</h3><p>{description}</p>{create&&<Link href="/create" className="button button-dark"><Sparkles size={16}/> Start a challenge</Link>}</div>}

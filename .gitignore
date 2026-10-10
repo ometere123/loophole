@@ -1,0 +1,15 @@
+node_modules/
+.next/
+.env
+.env.local
+__pycache__/
+.pytest_cache/
+*.pyc
+*.pyo
+.venv/
+*.egg-info/
+.coverage
+artifacts/
+deployments.local.json
+.DS_Store
+*.tsbuildinfo

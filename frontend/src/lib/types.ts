@@ -1,0 +1,21 @@
+export type ChallengeStatus = 'OPEN' | 'WON' | 'REFUNDED';
+export type AttemptStatus = 'COMMITTED' | 'REVEALED' | 'REVIEWING' | 'INVALID_PENDING' | 'APPEAL_REVIEWING' | 'DECIDED' | 'EXPIRED' | 'FORFEITED' | 'RELEASED';
+export type Verdict = 'VALID' | 'INVALID' | 'INCONCLUSIVE' | '';
+export type Category = 'COMMUNITY' | 'CONTENT' | 'REFERRAL' | 'GOVERNANCE' | 'OTHER';
+export type Challenge = {
+  id: string; organizer: string; title: string; goal: string; rule: string;
+  limitations: string; category: Category; prize_wei: string; bond_wei: string;
+  created_at: number; ends_at: number; status: ChallengeStatus; winner: string;
+  winner_attempt: string; active_attempt: string; active_round: string;
+  review_started: number; attempts: string[];
+};
+export type Attempt = {
+  id: string; challenge_id: string; challenger: string; commitment: string;
+  status: AttemptStatus; bond_wei: string; committed_at: number; revealed_at: number;
+  scenario: string; rule_quote: string; impact: string; verdict: Verdict;
+  reason: string; letter: boolean; purpose: boolean; feasible: boolean;
+};
+export type VaultConfig = {judge: string;chain:string;challenge_count:string;attempt_count:string;withdrawal_count:string;total_credit_wei:string;total_locked_wei:string};
+export type TxPhase = 'idle' | 'awaiting_wallet' | 'submitted' | 'accepted' | 'finalized' | 'execution_failed' | 'unknown' | 'rejected';
+export type TxInfo = {phase: TxPhase; hash?: string; title?: string; error?: string};
+export type CommitmentBackup = { challengeId: string; address: string; salt: string; scenario: string; ruleQuote: string; impact: string; commitment: string; savedAt: number };

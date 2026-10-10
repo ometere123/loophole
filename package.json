@@ -1,0 +1,10 @@
+{
+  "name": "loophole", "version": "1.0.0", "private": true,
+  "scripts": {
+    "dev": "npm --prefix frontend run dev", "build": "npm --prefix frontend run build",
+    "test": "python -m pytest -q tests", "typecheck": "npm --prefix frontend run typecheck",
+    "cli": "genlayer", "contract:lint": "genvm-lint check contracts/RuleVault.py && genvm-lint check contracts/GapJudge.py",
+    "preflight": "python scripts/preflight.py"
+  },
+  "devDependencies": {"genlayer": "0.39.1"}
+}

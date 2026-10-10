@@ -1,0 +1,39 @@
+name: Loophole quality gates
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install contract verification tools
+        run: pip install -r requirements.txt
+      - name: Run real GenVM lint
+        run: |
+          genvm-lint check contracts/RuleVault.py
+          genvm-lint check contracts/GapJudge.py
+      - name: Compile Python
+        run: python -m py_compile contracts/*.py
+      - name: Run protocol state-machine tests
+        run: python -m pytest tests/ -q
+      - name: Run source invariants
+        run: python scripts/preflight.py
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Install dependencies (repo-local CLI only)
+        run: npm install --no-audit --no-fund && npm --prefix frontend install --no-audit --no-fund
+      - name: Enforce local CLI version
+        run: node -e "const p=require('./node_modules/genlayer/package.json');if(p.version!=='0.39.1')process.exit(1)"
+      - name: Type-check
+        run: npm --prefix frontend run typecheck
+      - name: Build frontend
+        run: npm --prefix frontend run build

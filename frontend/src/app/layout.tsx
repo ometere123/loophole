@@ -1,0 +1,3 @@
+import type {Metadata} from 'next';import './globals.css';import {Providers} from '@/components/Providers';import {Header} from '@/components/Header';import {Footer} from '@/components/Footer';
+export const metadata:Metadata={title:{default:'Loophole! — Find the flaw. Claim the prize.',template:'%s · Loophole!'},description:'Fund better community rules. Discover loopholes. Earn GEN through independent GenLayer consensus.',openGraph:{title:'Loophole!',description:'Break the rules before the rules break you.',type:'website'}};
+export default function Layout({children}:{children:React.ReactNode}){return <html lang="en"><body><Providers><Header/><main id="main">{children}</main><Footer/></Providers></body></html>}
