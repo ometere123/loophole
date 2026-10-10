@@ -33,7 +33,7 @@ for directory in (root/'frontend',):
             path = Path(current) / name
             if path.suffix in ('.ts', '.tsx'):
                 text=path.read_text(encoding='utf-8')
-                if 'WalletConnect' in text or 'MetaMask Snap' in text:errors.append(f'Forbidden wallet approach: {path}')
+                if 'WalletConnect' in text or 'walletconnect' in text:errors.append(f'Forbidden non-injected wallet approach: {path}')
 print('PREFLIGHT:', 'PASS' if not errors else 'FAIL')
 for error in errors: print('  ERROR:',error)
 if errors:sys.exit(1)

@@ -6,7 +6,7 @@ The **RuleVault** contract escrows challenge prizes and challenger bonds, holds 
 
 ## Quick start
 
-Requirements: Node 22+, Python 3.12+, an injected EIP-1193 wallet, local GenLayer CLI wallet configured/funded on Studionet. The CLI is **repository-local `genlayer@0.39.1`**, never a global or `npx` latest installation. No WalletConnect, Snaps, Docker requirement or signing backend.
+Requirements: Node 22+, Python 3.12+, an injected EIP-1193 wallet, local GenLayer CLI wallet configured/funded on Studionet. The CLI is **repository-local `genlayer@0.39.1`**, never a global or `npx` latest installation. Wallet access is exclusively through the injected provider; there is no hosted signing backend.
 
 ```bash
 npm install
