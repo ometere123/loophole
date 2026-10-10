@@ -23,6 +23,13 @@ export async function fetchWithdrawal(id:string){return parseRecord<Record<strin
 export async function fetchWithdrawals(count:number){const out:Record<string,string|number>[]=[];for(let end=count;end>0;end=Math.max(0,end-24)){const page=parseRecord<string[]>(await readVault('get_withdrawals_page',[BigInt(end),BigInt(Math.min(24,end))]))||[];out.push(...page.map(item=>JSON.parse(item) as Record<string,string|number>));}return out;}
 export async function fetchChallenges():Promise<Challenge[]>{const cfg=await fetchConfig();const count=Number(cfg?.challenge_count||0);if(count===0)return[];const out:Challenge[]=[];for(let upper=count;upper>0;upper-=24){const raw=await readVault('get_challenges_page',[BigInt(upper),24n]);const page=JSON.parse(String(raw)) as string[];out.push(...page.map(item=>JSON.parse(item) as Challenge));}return out;}
 export async function fetchAttempts(ids:string[]):Promise<Attempt[]>{const out=await Promise.all(ids.map(i=>fetchAttempt(i).catch(()=>null)));return out.filter((x):x is Attempt=>!!x);}
+type ReceiptExecutionEvidence={execution_result?:string;result?:{status?:string}};
+function hasSuccessfulExecution(receipt:GenLayerTransaction):boolean{
+  if(receipt.txExecutionResultName)return receipt.txExecutionResultName===ExecutionResult.FINISHED_WITH_RETURN;
+  const raw=receipt as GenLayerTransaction & {consensus_data?:{leader_receipt?:ReceiptExecutionEvidence[]};leader_receipt?:ReceiptExecutionEvidence[]};
+  const leader=raw.consensus_data?.leader_receipt?.[0]??raw.leader_receipt?.[0];
+  return leader?.execution_result==='SUCCESS'&&leader.result?.status==='return';
+}
 export async function connectWallet():Promise<string>{const provider=window.ethereum;if(!provider)throw new Error('No injected wallet detected. Install an EIP-1193 wallet extension.');const accounts=await provider.request({method:'eth_requestAccounts'}) as string[];if(!accounts?.[0])throw new Error('Wallet did not provide an account.');return accounts[0];}
 export async function getWalletState():Promise<{account:string;chain:number}>{if(typeof window==='undefined'||!window.ethereum)return {account:'',chain:0};const [accounts,chain]=await Promise.all([window.ethereum.request({method:'eth_accounts'}),window.ethereum.request({method:'eth_chainId'})]) as [string[],string];return {account:accounts?.[0]||'',chain:parseInt(chain,16)};}
 export async function switchStudionet(){if(!window.ethereum)throw new Error('An injected wallet is required.');try{await window.ethereum.request({method:'wallet_switchEthereumChain',params:[{chainId:'0xf22f'}]});}catch(e:any){if(e?.code!==4902)throw e;await window.ethereum.request({method:'wallet_addEthereumChain',params:[{chainId:'0xf22f',chainName:'GenLayer Studionet',nativeCurrency:{name:'GEN',symbol:'GEN',decimals:18},rpcUrls:['https://studio.genlayer.com/api'],blockExplorerUrls:['https://explorer-studio.genlayer.com']}]});}}
@@ -44,7 +51,7 @@ export async function writeVault(method:string,args:unknown[],value:bigint|undef
  try{
    const receipt:GenLayerTransaction=await readClient.waitForTransactionReceipt({hash,status:TransactionStatus.FINALIZED});
    const outcome=receipt.txExecutionResultName;
-   if(outcome!==ExecutionResult.FINISHED_WITH_RETURN){
+   if(!hasSuccessfulExecution(receipt)){
      onUpdate({phase:'execution_failed',hash,title:method,error:`Finalized, but execution was not verified successful (${outcome||'unknown'}).`});
      throw new Error(`Execution was not verified: ${outcome||'unknown'}`);
    }
