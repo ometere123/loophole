@@ -1,0 +1,11 @@
+{
+  "transaction_hash": "0x59704b14f04d1b18f618e4ab9f76f4e52597eb23fd0963ba66e4250b2212b3bc",
+  "source_available_in_rpc": true,
+  "expected_source_bytes": 2056,
+  "expected_source_sha256": "690c94f299915de02e5b0de604df03bb672d5980063c41aa1f2fd48616da48b3",
+  "signed_rollup_bytes": 2381,
+  "source_offset": 237,
+  "exact_source_match": true,
+  "submitted_source_sha256": "690c94f299915de02e5b0de604df03bb672d5980063c41aa1f2fd48616da48b3",
+  "submitted_source_bytes": 2056
+}

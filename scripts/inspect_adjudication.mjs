@@ -62,6 +62,7 @@ for (const hash of hashes) {
   }
   rows.push({
     hash,
+    transaction: receipt,
     chain_id: chainId,
     from: receipt.from_address,
     to: receipt.to_address,

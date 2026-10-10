@@ -17,8 +17,11 @@ jobs:
         run: |
           GENVM_VERSION=v0.3.0-rc7 genvm-lint check contracts/RuleVault.py
           GENVM_VERSION=v0.3.0-rc7 genvm-lint check contracts/GapJudge.py
+          GENVM_VERSION=v0.3.0-rc7 genvm-lint check diagnostics/AdjudicationProbe.py
       - name: Compile Python
-        run: python -m py_compile contracts/*.py
+        run: python -m py_compile contracts/*.py diagnostics/*.py scripts/*.py
+      - name: Validate GenVM runner headers
+        run: python scripts/validate_runner_headers.py
       - name: Run protocol state-machine tests
         run: python -m pytest tests/test_protocol.py -m "not direct" -q
       - name: Run GenVM Direct Mode tests
