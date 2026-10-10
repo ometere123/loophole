@@ -11,6 +11,8 @@
   "bind_tx": "0x43eaaf452fc79998b2277e00aa291f235c18e1789df50ae50d68628e98e225e5",
   "binding_verified": true,
   "finality_verified": true,
+  "source_correspondence_verified": true,
+  "source_verification_method": "genlayer code at each canonical address; endpoint trailing blank lines normalized before SHA-256",
   "economic_lifecycle_verified": false,
   "source_sha256": {
     "GapJudge.py": "747e44975d6a3a7d56cf04c3575bb54f675d8cda776b1231dcddcc7b99ac853d",

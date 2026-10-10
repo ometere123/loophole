@@ -4,11 +4,12 @@ import json
 
 
 def _payload(vm, address):
+    from genlayer.py.types import Address
     salt = 'direct-salt-1234'
     scenario = 'I will publish a qualifying example that satisfies the exact written word-count rule.'
     quote = 'Every member who publishes a post of at least 100 words'
     impact = 'The qualifying post defeats the objective by rewarding mechanically repeated engagement.'
-    raw = '|'.join(['1', str(address).lower(), salt, scenario, quote, impact])
+    raw = '|'.join(['1', Address(address).as_hex.lower(), salt, scenario, quote, impact])
     return hashlib.sha256(raw.encode()).hexdigest(), (salt, scenario, quote, impact)
 
 
@@ -33,10 +34,13 @@ def test_rulevault_direct_create_commit_reveal(direct_vm, direct_deploy, direct_
     assert len(attempt['evidence_hash']) == 64
 
 
-def test_rulevault_direct_rejects_wrong_chain_and_forged_reveal(direct_vm, direct_deploy, direct_owner, direct_alice, direct_bob):
+def test_rulevault_direct_rejects_wrong_chain(direct_vm, direct_deploy):
     direct_vm._chain_id = 61998
     with direct_vm.expect_revert('Studionet 61999'):
         direct_deploy('contracts/RuleVault.py', '0x' + 'a' * 40)
+
+
+def test_rulevault_direct_rejects_forged_reveal(direct_vm, direct_deploy, direct_owner, direct_alice, direct_bob):
     direct_vm._chain_id = 61999
     vault = direct_deploy('contracts/RuleVault.py', '0x' + 'a' * 40)
     direct_vm.sender = direct_owner
