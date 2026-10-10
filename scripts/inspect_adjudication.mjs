@@ -22,7 +22,16 @@ async function probe(method, params) {
   try {
     return {supported: true, result: await rpc(method, params)};
   } catch (error) {
-    return {supported: false, error: String(error)};
+    const message = String(error);
+    let category = 'error';
+    if (message.includes('Method not found') || message.includes('-32601')) {
+      category = 'unsupported';
+    } else if (message.includes('rate limit') || message.includes('-32029') || message.includes('429')) {
+      category = 'rate_limited';
+    } else if (message.includes('timeout') || message.includes('fetch failed') || message.includes('502') || message.includes('503') || message.includes('504')) {
+      category = 'temporary_failure';
+    }
+    return {supported: false, category, error: message};
   }
 }
 

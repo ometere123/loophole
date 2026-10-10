@@ -1,0 +1,126 @@
+{
+  "rpc": "https://studio.genlayer.com/api",
+  "rows": [
+    {
+      "hash": "0x59704b14f04d1b18f618e4ab9f76f4e52597eb23fd0963ba66e4250b2212b3bc",
+      "chain_id": "0xf22f",
+      "from": "0xB845a69860ba4CDf19CfDC5AfbAF2e20b6bE86b0",
+      "to": "0xFeA1FD981b420c797C4f87aA54C1995fe87547e3",
+      "status": "FINALIZED",
+      "result_name": "MAJORITY_AGREE",
+      "value": 0,
+      "gaslimit": 155,
+      "gas_used": 0,
+      "leader_execution": "ERROR",
+      "votes": {
+        "0x03D58A4DeF6fDFc032A56374785a5F571D07Bc11": "agree",
+        "0x36728d2a123aB444E603EE5b2ad17d18Bb193557": "idle",
+        "0x76c25AFC12c75485703cCFfd0083AA6201455B25": "agree",
+        "0x772ffCd1dF6Cc566eC4b8d3f4F4f8eBbb6B36C84": "idle",
+        "0xec2Fb79cd12255Eb34886CEd7332f27B98DEe658": "agree"
+      },
+      "validator_count": 4,
+      "triggered_by": null,
+      "triggered_transactions": [],
+      "value_credited": false,
+      "consensus_error": null,
+      "evm_receipt": {
+        "supported": true,
+        "result": {
+          "transactionHash": "0x59704b14f04d1b18f618e4ab9f76f4e52597eb23fd0963ba66e4250b2212b3bc",
+          "transactionIndex": "0x0",
+          "blockHash": "0x59704b14f04d1b18f618e4ab9f76f4e52597eb23fd0963ba66e4250b2212b3bc",
+          "blockNumber": "0x0",
+          "from": "0xB845a69860ba4CDf19CfDC5AfbAF2e20b6bE86b0",
+          "to": "0xFeA1FD981b420c797C4f87aA54C1995fe87547e3",
+          "cumulativeGasUsed": "0x7a1200",
+          "gasUsed": "0x7a1200",
+          "effectiveGasPrice": "0x0",
+          "type": "0x0",
+          "contractAddress": null,
+          "logs": [
+            {
+              "address": "0xFeA1FD981b420c797C4f87aA54C1995fe87547e3",
+              "topics": [
+                "0xdab9102861c7483a187584d6371d88316f005af507982ccf95c110879f3ed5a5",
+                "0x59704b14f04d1b18f618e4ab9f76f4e52597eb23fd0963ba66e4250b2212b3bc",
+                "0x000000000000000000000000FeA1FD981b420c797C4f87aA54C1995fe87547e3",
+                "0x000000000000000000000000B845a69860ba4CDf19CfDC5AfbAF2e20b6bE86b0"
+              ],
+              "data": "0x",
+              "blockNumber": 0,
+              "transactionHash": "0x59704b14f04d1b18f618e4ab9f76f4e52597eb23fd0963ba66e4250b2212b3bc",
+              "transactionIndex": 0,
+              "blockHash": "0x59704b14f04d1b18f618e4ab9f76f4e52597eb23fd0963ba66e4250b2212b3bc",
+              "logIndex": 0,
+              "removed": false
+            }
+          ],
+          "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "status": "0x1"
+        }
+      },
+      "lifecycle_diagnostics": {
+        "gen_getTransactionReceipt": {
+          "supported": false,
+          "category": "unsupported",
+          "error": "Error: gen_getTransactionReceipt: -32601 Method not found: gen_getTransactionReceipt"
+        },
+        "gen_getTransactionStatus": {
+          "supported": true,
+          "result": "FINALIZED"
+        },
+        "gen_getConsensusData": {
+          "supported": false,
+          "category": "temporary_failure",
+          "error": "TypeError: fetch failed"
+        },
+        "gen_getTransactionFee": {
+          "supported": false,
+          "category": "unsupported",
+          "error": "Error: gen_getTransactionFee: -32601 Method not found: gen_getTransactionFee"
+        },
+        "gen_getTransactionFees": {
+          "supported": false,
+          "category": "unsupported",
+          "error": "Error: gen_getTransactionFees: -32601 Method not found: gen_getTransactionFees"
+        },
+        "gen_getTransactionData": {
+          "supported": false,
+          "category": "unsupported",
+          "error": "Error: gen_getTransactionData: -32601 Method not found: gen_getTransactionData"
+        },
+        "gen_getTransactionAllData": {
+          "supported": false,
+          "category": "unsupported",
+          "error": "Error: gen_getTransactionAllData: -32601 Method not found: gen_getTransactionAllData"
+        },
+        "gen_getTransactionExecution": {
+          "supported": false,
+          "category": "unsupported",
+          "error": "Error: gen_getTransactionExecution: -32601 Method not found: gen_getTransactionExecution"
+        },
+        "gen_getTransactionLogs": {
+          "supported": false,
+          "category": "unsupported",
+          "error": "Error: gen_getTransactionLogs: -32601 Method not found: gen_getTransactionLogs"
+        },
+        "gen_getTransactionHistory": {
+          "supported": false,
+          "category": "unsupported",
+          "error": "Error: gen_getTransactionHistory: -32601 Method not found: gen_getTransactionHistory"
+        },
+        "gen_getTransactionLifecycle": {
+          "supported": false,
+          "category": "unsupported",
+          "error": "Error: gen_getTransactionLifecycle: -32601 Method not found: gen_getTransactionLifecycle"
+        },
+        "gen_dbg_traceTransaction": {
+          "supported": false,
+          "category": "unsupported",
+          "error": "Error: gen_dbg_traceTransaction: -32601 Method not found: gen_dbg_traceTransaction"
+        }
+      }
+    }
+  ]
+}
