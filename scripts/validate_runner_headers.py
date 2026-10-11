@@ -13,7 +13,7 @@ HEADER = re.compile(r'^# \{ "Depends": "[^:]+:[^"]+" \}$')
 def main() -> int:
     paths = [Path(arg) for arg in sys.argv[1:]]
     if not paths:
-        paths = sorted(Path("contracts").glob("*.py")) + [Path("diagnostics/AdjudicationProbe.py")]
+        paths = sorted(Path("contracts").glob("*.py")) + sorted(Path("diagnostics").glob("*.py"))
     errors: list[str] = []
     for path in paths:
         lines = path.read_text(encoding="utf-8").splitlines()

@@ -6,4 +6,12 @@
 2. `trigger_judgment(prompt)` schedules the identical judgment through `emit(on='finalized')`.
 3. `trigger_ping()` schedules a deterministic finalized child without LLM execution.
 
+`CrossContractRelay.py` is a separate, prepared sender for the next approved
+differential. Its `trigger_probe(prompt)` emits the same `direct_judgment`
+call to the already deployed corrected probe at another contract address. A
+future live run therefore needs one zero-value relay deployment and one
+nonpayable trigger call, then independent inspection of the relay parent, the
+external probe child, and the probe state. It does not alter RuleVault,
+GapJudge, or either funded challenge.
+
 The probe is excluded from the production release. Its one approved zero-value deployment and the sequential `trigger_ping`, `direct_judgment`, and `trigger_judgment` runs are recorded in [`docs/ADJUDICATION_PROBE_2026-10-11.md`](../docs/ADJUDICATION_PROBE_2026-10-11.md). Any additional Studionet write, including a separate cross-contract reproduction, requires explicit approval. Use the smallest available transaction settings and wait for every result before submitting the next operation.
