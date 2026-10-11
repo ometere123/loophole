@@ -38,3 +38,14 @@ deployment:
 - State: `READY`, target `production`
 - Alias: [`https://loophole-one.vercel.app/`](https://loophole-one.vercel.app/)
 - Public verification: HTTP `200`, canonical contract addresses present, and the receipt/lifecycle reconciliation code present in the client bundle.
+
+## Read-only browser verification
+
+Using a separate preserved browser tab on 2026-10-11:
+
+- The public home page loaded its finalized chain statistics and exposed both active challenge links.
+- Search for `Hashtag` narrowed the list to challenge #2; the Community and Open-only filters remained usable.
+- The direct challenge route loaded the real RuleVault state for challenge #2, showing attempt #2 as awaiting the finalized judge callback.
+- `Start next review`, `Recover stalled review`, and `Refund unwon bounty` were visibly disabled while that review remained active, matching the five-day timeout protection.
+
+This was read-only browser verification. It did not claim wallet connection, transaction signing, adjudication completion, or payout delivery.
