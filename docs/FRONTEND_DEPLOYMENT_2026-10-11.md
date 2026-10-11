@@ -1,8 +1,10 @@
 # Frontend production deployment — 2026-10-11
 
 The restored Vercel project `delealufejoel-4184s-projects/loophole` was
-deployed from the verified repository commit that contains the diagnostic
-evidence, behavioral mutation tests, and lockfile remediation.
+deployed from verified repository commit
+[`b5305f7a0453a11f32de70ab99b82c2fc9e2b7ea`](https://github.com/ometere123/loophole/commit/b5305f7a0453a11f32de70ab99b82c2fc9e2b7ea),
+which contains the diagnostic evidence, behavioral mutation tests, and
+lockfile remediation.
 
 - Deployment: [`dpl_GyxiCjn3tD3343gF9i3XtLmiTZmh`](https://vercel.com/delealufejoel-4184s-projects/loophole/GyxiCjn3tD3343gF9i3XtLmiTZmh)
 - Production URL: [`https://loophole-one.vercel.app/`](https://loophole-one.vercel.app/)
