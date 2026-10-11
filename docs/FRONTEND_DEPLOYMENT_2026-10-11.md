@@ -2,11 +2,11 @@
 
 The restored Vercel project `delealufejoel-4184s-projects/loophole` was
 deployed from verified repository commit
-[`b5305f7a0453a11f32de70ab99b82c2fc9e2b7ea`](https://github.com/ometere123/loophole/commit/b5305f7a0453a11f32de70ab99b82c2fc9e2b7ea),
-which contains the diagnostic evidence, behavioral mutation tests, and
-lockfile remediation.
+[`abab7b7747711a01cb02467436eecae8cb735fea`](https://github.com/ometere123/loophole/commit/abab7b7747711a01cb02467436eecae8cb735fea),
+which contains the diagnostic evidence, behavioral mutation tests, lockfile
+remediation, and withdrawal delivery reconciliation.
 
-- Deployment: [`dpl_GyxiCjn3tD3343gF9i3XtLmiTZmh`](https://vercel.com/delealufejoel-4184s-projects/loophole/GyxiCjn3tD3343gF9i3XtLmiTZmh)
+- Deployment: [`dpl_DSvxqwdiwEyMwJNy75kTtAx1AHQf`](https://vercel.com/delealufejoel-4184s-projects/loophole/DSvxqwdiwEyMwJNy75kTtAx1AHQf)
 - Production URL: [`https://loophole-one.vercel.app/`](https://loophole-one.vercel.app/)
 - Deployment state: `READY`, target `production`
 - Anonymous HTTP verification: `200 OK`
