@@ -32,7 +32,7 @@ Please correlate the two child hashes with worker logs and return, for each tran
 6. whether the transaction was reset after a stale claim or worker restart;
 7. the first causal failure before the final `max_recovery_cycles_exceeded` record.
 
-The public RPC does not expose these fields. The repository does not infer them from empty final votes.
+The public RPC does not expose these fields. The repository does not infer them from empty final votes. A fresh read-only inspection on 2026-10-11 reconfirmed the same result and recorded the supported/unsupported method classification in [`evidence/studionet-adjudication-rpc-rerun-2026-10-11.json`](evidence/studionet-adjudication-rpc-rerun-2026-10-11.json).
 
 ## Isolated control result
 
