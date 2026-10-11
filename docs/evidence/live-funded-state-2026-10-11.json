@@ -1,9 +1,9 @@
 {
-  "observed_at": "2026-10-11T05:53:41.226Z",
+  "observed_at": "2026-10-11T06:06:18.822Z",
   "rpc": "https://studio.genlayer.com/api",
   "chain_id": "0xf22f",
-  "contract": "0xa77A29C96c30B2A5dB865a2CE35c8F396d504F26",
-  "now_unix": 1791698021,
+  "vault": "0xa77A29C96c30B2A5dB865a2CE35c8F396d504F26",
+  "now_unix": 1791698773,
   "config": {
     "attempt_count": "2",
     "chain": "61999",
@@ -20,6 +20,7 @@
   },
   "challenges": [
     {
+      "id": "1",
       "challenge": {
         "active_attempt": "1",
         "active_round": "1",
@@ -69,9 +70,11 @@
         }
       ],
       "review_timeout_at": 1792086064,
-      "timeout_elapsed": false
+      "timeout_elapsed": false,
+      "recovery_eligible": false
     },
     {
+      "id": "2",
       "challenge": {
         "active_attempt": "2",
         "active_round": "1",
@@ -121,8 +124,11 @@
         }
       ],
       "review_timeout_at": 1792088418,
-      "timeout_elapsed": false
+      "timeout_elapsed": false,
+      "recovery_eligible": false
     }
   ],
-  "interpretation": "Read-only finalized RuleVault state. Both live reviews remain active and below the five-day recovery timeout; no recovery, refund, callback, or withdrawal was submitted by this check."
+  "recovery_candidates": [],
+  "write_submitted": false,
+  "interpretation": "Read-only finalized RuleVault state. A recovery candidate is reported only when the challenge is OPEN, has an active attempt, and its five-day review timeout has elapsed."
 }
