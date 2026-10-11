@@ -14,6 +14,14 @@ inspection of the relay parent, external probe child, source and state is in
 [`docs/evidence/cross-contract-relay-2026-10-11.json`](../docs/evidence/cross-contract-relay-2026-10-11.json).
 It does not alter RuleVault, GapJudge, or either funded challenge.
 
+`DirectGapJudgeWorkloadProbe.py` is the next isolated differential. It reads a
+frozen review from a configured RuleVault and runs the production-sized
+GapJudge assessment from a wallet-submitted transaction. Its
+`adjudicate_fixture` entry point exists only for local Direct Mode because the
+Direct Mode runner has no cross-contract view backend. The probe has no payout
+path and never writes to the production vault. Its deployment and live
+adjudication require explicit approval after the local tests pass.
+
 These diagnostics are excluded from the production release. The probe and
 relay records, including the sequential probe controls and authenticated relay
 ancestry, are recorded in [`docs/ADJUDICATION_PROBE_2026-10-11.md`](../docs/ADJUDICATION_PROBE_2026-10-11.md).

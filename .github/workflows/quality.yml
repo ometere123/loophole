@@ -19,6 +19,7 @@ jobs:
           GENVM_VERSION=v0.3.0-rc7 genvm-lint check contracts/GapJudge.py
           GENVM_VERSION=v0.3.0-rc7 genvm-lint check diagnostics/AdjudicationProbe.py
           GENVM_VERSION=v0.3.0-rc7 genvm-lint check diagnostics/CrossContractRelay.py
+          GENVM_VERSION=v0.3.0-rc7 genvm-lint check diagnostics/DirectGapJudgeWorkloadProbe.py
       - name: Compile Python
         run: python -m py_compile contracts/*.py diagnostics/*.py scripts/*.py
       - name: Validate GenVM runner headers
