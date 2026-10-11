@@ -76,8 +76,8 @@ self-contradiction, or absent material harm means no VALID loophole.
 Use INCONCLUSIVE when the frozen policy lacks information needed to decide;
 INVALID when an express requirement fails or the claim is unsupported.
 VALID requires all three booleans true. Return ONLY a compact JSON object:
-{"verdict":"VALID|INVALID|INCONCLUSIVE","letter":true,
-"purpose":true,"feasible":true,"reason":"specific concise finding, max 320 characters"}
+{"verdict":"VALID|INVALID|INCONCLUSIVE","letter":true,"purpose":true,
+"feasible":true,"reason":"specific concise finding, max 320 characters"}
 DATA_START
 ''' + evidence + '\nDATA_END', response_format='json')
             try:
@@ -131,23 +131,6 @@ DATA_START
     def adjudicate_frozen_review(self, challenge_id: u256, attempt_id: u256, round_id: u256) -> None:
         key = str(int(challenge_id)) + ':' + str(int(attempt_id)) + ':' + str(int(round_id))
         self._record(key, self._read_frozen(challenge_id, attempt_id, round_id))
-
-    @gl.public.write
-    def adjudicate_fixture(self, challenge_id: u256, attempt_id: u256, round_id: u256,
-                           evidence_hash: str, rule: str, goal: str, limitations: str,
-                           scenario: str, rule_quote: str, impact: str) -> None:
-        """Direct Mode-only fixture entry point for the exact workload test.
-
-        The live probe uses adjudicate_frozen_review. This entry point exists
-        solely because Direct Mode has no cross-contract view backend.
-        """
-        frozen = {'goal': goal, 'published_rule': rule, 'limitations': limitations,
-                  'claimed_rule_quote': rule_quote, 'attack_sequence': scenario,
-                  'claimed_harm': impact}
-        if evidence_hash != self._evidence_hash(frozen):
-            raise gl.vm.UserError('fixture evidence hash mismatch')
-        key = str(int(challenge_id)) + ':' + str(int(attempt_id)) + ':' + str(int(round_id))
-        self._record(key, frozen)
 
     @gl.public.view
     def get_case(self, key: str) -> str:

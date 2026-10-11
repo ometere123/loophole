@@ -49,8 +49,13 @@ GENVM_VERSION=v0.3.0-rc7 genvm-lint check diagnostics/DirectGapJudgeWorkloadProb
 Lint passed (3 checks)
 Validation passed
 Contract: DirectGapJudgeWorkloadProbe
-Methods: 4 (2 view, 2 write)
+Methods: 3 (2 view, 1 write)
 ```
+
+The deployable probe has no arbitrary fixture writer. Direct Mode coverage
+generates a temporary test-only harness from that source, and
+`scripts/verify_prompt_parity.py` compares the prompt bytes in the production
+GapJudge and probe exactly: 1154 UTF-8 bytes.
 
 ## What this establishes
 

@@ -17,10 +17,11 @@ It does not alter RuleVault, GapJudge, or either funded challenge.
 `DirectGapJudgeWorkloadProbe.py` is the next isolated differential. It reads a
 frozen review from a configured RuleVault and runs the production-sized
 GapJudge assessment from a wallet-submitted transaction. Its
-`adjudicate_fixture` entry point exists only for local Direct Mode because the
-Direct Mode runner has no cross-contract view backend. The probe has no payout
-path and never writes to the production vault. Its deployment and live
-adjudication require explicit approval after the local tests pass.
+Direct Mode coverage uses a test-only harness generated from the source because
+the Direct Mode runner has no cross-contract view backend. The deployable probe
+has no arbitrary fixture entry point, no payout path, and never writes to the
+production vault. Its deployment and live adjudication require explicit
+approval after the local tests pass.
 
 These diagnostics are excluded from the production release. The probe and
 relay records, including the sequential probe controls and authenticated relay

@@ -24,6 +24,8 @@ jobs:
         run: python -m py_compile contracts/*.py diagnostics/*.py scripts/*.py
       - name: Validate GenVM runner headers
         run: python scripts/validate_runner_headers.py
+      - name: Verify production and diagnostic prompt parity
+        run: python scripts/verify_prompt_parity.py
       - name: Run protocol state-machine tests
         run: python -m pytest tests/test_protocol.py tests/test_mutation_behavior.py -m "not direct" -q
       - name: Run GenVM Direct Mode tests

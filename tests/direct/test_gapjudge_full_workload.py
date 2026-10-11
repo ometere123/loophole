@@ -8,6 +8,7 @@ independent validator against the full policy/evidence dimensions.
 
 import hashlib
 import json
+from pathlib import Path
 
 
 RULE = (
@@ -132,10 +133,10 @@ def test_gapjudge_direct_full_challenge_two_validator_rechecks_material_findings
     assert direct_vm.run_validator() is False
 
 
-def test_direct_workload_probe_fixture_uses_the_same_full_assessment(
-    direct_vm, direct_deploy, direct_alice
+def test_direct_workload_probe_harness_uses_the_same_full_assessment(
+    direct_vm, direct_deploy, direct_alice, tmp_path
 ):
-    """The isolated direct probe executes the production-sized prompt path."""
+    """A test-only harness covers the probe without a live fixture entry point."""
     direct_vm._chain_id = 61999
     direct_vm.clear_mocks()
     direct_vm.mock_llm(
@@ -150,7 +151,26 @@ def test_direct_workload_probe_fixture_uses_the_same_full_assessment(
             }
         ),
     )
-    probe = direct_deploy("diagnostics/DirectGapJudgeWorkloadProbe.py", "0x" + "a" * 40)
+    source_path = Path("diagnostics/DirectGapJudgeWorkloadProbe.py")
+    source = source_path.read_text(encoding="utf-8")
+    marker = "    @gl.public.view\n    def get_case(self, key: str) -> str:\n"
+    assert marker in source
+    harness_method = (
+        "    @gl.public.write\n"
+        "    def adjudicate_fixture(self, challenge_id: u256, attempt_id: u256, round_id: u256,\n"
+        "                           evidence_hash: str, rule: str, goal: str, limitations: str,\n"
+        "                           scenario: str, rule_quote: str, impact: str) -> None:\n"
+        "        frozen = {'goal': goal, 'published_rule': rule, 'limitations': limitations,\n"
+        "                  'claimed_rule_quote': rule_quote, 'attack_sequence': scenario,\n"
+        "                  'claimed_harm': impact}\n"
+        "        if evidence_hash != self._evidence_hash(frozen):\n"
+        "            raise gl.vm.UserError('fixture evidence hash mismatch')\n"
+        "        key = str(int(challenge_id)) + ':' + str(int(attempt_id)) + ':' + str(int(round_id))\n"
+        "        self._record(key, frozen)\n\n"
+    )
+    harness_path = tmp_path / "DirectGapJudgeWorkloadProbeFixture.py"
+    harness_path.write_text(source.replace(marker, harness_method + marker), encoding="utf-8")
+    probe = direct_deploy(str(harness_path), "0x" + "a" * 40)
     direct_vm.sender = direct_alice
     probe.adjudicate_fixture(*_challenge_two_args())
     record = json.loads(probe.get_case("2:2:1"))
