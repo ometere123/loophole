@@ -3,7 +3,7 @@ import { studionet } from 'genlayer-js/chains';
 import { ExecutionResult, TransactionHashVariant, TransactionStatus } from 'genlayer-js/types';
 import type { CalldataEncodable, GenLayerTransaction } from 'genlayer-js/types';
 import { clearPersistedTransaction, savePersistedTransaction, VAULT_ADDRESS, READY } from './helpers';
-import type { Attempt, Challenge, DeliveryVerification, DeliveryStatus, TxInfo, VaultConfig } from './types';
+import type { Attempt, Challenge, DeliveryVerification, DeliveryStatus, PersistedTransaction, TxInfo, VaultConfig } from './types';
 
 export interface EIP1193 {request(args:{method:string;params?:unknown[]}):Promise<unknown>;on?(e:string,fn:(...args:any[])=>void):void;removeListener?(e:string,fn:(...args:any[])=>void):void;}
 declare global {interface Window {ethereum?:EIP1193;}}
@@ -35,6 +35,18 @@ function hasSuccessfulExecution(receipt:GenLayerTransaction):boolean{
 function rawFinal(tx:any){return String(tx?.status??'').toUpperCase()==='FINALIZED';}
 function rawSucceeded(tx:any){const leader=tx?.consensus_data?.leader_receipt?.[0]??tx?.leader_receipt?.[0];return leader?.execution_result==='SUCCESS'&&(leader?.result==='AAA='||leader?.result?.status==='return');}
 function rawFailed(tx:any){const status=String(tx?.status??'').toUpperCase();return ['CANCELED','CANCELLED','FAILED','REVERTED'].includes(status)||(rawFinal(tx)&&tx?.consensus_data&&rawSucceeded(tx)===false);}
+export async function reconcilePersistedTransaction(saved:PersistedTransaction):Promise<TxInfo>{
+ const tx=await rawRpc('eth_getTransactionByHash',[saved.hash]);
+ if(!tx)return {phase:'unknown',hash:saved.hash,title:saved.title,error:'The transaction hash is not visible from the configured RPC yet. Do not resubmit.'};
+ const status=String(tx.status_name??tx.status??'').toUpperCase();
+ if(status==='FINALIZED'){
+  if(rawSucceeded(tx))return {phase:'finalized',hash:saved.hash,title:saved.title};
+  return {phase:'execution_failed',hash:saved.hash,title:saved.title,error:`Finalized, but execution was not verified successful (${tx.result_name??'unknown'}).`};
+ }
+ if(['CANCELED','CANCELLED','FAILED','REVERTED'].includes(status))return {phase:'execution_failed',hash:saved.hash,title:saved.title,error:`Transaction ended ${status}. Do not resubmit without inspecting the contract state.`};
+ if(status==='ACCEPTED')return {phase:'accepted',hash:saved.hash,title:saved.title};
+ return {phase:'submitted',hash:saved.hash,title:saved.title};
+}
 export async function verifyWithdrawalDelivery(parentHash:string,beneficiary:string,amountWei:string):Promise<DeliveryVerification>{
  const base={parentHash,beneficiary:beneficiary.toLowerCase(),amountWei,reasons:[],checkedAt:Date.now()} as Omit<DeliveryVerification,'status'>;
  try{

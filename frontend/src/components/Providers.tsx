@@ -1,8 +1,8 @@
 'use client';
 import React,{createContext,useContext,useEffect,useState,useCallback} from 'react';
 import {CheckCircle2,AlertTriangle,LoaderCircle,Wallet,ExternalLink,X,RefreshCcw} from 'lucide-react';
-import {connectWallet,getWalletState,switchStudionet,writeVault} from '@/lib/genlayer';
-import {explorerTx,getPendingTransaction,READY,short} from '@/lib/helpers';
+import {connectWallet,getWalletState,reconcilePersistedTransaction,switchStudionet,writeVault} from '@/lib/genlayer';
+import {clearPersistedTransaction,explorerTx,getPendingTransaction,READY,short} from '@/lib/helpers';
 import type {TxInfo} from '@/lib/types';
 
 type Context = {account:string;chain:number;connect:()=>Promise<void>;switchChain:()=>Promise<void>;disconnect:()=>void;submit:(method:string,args:unknown[],value?:bigint)=>Promise<string>;busy:boolean;tx:TxInfo;setTx:(x:TxInfo)=>void;refreshWallet:()=>Promise<void>};
@@ -12,7 +12,7 @@ const EMPTY:TxInfo={phase:'idle'};
 export function Providers({children}:{children:React.ReactNode}){
  const [account,setAccount]=useState('');const [chain,setChain]=useState(0);
  const [tx,setTx]=useState<TxInfo>(EMPTY);const [busy,setBusy]=useState(false);
- const refreshWallet=useCallback(async()=>{try{const state=await getWalletState();setAccount(state.account);setChain(state.chain);const saved=state.account?getPendingTransaction(state.account):null;if(saved)setTx({phase:saved.phase,hash:saved.hash,title:saved.title,error:saved.error});}catch{setAccount('');setChain(0);}},[]);
+ const refreshWallet=useCallback(async()=>{try{const state=await getWalletState();setAccount(state.account);setChain(state.chain);const saved=state.account?getPendingTransaction(state.account):null;if(!saved){setTx(EMPTY);return;}setTx({phase:saved.phase,hash:saved.hash,title:saved.title,error:saved.error});try{const live=await reconcilePersistedTransaction(saved);if(live.phase==='finalized')clearPersistedTransaction(saved.hash);setTx(live);}catch{/* Keep the persisted state when the RPC is temporarily unavailable. */}}catch{setAccount('');setChain(0);}},[]);
  useEffect(()=>{refreshWallet();const p=window.ethereum;const cb=()=>{setTx(EMPTY);refreshWallet();};p?.on?.('accountsChanged',cb);p?.on?.('chainChanged',cb);p?.on?.('disconnect',cb);return()=>{p?.removeListener?.('accountsChanged',cb);p?.removeListener?.('chainChanged',cb);p?.removeListener?.('disconnect',cb);};},[refreshWallet]);
  const connect=async()=>{const a=await connectWallet();setAccount(a);await refreshWallet();};
  const switchChain=async()=>{await switchStudionet();await refreshWallet();};
