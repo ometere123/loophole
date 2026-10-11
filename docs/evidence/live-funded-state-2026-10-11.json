@@ -1,0 +1,128 @@
+{
+  "observed_at": "2026-10-11T05:53:41.226Z",
+  "rpc": "https://studio.genlayer.com/api",
+  "chain_id": "0xf22f",
+  "contract": "0xa77A29C96c30B2A5dB865a2CE35c8F396d504F26",
+  "now_unix": 1791698021,
+  "config": {
+    "attempt_count": "2",
+    "chain": "61999",
+    "challenge_count": "2",
+    "invalid_appeal_window_seconds": "86400",
+    "judge": "0xb14B08cd35Fa64FE795e14931DdA09999627785d",
+    "max_active_attempts": "12",
+    "max_total_attempts": "64",
+    "reveal_grace_seconds": "172800",
+    "review_timeout_seconds": "432000",
+    "total_credit_wei": "0",
+    "total_locked_wei": "40000000000000000",
+    "withdrawal_count": "0"
+  },
+  "challenges": [
+    {
+      "challenge": {
+        "active_attempt": "1",
+        "active_round": "1",
+        "active_slots": "1",
+        "attempts": [
+          "1"
+        ],
+        "bond_wei": "10000000000000000",
+        "category": "COMMUNITY",
+        "created_at": 1791653054,
+        "ends_at": 1792257854,
+        "goal": "Reward members who publish an original educational post that explains a topic clearly and helps readers learn.",
+        "id": "1",
+        "limitations": "Posts must be newly written by the member and include a clear explanation of the topic. Reposts, copied text, and meaningless repetition do not qualify.",
+        "organizer": "0xfcef676044658b5402f590dabe9e04a0f640522f",
+        "prize_wei": "10000000000000000",
+        "reveal_deadline": 1792430654,
+        "review_started": 1791654064,
+        "rule": "A member earns 10 points when they publish a post containing #OurCampaign and at least 100 words.",
+        "status": "OPEN",
+        "title": "Length Without Learning",
+        "winner": "",
+        "winner_attempt": "0"
+      },
+      "attempts": [
+        {
+          "appeal_bond_wei": "0",
+          "appeal_deadline": 0,
+          "appeal_used": false,
+          "bond_wei": "10000000000000000",
+          "challenge_id": "1",
+          "challenger": "0x81301dd9c3605a7da743d87b803156d8445620b0",
+          "commitment": "ecc0d4fcbe13239df6d734b9bd1707581dea2678ad9f3795ced8bbca939a212b",
+          "committed_at": 1791653360,
+          "evidence_hash": "ec00842bceeafc038a3e5a0cc74d44e12acf4de378746bccc49caf0da5160cc7",
+          "feasible": false,
+          "id": "1",
+          "impact": "The literal rule awards points for meaningless repetition, so an ineligible post can satisfy the measurable conditions while violating the stated educational purpose.",
+          "letter": false,
+          "purpose": false,
+          "reason": "",
+          "revealed_at": 1791653853,
+          "rule_quote": "A member earns 10 points when they publish a post containing #OurCampaign and at least 100 words.",
+          "scenario": "I publish a 100-word post made by repeating the same harmless sentence and include #OurCampaign. It meets the literal hashtag and word-count conditions, but it does not explain a topic or provide educational value. The wording permits the points even though the stated educational outcome is not achieved.",
+          "status": "REVIEWING",
+          "verdict": ""
+        }
+      ],
+      "review_timeout_at": 1792086064,
+      "timeout_elapsed": false
+    },
+    {
+      "challenge": {
+        "active_attempt": "2",
+        "active_round": "1",
+        "active_slots": "1",
+        "attempts": [
+          "2"
+        ],
+        "bond_wei": "10000000000000000",
+        "category": "COMMUNITY",
+        "created_at": 1791655272,
+        "ends_at": 1792260072,
+        "goal": "Reward members who publish an original educational post that explains a topic clearly and helps readers learn.",
+        "id": "2",
+        "limitations": "Posts must be newly written by the member.",
+        "organizer": "0xfcef676044658b5402f590dabe9e04a0f640522f",
+        "prize_wei": "10000000000000000",
+        "reveal_deadline": 1792432872,
+        "review_started": 1791656418,
+        "rule": "A member earns 10 points when they publish a post containing #OurCampaign and at least 100 words.",
+        "status": "OPEN",
+        "title": "Hashtag Without Learning",
+        "winner": "",
+        "winner_attempt": "0"
+      },
+      "attempts": [
+        {
+          "appeal_bond_wei": "0",
+          "appeal_deadline": 0,
+          "appeal_used": false,
+          "bond_wei": "10000000000000000",
+          "challenge_id": "2",
+          "challenger": "0x81301dd9c3605a7da743d87b803156d8445620b0",
+          "commitment": "952bb24d1f469e120361f9fc5b71751e51f17ce61ed96cc709487b1c95729199",
+          "committed_at": 1791655588,
+          "evidence_hash": "b3bd6215ca42d48ee9bf2fe8178265aaeb2f7be817e1ebf96c81eab1eb67018b",
+          "feasible": false,
+          "id": "2",
+          "impact": "The literal rule awards points for meaningless repetition, so an ineligible post can satisfy the measurable conditions while violating the stated educational purpose.",
+          "letter": false,
+          "purpose": false,
+          "reason": "",
+          "revealed_at": 1791655642,
+          "rule_quote": "A member earns 10 points when they publish a post containing #OurCampaign and at least 100 words.",
+          "scenario": "I publish a 100-word post made by repeating the same harmless sentence and include #OurCampaign. It meets the literal hashtag and word-count conditions, but it does not explain a topic or provide educational value. The wording permits the points even though the stated educational outcome is not achieved.",
+          "status": "REVIEWING",
+          "verdict": ""
+        }
+      ],
+      "review_timeout_at": 1792088418,
+      "timeout_elapsed": false
+    }
+  ],
+  "interpretation": "Read-only finalized RuleVault state. Both live reviews remain active and below the five-day recovery timeout; no recovery, refund, callback, or withdrawal was submitted by this check."
+}
