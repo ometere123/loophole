@@ -26,3 +26,15 @@ Vercel project environment configuration contains these four public variables
 for Production, Preview, and Development. No signing key or wallet secret is
 configured. Project protection is set to `preview`, so the production alias
 is public while preview deployments remain protected.
+
+## Latest production verification
+
+After receipt reconciliation was hardened and pushed at commit
+`ab76d3484eaa46892895b44b0f51465df97e6cd1`, Vercel created a newer production
+deployment:
+
+- Deployment: [`dpl_9PQsbtBKp7a7sUicvN5GpegZqyUw`](https://vercel.com/delealufejoel-4184s-projects/loophole/dpl_9PQsbtBKp7a7sUicvN5GpegZqyUw)
+- Deployment URL: [`https://loophole-lbdm2vlv8-delealufejoel-4184s-projects.vercel.app`](https://loophole-lbdm2vlv8-delealufejoel-4184s-projects.vercel.app)
+- State: `READY`, target `production`
+- Alias: [`https://loophole-one.vercel.app/`](https://loophole-one.vercel.app/)
+- Public verification: HTTP `200`, canonical contract addresses present, and the receipt/lifecycle reconciliation code present in the client bundle.
