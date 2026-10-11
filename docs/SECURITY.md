@@ -18,7 +18,7 @@
 ## Current external verification boundary
 
 1. The canonical RuleVault and GapJudge deployments, source fingerprints, finalized deployment receipts and reciprocal binding are verified in `deployments.studionet.json`.
-2. The corrected diagnostic probe passes direct nondeterministic consensus, a deterministic finalized child and a finalized-triggered nondeterministic child. A separate zero-value cross-contract reproduction is still required to isolate the RuleVault → GapJudge boundary before retrying production adjudication.
+2. The corrected diagnostic probe passes direct nondeterministic consensus, a deterministic finalized child and a finalized-triggered nondeterministic child. The separately approved zero-value relay reproduction also passes a finalized cross-contract message to the probe; the production GapJudge workload and authenticated RuleVault callback remain unproven and must not be inferred from this control.
 3. Execute the funded organizer/challenger lifecycle only after that boundary is proven, including a real VALID, INVALID and INCONCLUSIVE result where the network permits it.
 4. Verify EOA value transfer independently from the vault withdrawal record with `scripts/verify_delivery.mjs`. Never describe `TRANSFER_EMITTED_UNVERIFIED` as paid.
 5. Demonstrate timeout recovery, failed callbacks and native-balance/credit reconciliation. Obtain external security review before large GEN values.

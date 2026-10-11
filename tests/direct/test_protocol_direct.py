@@ -68,3 +68,53 @@ def test_gapjudge_direct_validates_frozen_evidence_hash(direct_vm, direct_deploy
                          'An explicit goal that is long enough for validation.', '',
                          'A scenario that contains enough concrete attack steps to validate.',
                          'A rule', 'A specific impact statement for validation.')
+
+
+def test_gapjudge_direct_substantive_verdict(direct_vm, direct_deploy, direct_owner, direct_alice):
+    """Exercise the real GapJudge assessment and validator agreement path."""
+    direct_vm._chain_id = 61999
+    direct_vm.mock_llm(
+        r'.*Return ONLY a compact JSON object.*',
+        json.dumps({
+            'verdict': 'INVALID',
+            'letter': True,
+            'purpose': False,
+            'feasible': True,
+            'reason': 'The literal condition is met while the stated educational purpose is defeated.',
+        }),
+    )
+    judge = direct_deploy('contracts/GapJudge.py')
+    vault_address = '0x' + direct_alice.hex()
+    direct_vm.sender = direct_owner
+    judge.bind_vault(vault_address)
+    direct_vm.sender = direct_alice
+
+    rule = 'A member earns 10 points when they publish a post containing #OurCampaign and at least 100 words.'
+    goal = 'Reward members who publish an original educational post that explains a topic clearly and helps readers learn.'
+    limitations = 'Posts must be newly written by the member.'
+    scenario = (
+        'I publish a 100-word post made by repeating the same harmless sentence and include #OurCampaign. '
+        'It meets the literal hashtag and word-count conditions, but it does not explain a topic or provide educational value.'
+    )
+    rule_quote = 'A member earns 10 points when they publish a post containing #OurCampaign and at least 100 words.'
+    impact = 'The literal rule awards points for meaningless repetition, so an ineligible post can satisfy the measurable conditions while violating the stated educational purpose.'
+    frozen = {
+        'goal': goal,
+        'published_rule': rule,
+        'limitations': limitations,
+        'claimed_rule_quote': rule_quote,
+        'attack_sequence': scenario,
+        'claimed_harm': impact,
+    }
+    evidence_hash = hashlib.sha256(
+        json.dumps(frozen, sort_keys=True, separators=(',', ':')).encode('utf-8')
+    ).hexdigest()
+
+    judge.adjudicate(1, 1, 1, evidence_hash, rule, goal, limitations, scenario, rule_quote, impact)
+
+    case = json.loads(judge.get_case('1:1:1'))
+    assert case['verdict'] == 'INVALID'
+    assert case['letter'] is True
+    assert case['purpose'] is False
+    assert case['feasible'] is True
+    assert case['evidence_hash'] == evidence_hash
