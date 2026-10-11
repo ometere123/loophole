@@ -2,11 +2,14 @@
 
 The restored Vercel project `delealufejoel-4184s-projects/loophole` was
 deployed from verified repository commit
-[`abab7b7747711a01cb02467436eecae8cb735fea`](https://github.com/ometere123/loophole/commit/abab7b7747711a01cb02467436eecae8cb735fea),
-which contains the diagnostic evidence, behavioral mutation tests, lockfile
-remediation, and withdrawal delivery reconciliation.
+[`db6016d0f47aba02afd5ae1d5609ab075cdf4309`](https://github.com/ometere123/loophole/commit/db6016d0f47aba02afd5ae1d5609ab075cdf4309),
+with the project Root Directory set to `frontend`. This deployment includes
+the diagnostic evidence, behavioral mutation tests, lockfile remediation,
+withdrawal delivery reconciliation, and the isolated cross-contract relay
+diagnostic source.
 
-- Deployment: [`dpl_DSvxqwdiwEyMwJNy75kTtAx1AHQf`](https://vercel.com/delealufejoel-4184s-projects/loophole/DSvxqwdiwEyMwJNy75kTtAx1AHQf)
+- Deployment: [`dpl_HskpoV1g7YZGo487m7H3qtCLwHL6`](https://vercel.com/delealufejoel-4184s-projects/loophole/HskpoV1g7YZGo487m7H3qtCLwHL6)
+- Deployment URL: [`https://loophole-ckqgbi7qs-delealufejoel-4184s-projects.vercel.app`](https://loophole-ckqgbi7qs-delealufejoel-4184s-projects.vercel.app)
 - Production URL: [`https://loophole-one.vercel.app/`](https://loophole-one.vercel.app/)
 - Deployment state: `READY`, target `production`
 - Anonymous HTTP verification: `200 OK`
