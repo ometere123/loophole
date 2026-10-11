@@ -15,14 +15,12 @@
 | Revealed but never reviewed bonds refund | public method once challenge won/refunded | challenger must send a transaction |
 | Claim accounting first | credit cleared before outbound transfer | child EVM transfer may fail; GenLayer does **not** return failed-message value automatically |
 
-## Major remaining external verification
+## Current external verification boundary
 
-1. Source must pass `genvm-lint` on exact runtime, including annotated storage and typed address conversions.
-2. Deploy both contracts using repo-local 0.39.1 on Studionet 61999 and verify their schemas/source hashes.
-3. Bind judge after vault deployment; check `get_configuration()` and `get_config()` show reciprocal addresses.
-4. Execute 3-wallet funded lifecycle with a real VALID, INVALID, and INCONCLUSIVE answer; inspect emitted child transactions.
-5. Verify exact source and proof timeline for every callback: parent finalized → child created → child finalized → vault updated.
-6. Verify EOA value transfer independently from the vault withdrawal record. Never describe `TRANSFER_EMITTED_UNVERIFIED` as paid.
-7. Demonstrate timeout recovery, failed callbacks and native-balance/credit reconciliation. Obtain external security review before large GEN values.
+1. The canonical RuleVault and GapJudge deployments, source fingerprints, finalized deployment receipts and reciprocal binding are verified in `deployments.studionet.json`.
+2. The corrected diagnostic probe passes direct nondeterministic consensus, a deterministic finalized child and a finalized-triggered nondeterministic child. A separate zero-value cross-contract reproduction is still required to isolate the RuleVault → GapJudge boundary before retrying production adjudication.
+3. Execute the funded organizer/challenger lifecycle only after that boundary is proven, including a real VALID, INVALID and INCONCLUSIVE result where the network permits it.
+4. Verify EOA value transfer independently from the vault withdrawal record with `scripts/verify_delivery.mjs`. Never describe `TRANSFER_EMITTED_UNVERIFIED` as paid.
+5. Demonstrate timeout recovery, failed callbacks and native-balance/credit reconciliation. Obtain external security review before large GEN values.
 
 This is not formal verification. The 12-attempt capacity is a bounded resource and can be exhausted by Sybil actors; increasing it adds cost, not genuine Sybil protection.

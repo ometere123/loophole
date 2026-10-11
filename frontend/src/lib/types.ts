@@ -18,4 +18,16 @@ export type Attempt = {
 export type VaultConfig = {judge: string;chain:string;challenge_count:string;attempt_count:string;withdrawal_count:string;total_credit_wei:string;total_locked_wei:string};
 export type TxPhase = 'idle' | 'awaiting_wallet' | 'submitted' | 'accepted' | 'finalized' | 'execution_failed' | 'unknown' | 'rejected';
 export type TxInfo = {phase: TxPhase; hash?: string; title?: string; error?: string};
+export type PersistedTransaction = {hash: string; account: string; phase: Exclude<TxPhase, 'idle'|'awaiting_wallet'|'rejected'|'finalized'>; title?: string; error?: string; updatedAt: number};
 export type CommitmentBackup = { challengeId: string; address: string; salt: string; scenario: string; ruleQuote: string; impact: string; commitment: string; savedAt: number };
+export type DeliveryStatus = 'CLAIMABLE' | 'TRANSFER SUBMITTED' | 'PARENT FINALIZED' | 'DELIVERY VERIFIED' | 'FAILED' | 'UNRESOLVED';
+export type DeliveryVerification = {
+  status: DeliveryStatus;
+  parentHash: string;
+  childHash?: string;
+  beneficiary: string;
+  amountWei: string;
+  reasons: string[];
+  checkedAt: number;
+};
+export type WithdrawalProvenance = DeliveryVerification & { withdrawalId: string };

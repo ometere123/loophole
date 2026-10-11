@@ -9,8 +9,8 @@ The **RuleVault** contract escrows challenge prizes and challenger bonds, holds 
 Requirements: Node 22+, Python 3.12+, an injected EIP-1193 wallet, local GenLayer CLI wallet configured/funded on Studionet. The CLI is **repository-local `genlayer@0.39.1`**, never a global or `npx` latest installation. Wallet access is exclusively through the injected provider; there is no hosted signing backend.
 
 ```bash
-npm install
-npm --prefix frontend install
+npm ci
+npm --prefix frontend ci
 python -m pip install -r requirements.txt
 python scripts/preflight.py
 python -m pytest -q tests/
@@ -23,7 +23,7 @@ cp frontend/.env.example frontend/.env.local         # fill the two addresses pr
 npm --prefix frontend run dev
 ```
 
-The verified Studionet deployment and public frontend are recorded in `deployments.studionet.json`. Economic lifecycle testing still requires funded organizer and challenger transactions because the CLI write path does not expose payable values.
+The verified Studionet deployment and public frontend are recorded in `deployments.studionet.json`. The frontend uses injected EIP-1193 payable writes; the funded economic lifecycle remains externally blocked by the observed Studionet triggered-consensus recovery failure.
 
 ## End-to-end action sequence
 
@@ -60,6 +60,7 @@ This package is not an audited system. Model verdict agreement is not a mathemat
 - `pytest -q tests/` — offline deterministic state-machine tests using a deliberately small GenLayer simulator (not Direct Mode).
 - `genvm-lint check contracts/*.py` — actual SDK semantic lint once installed.
 - `python deploy/deploy_studionet.py` — guarded, repo-local CLI two-contract installer; requires FINALIZED successful execution and verifies reciprocal binding before writing the local manifest.
+- `node scripts/verify_delivery.mjs <withdrawal-parent-hash> <beneficiary> <amount-wei>` — read-only reconciliation of parent finality, child ancestry, exact recipient/value and authoritative `value_credited` evidence.
 - GitHub Actions — source checks, GenVM lint, Python state-machine tests, TypeScript check and frontend build.
 
 Additional design details are in `docs/SECURITY.md`, `docs/CONSENSUS.md`, and `docs/QA.md` (these are product documentation, not a handoff).

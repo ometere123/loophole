@@ -3,6 +3,14 @@
 const RPC = process.env.LOOPHOLE_RPC ?? 'https://studio.genlayer.com/api';
 const VAULT = '0xa77A29C96c30B2A5dB865a2CE35c8F396d504F26'.toLowerCase();
 const CHAIN_ID = '0xf22f';
+const DELIVERY_STATES = Object.freeze({
+  CLAIMABLE: 'CLAIMABLE',
+  TRANSFER_SUBMITTED: 'TRANSFER SUBMITTED',
+  PARENT_FINALIZED: 'PARENT FINALIZED',
+  DELIVERY_VERIFIED: 'DELIVERY VERIFIED',
+  FAILED: 'FAILED',
+  UNRESOLVED: 'UNRESOLVED',
+});
 
 function usage() {
   console.error('Usage: node scripts/verify_delivery.mjs <withdrawal-parent-hash> <beneficiary> <amount-wei>');
@@ -27,20 +35,30 @@ async function rpc(method, params) {
   return body.result;
 }
 
-function parentExecutionSucceeded(tx) {
+function executionSucceeded(tx) {
   const leader = tx?.consensus_data?.leader_receipt?.[0] ?? tx?.leader_receipt?.[0];
   return leader?.execution_result === 'SUCCESS' &&
     (leader?.result === 'AAA=' || leader?.result?.status === 'return');
 }
 
 function final(tx) { return String(tx?.status ?? '').toUpperCase() === 'FINALIZED'; }
+function terminalFailure(tx) {
+  const status = String(tx?.status ?? '').toUpperCase();
+  return ['CANCELED', 'CANCELLED', 'FAILED', 'REVERTED'].includes(status) ||
+    (final(tx) && tx?.consensus_data && executionSucceeded(tx) === false);
+}
+function childIsExactMatch(child, beneficiary, amountWei) {
+  return child?.from_address?.toLowerCase() === VAULT &&
+    child?.to_address?.toLowerCase() === beneficiary.toLowerCase() &&
+    String(child?.value ?? '') === amountWei;
+}
 
 const result = {
   chain_id: null,
   parent_hash: parentHash,
   beneficiary: beneficiary.toLowerCase(),
   amount_wei: amountWei,
-  status: 'UNRESOLVED',
+  status: DELIVERY_STATES.UNRESOLVED,
   reasons: [],
   children: [],
 };
@@ -60,7 +78,7 @@ try {
     result.reasons.push('parent destination is not the canonical RuleVault');
   } else if (!final(parent)) {
     result.reasons.push(`parent status is ${parent.status ?? 'unknown'}`);
-  } else if (parentExecutionSucceeded(parent) === false && parent.consensus_data) {
+  } else if (final(parent) && executionSucceeded(parent) === false && parent.consensus_data) {
     result.reasons.push('parent finalized without successful leader return evidence');
   }
 
@@ -76,21 +94,42 @@ try {
       value_credited: child?.value_credited ?? null,
       matches: false,
     };
-    record.matches = record.from === VAULT &&
-      record.to === beneficiary.toLowerCase() &&
-      record.value_wei === amountWei &&
-      final(child) && child.value_credited === true;
+    record.exact_origin_recipient_value = childIsExactMatch(child, beneficiary, amountWei);
+    record.execution_succeeded = child ? executionSucceeded(child) : false;
+    record.finalized = child ? final(child) : false;
+    record.authoritative_credit = child?.value_credited === true;
+    record.failed = child ? terminalFailure(child) : false;
+    record.matches = record.exact_origin_recipient_value && record.finalized &&
+      record.execution_succeeded && record.authoritative_credit;
     result.children.push(record);
   }
 
-  if (!parent || result.reasons.length || !result.children.some((child) => child.matches)) {
-    if (!result.children.length) result.reasons.push('no triggered child transfer found');
-    else if (!result.children.some((child) => child.matches)) result.reasons.push('no child matched vault, beneficiary, amount, finality, and value_credited');
+  if (!parent) {
+    result.status = DELIVERY_STATES.UNRESOLVED;
+    result.reasons.push('parent transaction is unavailable');
+  } else if (terminalFailure(parent)) {
+    result.status = DELIVERY_STATES.FAILED;
+    result.reasons.push('parent transaction failed or finalized without successful execution');
+  } else if (!final(parent)) {
+    result.status = DELIVERY_STATES.TRANSFER_SUBMITTED;
+    result.reasons.push(`parent status is ${parent.status ?? 'unknown'}`);
+  } else if (result.children.some((child) => child.matches)) {
+    result.status = DELIVERY_STATES.DELIVERY_VERIFIED;
+  } else if (result.children.some((child) => child.exact_origin_recipient_value && child.failed)) {
+    result.status = DELIVERY_STATES.FAILED;
+    result.reasons.push('matching child transfer failed or finalized without successful execution');
+  } else if (result.children.some((child) => child.exact_origin_recipient_value && !child.finalized)) {
+    result.status = DELIVERY_STATES.TRANSFER_SUBMITTED;
+    result.reasons.push('matching child transfer is not finalized');
+  } else if (!result.children.length) {
+    result.status = DELIVERY_STATES.PARENT_FINALIZED;
+    result.reasons.push('parent finalized, but no external child transfer is visible yet');
   } else {
-    result.status = 'DELIVERY VERIFIED';
+    result.status = DELIVERY_STATES.UNRESOLVED;
+    result.reasons.push('child transactions exist, but none matched the vault, beneficiary, amount, finality, and authoritative credit evidence');
   }
   console.log(JSON.stringify(result, null, 2));
-  process.exit(result.status === 'DELIVERY VERIFIED' ? 0 : 1);
+  process.exit(result.status === DELIVERY_STATES.DELIVERY_VERIFIED ? 0 : 1);
 } catch (error) {
   result.reasons.push(error instanceof Error ? error.message : String(error));
   console.log(JSON.stringify(result, null, 2));

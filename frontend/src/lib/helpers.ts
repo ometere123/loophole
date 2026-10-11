@@ -1,4 +1,4 @@
-import type { Category, CommitmentBackup } from './types';
+import type { Category, CommitmentBackup, PersistedTransaction, WithdrawalProvenance } from './types';
 export const CHAIN_ID = 61999;
 export const CHAIN_HEX = '0xf22f';
 export const VAULT_ADDRESS = process.env.NEXT_PUBLIC_RULE_VAULT_ADDRESS || '';
@@ -19,6 +19,14 @@ export function categoryOf(s: string) {return categories.find(c=>c.id===s)||cate
 export function saveBackup(b:CommitmentBackup){if(typeof window==='undefined')return;localStorage.setItem(`loophole:${b.address.toLowerCase()}:${b.commitment}`, JSON.stringify(b));}
 export function getBackups(address:string):CommitmentBackup[]{if(typeof window==='undefined')return[];const out:CommitmentBackup[]=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i)||'';if(k.startsWith(`loophole:${address.toLowerCase()}:`)){try{out.push(JSON.parse(localStorage.getItem(k)||''));}catch{}}}return out.sort((a,b)=>b.savedAt-a.savedAt);}
 export function deleteBackup(b:CommitmentBackup){if(typeof window!=='undefined')localStorage.removeItem(`loophole:${b.address.toLowerCase()}:${b.commitment}`);}
+function withdrawalKey(address:string,id:string){return `loophole:withdrawal:${address.toLowerCase()}:${id}`;}
+export function saveWithdrawalProvenance(p:WithdrawalProvenance){if(typeof window!=='undefined')localStorage.setItem(withdrawalKey(p.beneficiary,p.withdrawalId),JSON.stringify(p));}
+export function getWithdrawalProvenance(address:string,id:string):WithdrawalProvenance|null{if(typeof window==='undefined')return null;try{const raw=localStorage.getItem(withdrawalKey(address,id));return raw?JSON.parse(raw) as WithdrawalProvenance:null;}catch{return null;}}
+const txKey='loophole:transactions';
+export function savePersistedTransaction(tx:PersistedTransaction){if(typeof window==='undefined')return;const all=getPersistedTransactions().filter(x=>x.hash!==tx.hash);localStorage.setItem(txKey,JSON.stringify([tx,...all].slice(0,20)));}
+export function getPersistedTransactions():PersistedTransaction[]{if(typeof window==='undefined')return[];try{const raw=localStorage.getItem(txKey);return raw?JSON.parse(raw) as PersistedTransaction[]:[];}catch{return[];}}
+export function getPendingTransaction(address:string):PersistedTransaction|null{return getPersistedTransactions().find(x=>x.account.toLowerCase()===address.toLowerCase())||null;}
+export function clearPersistedTransaction(hash:string){if(typeof window==='undefined')return;localStorage.setItem(txKey,JSON.stringify(getPersistedTransactions().filter(x=>x.hash!==hash)));}
 export async function makeCommitment(cid:string,address:string,salt:string,scenario:string,quote:string,impact:string){const raw=[cid,address.toLowerCase(),salt,scenario,quote,impact].join('|');const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(raw));return [...new Uint8Array(digest)].map(x=>x.toString(16).padStart(2,'0')).join('');}
 export function randomSalt(){const a=crypto.getRandomValues(new Uint8Array(32));return Array.from(a,x=>x.toString(16).padStart(2,'0')).join('');}
 export function explorerTx(hash:string){return `${EXPLORER}/tx/${encodeURIComponent(hash)}`;}
