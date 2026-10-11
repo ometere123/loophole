@@ -23,7 +23,7 @@ jobs:
       - name: Validate GenVM runner headers
         run: python scripts/validate_runner_headers.py
       - name: Run protocol state-machine tests
-        run: python -m pytest tests/test_protocol.py -m "not direct" -q
+        run: python -m pytest tests/test_protocol.py tests/test_mutation_behavior.py -m "not direct" -q
       - name: Run GenVM Direct Mode tests
         env:
           GENVM_GITHUB_TOKEN: ${{ github.token }}
@@ -44,3 +44,5 @@ jobs:
         run: npm --prefix frontend run typecheck
       - name: Build frontend
         run: npm --prefix frontend run build
+      - name: Audit frontend lockfile
+        run: npm --prefix frontend audit --audit-level=high

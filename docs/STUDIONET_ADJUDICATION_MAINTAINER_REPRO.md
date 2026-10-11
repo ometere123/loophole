@@ -32,4 +32,14 @@ Please correlate the two child hashes with worker logs and return, for each tran
 6. whether the transaction was reset after a stale claim or worker restart;
 7. the first causal failure before the final `max_recovery_cycles_exceeded` record.
 
-The public RPC does not expose these fields. The repository does not infer them from empty final votes. The isolated `diagnostics/AdjudicationProbe.py` is ready to compare direct nondeterministic execution, finalized-triggered nondeterministic execution, and a deterministic finalized child after explicit approval for additional Studionet writes.
+The public RPC does not expose these fields. The repository does not infer them from empty final votes.
+
+## Isolated control result
+
+After the malformed runner header was corrected, one separately approved zero-value diagnostic deployment was run on the same Studionet stack. The probe address is `0xF1a8f257954204bedc1bce57B8C498c9f9841889`, with corrected-source SHA-256 `5c692d508d0bf412f22162581adc39b93bf449d62e51ce8cb427060001b12d01`. The deployment finalized with successful leader execution. The sequential control transactions all finalized successfully:
+
+- deterministic finalized child: parent `0x65c0a889a888d41d9ff160c20f976991a33ae88657919e19df2539968546c557`, child `0x89ca8c6dfb4fb4d34e89991c0e68b569a53f3525eb17e0d96de55b96391a8976`, `ping_count` `0 → 1`;
+- direct nondeterministic judgment: `0x6ba3bacc795122acb6be070cafeb67b0203718d62084f3cb09e0e97289078004`, validator agreement and `{"label":"CONTROL"}`;
+- finalized-triggered nondeterministic judgment: parent `0x040d6346a1576d114ab1af662dac390316a70c9b2e14f278e46a0eb4cea8f2fa`, child `0x54fd07c0562d0e85ab8ea7ac91fbdb18bbfb7dfbe2789cf247b1ef887ce5b8b6`, validator agreement and `{"label":"CONTROL"}`.
+
+The complete records are in [`docs/ADJUDICATION_PROBE_2026-10-11.md`](ADJUDICATION_PROBE_2026-10-11.md) and its linked JSON evidence. This rules out a universal Studionet failure for direct nondeterminism, finalized self-messages, and deterministic finalized children. It does not reproduce the RuleVault → GapJudge cross-contract message, so the remaining differential is the cross-contract boundary and/or the production adjudication payload. One additional zero-value cross-contract diagnostic deployment is the minimum next action; it must be separately approved before any new Studionet write.
