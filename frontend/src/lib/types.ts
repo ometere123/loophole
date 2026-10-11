@@ -27,6 +27,10 @@ export type DeliveryVerification = {
   childHash?: string;
   beneficiary: string;
   amountWei: string;
+  parentLifecycleStatus?: string | null;
+  childLifecycleStatus?: string | null;
+  parentEvmReceiptStatus?: string | null;
+  childEvmReceiptStatus?: string | null;
   reasons: string[];
   checkedAt: number;
 };
