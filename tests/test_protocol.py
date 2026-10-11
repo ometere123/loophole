@@ -150,3 +150,114 @@ def test_early_winner_releases_other_hidden_commitment(funded):
     w.run(w.vaddr,w.bob,'settle_remaining_bond',2)
     assert w.vault.get_credit(w.bob)==10**16
     assert w.vault.total_locked==0
+
+
+def test_review_queue_selects_earliest_revealed_attempt(funded):
+    w = funded
+    first_digest, first_payload = attack(1, w.alice, salt='first0123456789')
+    second_digest, second_payload = attack(1, w.bob, salt='second012345678')
+    w.run(w.vaddr, w.alice, 'commit_attempt', 1, first_digest, value=10**16)
+    w.run(w.vaddr, w.bob, 'commit_attempt', 1, second_digest, value=10**16)
+    w.run(w.vaddr, w.alice, 'reveal_attempt', 1, *first_payload)
+    w.run(w.vaddr, w.bob, 'reveal_attempt', 2, *second_payload)
+
+    w.run(w.vaddr, w.bob, 'start_review', 1)
+    challenge = json.loads(w.vault.get_challenge(1))
+    assert challenge['active_attempt'] == '1'
+    assert json.loads(w.vault.get_attempt(1))['status'] == 'REVIEWING'
+    assert json.loads(w.vault.get_attempt(2))['status'] == 'REVEALED'
+    w.flush()
+
+
+def test_unrevealed_front_commitment_blocks_until_expiry_then_yields_queue(funded):
+    w = funded
+    first_digest, _ = attack(1, w.alice, salt='front0123456789')
+    second_digest, second_payload = attack(1, w.bob, salt='ready0123456789')
+    w.run(w.vaddr, w.alice, 'commit_attempt', 1, first_digest, value=10**16)
+    w.run(w.vaddr, w.bob, 'commit_attempt', 1, second_digest, value=10**16)
+    w.run(w.vaddr, w.bob, 'reveal_attempt', 2, *second_payload)
+
+    with pytest.raises(Exception, match='earlier commitment remains revealable'):
+        w.run(w.vaddr, w.bob, 'start_review', 1)
+
+    challenge = json.loads(w.vault.get_challenge(1))
+    challenge['reveal_deadline'] = 0
+    w.vault.challenges[1] = json.dumps(challenge)
+    w.run(w.vaddr, w.bob, 'start_review', 1)
+
+    assert json.loads(w.vault.get_attempt(1))['status'] == 'EXPIRED'
+    assert json.loads(w.vault.get_challenge(1))['active_attempt'] == '2'
+    assert w.vault.get_credit(w.owner) == 10**16
+    w.flush()
+
+
+@pytest.mark.parametrize(
+    'appeal_verdict,expected_recipient,expected_credit,expected_locked',
+    [
+        ('VALID', 'alice', 2 * 10**18 + 2 * 10**16, 0),
+        ('INVALID', 'owner', 2 * 10**16, 2 * 10**18),
+        ('INCONCLUSIVE', 'alice', 2 * 10**16, 2 * 10**18),
+    ],
+)
+def test_invalid_appeal_has_single_terminal_settlement(
+    funded, appeal_verdict, expected_recipient, expected_credit, expected_locked
+):
+    w = funded
+    digest, payload = attack(1, w.alice)
+    w.run(w.vaddr, w.alice, 'commit_attempt', 1, digest, value=10**16)
+    w.run(w.vaddr, w.alice, 'reveal_attempt', 1, *payload)
+    w.gl.nondet.answer = (
+        '{"verdict":"INVALID","letter":false,"purpose":true,'
+        '"feasible":true,"reason":"The published limitations reject this claim."}'
+    )
+    w.run(w.vaddr, w.owner, 'start_review', 1)
+    w.flush()
+    assert json.loads(w.vault.get_attempt(1))['status'] == 'INVALID_PENDING'
+
+    if appeal_verdict == 'VALID':
+        w.gl.nondet.answer = (
+            '{"verdict":"VALID","letter":true,"purpose":true,'
+            '"feasible":true,"reason":"The exact policy permits the demonstrated attack."}'
+        )
+    elif appeal_verdict == 'INVALID':
+        w.gl.nondet.answer = (
+            '{"verdict":"INVALID","letter":false,"purpose":true,'
+            '"feasible":true,"reason":"The claim remains barred by the policy."}'
+        )
+    else:
+        w.gl.nondet.answer = (
+            '{"verdict":"INCONCLUSIVE","letter":false,"purpose":false,'
+            '"feasible":false,"reason":"The appeal lacks enough policy detail."}'
+        )
+
+    w.run(w.vaddr, w.alice, 'appeal_invalid', 1, value=10**16)
+    w.flush()
+    attempt = json.loads(w.vault.get_attempt(1))
+    challenge = json.loads(w.vault.get_challenge(1))
+    assert attempt['status'] == 'DECIDED'
+    assert attempt['verdict'] == appeal_verdict
+    assert challenge['active_attempt'] == '0'
+    assert challenge['active_slots'] == '0'
+    assert w.vault.total_locked == expected_locked
+    if expected_recipient == 'alice':
+        assert w.vault.get_credit(w.alice) == expected_credit
+        assert w.vault.get_credit(w.owner) == 0
+    else:
+        assert w.vault.get_credit(w.owner) == expected_credit
+        assert w.vault.get_credit(w.alice) == 0
+
+
+def test_refund_rejects_revealed_right_after_reveal_deadline(funded):
+    w = funded
+    digest, payload = attack(1, w.alice)
+    w.run(w.vaddr, w.alice, 'commit_attempt', 1, digest, value=10**16)
+    w.run(w.vaddr, w.alice, 'reveal_attempt', 1, *payload)
+    challenge = json.loads(w.vault.get_challenge(1))
+    challenge['reveal_deadline'] = 0
+    w.vault.challenges[1] = json.dumps(challenge)
+
+    with pytest.raises(Exception, match='pending challenger rights'):
+        w.run(w.vaddr, w.owner, 'refund_unwon', 1)
+
+    assert json.loads(w.vault.get_challenge(1))['status'] == 'OPEN'
+    assert w.vault.get_credit(w.owner) == 0
