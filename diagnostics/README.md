@@ -26,6 +26,8 @@ approval after the local tests pass.
 These diagnostics are excluded from the production release. The probe and
 relay records, including the sequential probe controls and authenticated relay
 ancestry, are recorded in [`docs/ADJUDICATION_PROBE_2026-10-11.md`](../docs/ADJUDICATION_PROBE_2026-10-11.md).
+The approved direct workload result is recorded in
+[`docs/DIRECT_ADJUDICATION_LIVE_2026-10-11.md`](../docs/DIRECT_ADJUDICATION_LIVE_2026-10-11.md).
 The relay proves the generic finalized cross-contract boundary, while the
 production GapJudge workload and authenticated RuleVault callback remain
 separate questions.
