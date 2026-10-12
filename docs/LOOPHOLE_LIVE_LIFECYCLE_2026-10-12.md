@@ -1,3 +1,8 @@
+> **Historical superseded record.** This lifecycle used the previous monolith
+> deployment at `0x7a5e…`. The current source-verified deployment and funded
+> lifecycle are recorded in
+> [`LOOPHOLE corrected deployment live lifecycle — 2026-10-12`](LOOPHOLE_CORRECTED_LIVE_LIFECYCLE_2026-10-12.md).
+
 # LOOPHOLE live lifecycle evidence — 2026-10-12
 
 The canonical single-contract deployment at `0x7a5eC154FfA7c05DDe0Fbb1a34286d2eaDA3FBaf` completed a real Studionet 61999 lifecycle using organizer `0xfcef676044658b5402f590dabe9e04a0f640522f` and challenger `0x81301DD9C3605a7DA743D87b803156d8445620B0`.

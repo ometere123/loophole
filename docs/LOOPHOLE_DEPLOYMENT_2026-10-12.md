@@ -1,3 +1,7 @@
+> **Historical superseded record.** This was the earlier monolith deployment.
+> The current deployment is documented in
+> [`LOOPHOLE corrected deployment — 2026-10-12`](LOOPHOLE_CORRECTED_DEPLOYMENT_2026-10-12.md).
+
 # LOOPHOLE monolith deployment — 2026-10-12
 
 The one approved zero-value deployment used the repository-local GenLayer CLI

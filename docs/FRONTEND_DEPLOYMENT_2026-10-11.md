@@ -1,3 +1,8 @@
+> **Historical superseded record.** This deployment predates the corrected
+> single-contract binding. The current production URL and canonical address
+> verification are in
+> [`FRONTEND_DEPLOYMENT_2026-10-12`](FRONTEND_DEPLOYMENT_2026-10-12.md).
+
 # Frontend production deployment — 2026-10-11
 
 The restored Vercel project `delealufejoel-4184s-projects/loophole` was
