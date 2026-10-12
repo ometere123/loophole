@@ -74,6 +74,20 @@ Challenge durations are limited to 1–30 days, active attempts to 12, lifetime 
 
 The frontend reads challenges and verdicts from chain state, gates wallet writes to EIP-1193 chain 61999, distinguishes accepted from finalized execution, restores pending transaction provenance after refresh, and can recover missing withdrawal parent provenance from the read-only explorer history before showing delivery as verified. Missing, ambiguous or unavailable evidence remains unresolved with explorer links.
 
+## Scope, Verification & Known Limitations
+
+LOOPHOLE! rewards independently adjudicated textual or hypothetical loopholes against immutable rulebooks. GenLayer validators assess literal compliance, conflict with the stated purpose and feasibility of the described sequence. A `VALID` result means the frozen text supports those findings; it is not proof that an exploit occurred in the real world.
+
+Appeals reassess the original frozen rulebook and attempt evidence. They do not accept additional supporting evidence or a rewritten attack, so a new theory must be submitted as a separate attempt when the challenge permits it.
+
+GEN delivery has separate evidence states: `CLAIMABLE` is finalized on-chain credit; `TRANSFER SUBMITTED` is a withdrawal parent submitted with delivery still unverified; `PARENT FINALIZED` means the parent executed successfully but does not prove payment; `DELIVERY VERIFIED` requires an independently matched finalized child with the exact contract origin, beneficiary, amount, successful receipt and authoritative recipient-credit evidence; `FAILED` requires authoritative child failure or non-credit; and `UNRESOLVED` means safe delivery proof is unavailable. A successful withdrawal parent alone never proves that GEN reached the recipient.
+
+The verifier is read-only. If an external transfer fails or remains ambiguous, the current protocol cannot safely recredit or retry it automatically. Credit is never restored from a timeout, a later positive balance or beneficiary acknowledgement, and the application makes no guarantee of payout recovery.
+
+The current monolith has authentic live evidence for `VALID` with a verified bounty-plus-bond receipt ([funded lifecycle](docs/LOOPHOLE_CURRENT_FUNDED_LIFECYCLE_2026-10-12.md)), `INVALID` with no entitlement ([invalid lifecycle](docs/LOOPHOLE_CURRENT_INVALID_LIFECYCLE_2026-10-12.md)), and `INCONCLUSIVE` with returned-bond delivery ([neutral lifecycle](docs/LOOPHOLE_CURRENT_NEUTRAL_LIFECYCLE_2026-10-12.md)). The `VALID` and `INCONCLUSIVE` records include finalized native GEN child receipts independently matched to their beneficiaries. The invalid case remains in its documented bounded appeal window; live appeal settlement, stalled-review recovery and external-transfer failure recovery are not claimed as demonstrated.
+
+`contracts/Loophole.py` is the sole active Intelligent Contract for LOOPHOLE! on Studionet 61999. The earlier RuleVault and GapJudge deployments remain separate historical deployments with their own source and fund records; they are not part of the active monolith or an automatic migration path.
+
 The current public frontend is [`https://loophole-one.vercel.app/`](https://loophole-one.vercel.app/), verified against the current monolith above. Its deployment and environment evidence is recorded in [`docs/FRONTEND_DEPLOYMENT_2026-10-12.md`](docs/FRONTEND_DEPLOYMENT_2026-10-12.md).
 
 ## Deployment
