@@ -50,8 +50,8 @@
     "evidence": "docs/evidence/loophole-deployment-2026-10-12.json"
   },
   "evidence": "docs/evidence/loophole-current-deployment-2026-10-12.json",
-  "economic_lifecycle_verified": false,
-  "economic_lifecycle_evidence": null,
+  "economic_lifecycle_verified": true,
+  "economic_lifecycle_evidence": "docs/evidence/loophole-current-funded-lifecycle-2026-10-12.json",
   "previous_current_deployment": {
     "address": "0xe5e2b5E9Bc53c9D19FEce32a72238842AD8B093e",
     "deploy_tx": "0xf27efe23174de8d46ace87bade177ebeb653d2a7a13c8f398bcfccfceb4dd1c3",
