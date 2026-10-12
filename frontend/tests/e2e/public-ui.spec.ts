@@ -73,7 +73,7 @@ test('wallet rejection is surfaced', async ({page}) => {
 });
 
 test('mobile navigation opens without horizontal overflow', async ({page}) => {
-  test.skip((await page.evaluate(() => window.innerWidth)) > 800, 'mobile navigation is covered by the mobile project');
+  await page.setViewportSize({width: 390, height: 844});
   await page.goto('/');
   await page.getByRole('button', {name: /toggle menu/i}).click();
   await expect(page.getByRole('navigation', {name: /main navigation/i})).toBeVisible();

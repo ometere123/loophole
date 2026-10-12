@@ -64,9 +64,9 @@ The original two-contract deployment remains authoritative for its existing fund
 - GapJudge: `0xb14B08cd35Fa64FE795e14931DdA09999627785d`
 - RuleVault: `0xa77A29C96c30B2A5dB865a2CE35c8F396d504F26`
 
-The corrected source-verified monolith is deployed at [`0xe5e2b5E9Bc53c9D19FEce32a72238842AD8B093e`](https://explorer-studio.genlayer.com/address/0xe5e2b5E9Bc53c9D19FEce32a72238842AD8B093e). Its finalized zero-value deployment transaction is [`0xf27efe23174de8d46ace87bade177ebeb653d2a7a13c8f398bcfccfceb4dd1c3`](https://explorer-studio.genlayer.com/tx/0xf27efe23174de8d46ace87bade177ebeb653d2a7a13c8f398bcfccfceb4dd1c3), with exact source and schema evidence in [`docs/LOOPHOLE_CORRECTED_DEPLOYMENT_2026-10-12.md`](docs/LOOPHOLE_CORRECTED_DEPLOYMENT_2026-10-12.md). The previous monolith at [`0x7a5eC154FfA7c05DDe0Fbb1a34286d2eaDA3FBaf`](https://explorer-studio.genlayer.com/address/0x7a5eC154FfA7c05DDe0Fbb1a34286d2eaDA3FBaf) and its evidence in [`docs/LOOPHOLE_DEPLOYMENT_2026-10-12.md`](docs/LOOPHOLE_DEPLOYMENT_2026-10-12.md) remain historical. No historical escrow is migrated automatically.
+The current source-verified monolith is deployed at [`0xec98AFC80bda4b664F20d782aA8a0bd49e436233`](https://explorer-studio.genlayer.com/address/0xec98AFC80bda4b664F20d782aA8a0bd49e436233). Its finalized zero-value deployment transaction is [`0xc5a5dee6cbbb2f081a37adefcb060061abe306044a46c17c2587f18577bda2d1`](https://explorer-studio.genlayer.com/tx/0xc5a5dee6cbbb2f081a37adefcb060061abe306044a46c17c2587f18577bda2d1), with exact source and schema evidence in [`docs/LOOPHOLE_CURRENT_DEPLOYMENT_2026-10-12.md`](docs/LOOPHOLE_CURRENT_DEPLOYMENT_2026-10-12.md). The previous source-verified monolith at [`0xe5e2b5E9Bc53c9D19FEce32a72238842AD8B093e`](https://explorer-studio.genlayer.com/address/0xe5e2b5E9Bc53c9D19FEce32a72238842AD8B093e), the earlier monolith at [`0x7a5eC154FfA7c05DDe0Fbb1a34286d2eaDA3FBaf`](https://explorer-studio.genlayer.com/address/0x7a5eC154FfA7c05DDe0Fbb1a34286d2eaDA3FBaf), and their evidence remain historical. No historical escrow is migrated automatically.
 
-The corrected deployment's complete funded challenge, adjudication, entitlement and native GEN withdrawal is recorded in [`docs/LOOPHOLE_CORRECTED_LIVE_LIFECYCLE_2026-10-12.md`](docs/LOOPHOLE_CORRECTED_LIVE_LIFECYCLE_2026-10-12.md), including the independently verified external transfer child. The earlier single-contract lifecycle remains available as historical evidence in [`docs/LOOPHOLE_LIVE_LIFECYCLE_2026-10-12.md`](docs/LOOPHOLE_LIVE_LIFECYCLE_2026-10-12.md).
+The previous monolith's complete funded challenge, adjudication, entitlement and native GEN withdrawal remains recorded in [`docs/LOOPHOLE_CORRECTED_LIVE_LIFECYCLE_2026-10-12.md`](docs/LOOPHOLE_CORRECTED_LIVE_LIFECYCLE_2026-10-12.md), including the independently verified external transfer child. The current deployment has no migrated escrow; its new funded lifecycle is pending.
 
 ## Safety bounds and delivery
 
@@ -74,7 +74,7 @@ Challenge durations are limited to 1–30 days, active attempts to 12, lifetime 
 
 The frontend reads challenges and verdicts from chain state, gates wallet writes to EIP-1193 chain 61999, distinguishes accepted from finalized execution, restores pending transaction provenance after refresh, and shows unresolved delivery with explorer links.
 
-The current public frontend is [`https://loophole-one.vercel.app/`](https://loophole-one.vercel.app/), verified against the corrected source-verified monolith address. Its deployment and environment evidence is recorded in [`docs/FRONTEND_DEPLOYMENT_2026-10-12.md`](docs/FRONTEND_DEPLOYMENT_2026-10-12.md).
+The current public frontend is [`https://loophole-one.vercel.app/`](https://loophole-one.vercel.app/), verified against the current monolith above. Its deployment and environment evidence is recorded in [`docs/FRONTEND_DEPLOYMENT_2026-10-12.md`](docs/FRONTEND_DEPLOYMENT_2026-10-12.md).
 
 ## Deployment
 

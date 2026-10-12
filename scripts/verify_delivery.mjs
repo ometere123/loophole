@@ -6,7 +6,7 @@ const RPC = process.env.LOOPHOLE_RPC ?? 'https://studio.genlayer.com/api';
 // turn a valid current withdrawal into a false UNRESOLVED result.
 const VAULT = (process.env.LOOPHOLE_ADDRESS ??
   process.env.NEXT_PUBLIC_LOOPHOLE_ADDRESS ??
-  '0xe5e2b5E9Bc53c9D19FEce32a72238842AD8B093e').toLowerCase();
+  '0xec98AFC80bda4b664F20d782aA8a0bd49e436233').toLowerCase();
 const CHAIN_ID = '0xf22f';
 const DELIVERY_STATES = Object.freeze({
   CLAIMABLE: 'CLAIMABLE',

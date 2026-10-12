@@ -5,15 +5,15 @@
   "explorer": "https://explorer-studio.genlayer.com",
   "cli_version": "0.39.1",
   "contract": "Loophole",
-  "address": "0xe5e2b5E9Bc53c9D19FEce32a72238842AD8B093e",
-  "deploy_tx": "0xf27efe23174de8d46ace87bade177ebeb653d2a7a13c8f398bcfccfceb4dd1c3",
-  "deploy_explorer": "https://explorer-studio.genlayer.com/tx/0xf27efe23174de8d46ace87bade177ebeb653d2a7a13c8f398bcfccfceb4dd1c3",
+  "address": "0xec98AFC80bda4b664F20d782aA8a0bd49e436233",
+  "deploy_tx": "0xc5a5dee6cbbb2f081a37adefcb060061abe306044a46c17c2587f18577bda2d1",
+  "deploy_explorer": "https://explorer-studio.genlayer.com/tx/0xc5a5dee6cbbb2f081a37adefcb060061abe306044a46c17c2587f18577bda2d1",
   "source": {
     "path": "contracts/Loophole.py",
-    "sha256": "f173b087336403044db3ce793c2c0df57e5104b5078964b2ce8b8b7e88ccf8c7",
+    "sha256": "940446781007701148449db3316f8b0c0e6b04ee84a8de405f78d5789bc1dae1",
     "rpc_method": "gen_getContractCode",
     "exact_byte_match": true,
-    "bytes": 28740
+    "bytes": 30059
   },
   "deployment_receipt": {
     "status": "FINALIZED",
@@ -49,7 +49,16 @@
     "source_bytes": 28363,
     "evidence": "docs/evidence/loophole-deployment-2026-10-12.json"
   },
-  "evidence": "docs/evidence/loophole-corrected-deployment-2026-10-12.json",
-  "economic_lifecycle_verified": true,
-  "economic_lifecycle_evidence": "docs/evidence/loophole-corrected-live-lifecycle-2026-10-12.json"
+  "evidence": "docs/evidence/loophole-current-deployment-2026-10-12.json",
+  "economic_lifecycle_verified": false,
+  "economic_lifecycle_evidence": null,
+  "previous_current_deployment": {
+    "address": "0xe5e2b5E9Bc53c9D19FEce32a72238842AD8B093e",
+    "deploy_tx": "0xf27efe23174de8d46ace87bade177ebeb653d2a7a13c8f398bcfccfceb4dd1c3",
+    "source_sha256": "f173b087336403044db3ce793c2c0df57e5104b5078964b2ce8b8b7e88ccf8c7",
+    "source_bytes": 28740,
+    "evidence": "docs/evidence/loophole-corrected-deployment-2026-10-12.json",
+    "economic_lifecycle_verified": true,
+    "economic_lifecycle_evidence": "docs/evidence/loophole-corrected-live-lifecycle-2026-10-12.json"
+  }
 }

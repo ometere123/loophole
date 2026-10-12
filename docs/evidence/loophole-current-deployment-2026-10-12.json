@@ -1,0 +1,62 @@
+{
+  "rpc": "https://studio.genlayer.com/api",
+  "chain_id": "0xf22f",
+  "expected_chain_id": "0xf22f",
+  "address": "0xec98AFC80bda4b664F20d782aA8a0bd49e436233",
+  "deployment_tx": "0xc5a5dee6cbbb2f081a37adefcb060061abe306044a46c17c2587f18577bda2d1",
+  "value_wei": "0",
+  "source": {
+    "path": "contracts/Loophole.py",
+    "local_bytes": 30059,
+    "local_sha256": "940446781007701148449db3316f8b0c0e6b04ee84a8de405f78d5789bc1dae1",
+    "gen_getContractCode_bytes": 30059,
+    "gen_getContractCode_sha256": "940446781007701148449db3316f8b0c0e6b04ee84a8de405f78d5789bc1dae1",
+    "submitted_contract_code_bytes": 30059,
+    "submitted_contract_code_sha256": "940446781007701148449db3316f8b0c0e6b04ee84a8de405f78d5789bc1dae1",
+    "deployed_exact_match": true,
+    "submitted_exact_match": true
+  },
+  "finality": {
+    "gen_getTransactionStatus": "FINALIZED",
+    "eth_receipt_status": "0x1",
+    "from": "0xA7EeAE0E93793e3146Cb14b0700251B8b0EBADFB",
+    "to": "0xec98AFC80bda4b664F20d782aA8a0bd49e436233",
+    "result": 6,
+    "result_name": "MAJORITY_AGREE",
+    "leader_execution": "SUCCESS",
+    "votes": {
+      "0x14402D49f317CE1a2F35BAE01b1804A2A9703dCb": "agree",
+      "0x36728d2a123aB444E603EE5b2ad17d18Bb193557": "idle",
+      "0x5310dcF075E0BD47d29B8ec6581F736C767f54D2": "agree",
+      "0x772ffCd1dF6Cc566eC4b8d3f4F4f8eBbb6B36C84": "agree",
+      "0xcE1d6bBB36B744536153966B4DD42276f5ADd0F8": "idle"
+    },
+    "num_of_rounds": "1"
+  },
+  "schema": {
+    "constructor_params": [],
+    "method_count": 19,
+    "exact_method_set": true
+  },
+  "configuration": {
+    "contract": "Loophole",
+    "chain": "61999",
+    "adjudication_mode": "DIRECT_ATOMIC",
+    "commitment_encoding": "length-prefixed-utf8-v1",
+    "challenge_count": "0",
+    "attempt_count": "0",
+    "adjudication_count": "0",
+    "withdrawal_count": "0",
+    "total_credit_wei": "0",
+    "total_locked_wei": "0"
+  },
+  "historical_contracts": {
+    "gapjudge": "0xb14B08cd35Fa64FE795e14931DdA09999627785d",
+    "rulevault": "0xa77A29C96c30B2A5dB865a2CE35c8F396d504F26",
+    "previous_monolith": "0xe5e2b5E9Bc53c9D19FEce32a72238842AD8B093e"
+  },
+  "verification": {
+    "passed": true,
+    "failures": []
+  }
+}
