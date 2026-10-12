@@ -66,7 +66,7 @@ The original two-contract deployment remains authoritative for its existing fund
 
 The corrected source-verified monolith is deployed at [`0xe5e2b5E9Bc53c9D19FEce32a72238842AD8B093e`](https://explorer-studio.genlayer.com/address/0xe5e2b5E9Bc53c9D19FEce32a72238842AD8B093e). Its finalized zero-value deployment transaction is [`0xf27efe23174de8d46ace87bade177ebeb653d2a7a13c8f398bcfccfceb4dd1c3`](https://explorer-studio.genlayer.com/tx/0xf27efe23174de8d46ace87bade177ebeb653d2a7a13c8f398bcfccfceb4dd1c3), with exact source and schema evidence in [`docs/LOOPHOLE_CORRECTED_DEPLOYMENT_2026-10-12.md`](docs/LOOPHOLE_CORRECTED_DEPLOYMENT_2026-10-12.md). The previous monolith at [`0x7a5eC154FfA7c05DDe0Fbb1a34286d2eaDA3FBaf`](https://explorer-studio.genlayer.com/address/0x7a5eC154FfA7c05DDe0Fbb1a34286d2eaDA3FBaf) and its evidence in [`docs/LOOPHOLE_DEPLOYMENT_2026-10-12.md`](docs/LOOPHOLE_DEPLOYMENT_2026-10-12.md) remain historical. No historical escrow is migrated automatically.
 
-The first complete funded challenge, adjudication, entitlement and native GEN withdrawal is recorded in [`docs/LOOPHOLE_LIVE_LIFECYCLE_2026-10-12.md`](docs/LOOPHOLE_LIVE_LIFECYCLE_2026-10-12.md), including the independently verified external transfer child.
+The corrected deployment's complete funded challenge, adjudication, entitlement and native GEN withdrawal is recorded in [`docs/LOOPHOLE_CORRECTED_LIVE_LIFECYCLE_2026-10-12.md`](docs/LOOPHOLE_CORRECTED_LIVE_LIFECYCLE_2026-10-12.md), including the independently verified external transfer child. The earlier single-contract lifecycle remains available as historical evidence in [`docs/LOOPHOLE_LIVE_LIFECYCLE_2026-10-12.md`](docs/LOOPHOLE_LIVE_LIFECYCLE_2026-10-12.md).
 
 ## Safety bounds and delivery
 

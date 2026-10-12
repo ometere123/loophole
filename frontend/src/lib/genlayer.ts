@@ -11,6 +11,9 @@ const readClient = createClient({chain:studionet});
 const addr = VAULT_ADDRESS as `0x${string}`;
 const RPC_TIMEOUT_MS=15000;
 const READ_TIMEOUT_MS=20000;
+const TX_POLL_INTERVAL_MS=5000;
+const ACCEPTED_RETRIES=24;
+const FINALIZED_RETRIES=180;
 function requireDeployment(){if(!READY)throw new Error('The Loophole contract is not deployed/configured. Set NEXT_PUBLIC_LOOPHOLE_ADDRESS.');}
 function parseRecord<T>(data:unknown):T|null{if(!data||data==='')return null;const parsed=typeof data==='string'? JSON.parse(data): data;return parsed as T;}
 async function withTimeout<T>(promise:Promise<T>,milliseconds:number,label:string):Promise<T>{let timer:ReturnType<typeof setTimeout>|undefined;try{return await Promise.race([promise,new Promise<T>((_,reject)=>{timer=setTimeout(()=>reject(new Error(`${label} timed out after ${milliseconds}ms`)),milliseconds);})]);}finally{if(timer)clearTimeout(timer);}}
@@ -153,9 +156,9 @@ export async function writeVault(method:string,args:unknown[],value:bigint|undef
  const persist=(phase:'submitted'|'accepted'|'unknown'|'execution_failed',error?:string)=>savePersistedTransaction({hash,account:address.toLowerCase(),phase,title:method,error,updatedAt:Date.now()});
  persist('submitted');
   onUpdate({phase:'submitted',hash,title:method});
- try{await readClient.waitForTransactionReceipt({hash,status:TransactionStatus.ACCEPTED});persist('accepted');onUpdate({phase:'accepted',hash,title:method});}catch{/* final receipt remains authoritative */}
+ try{await readClient.waitForTransactionReceipt({hash,status:TransactionStatus.ACCEPTED,interval:TX_POLL_INTERVAL_MS,retries:ACCEPTED_RETRIES});persist('accepted');onUpdate({phase:'accepted',hash,title:method});}catch{/* final receipt remains authoritative */}
  try{
-   const receipt:GenLayerTransaction=await readClient.waitForTransactionReceipt({hash,status:TransactionStatus.FINALIZED});
+   const receipt:GenLayerTransaction=await readClient.waitForTransactionReceipt({hash,status:TransactionStatus.FINALIZED,interval:TX_POLL_INTERVAL_MS,retries:FINALIZED_RETRIES});
    const outcome=receipt.txExecutionResultName;
    if(!hasSuccessfulExecution(receipt)){
      persist('execution_failed',`Finalized, but execution was not verified successful (${outcome||'unknown'}).`);

@@ -37,5 +37,6 @@ and the original RuleVault/GapJudge pair remain preserved historical
 deployments. Existing funds and challenges on those addresses were not touched.
 
 This record proves deployment finality, execution, schema and source
-correspondence. A funded challenge, adjudication, entitlement and withdrawal
-against this corrected address remain a separate live verification step.
+correspondence. The subsequent funded challenge, adjudication, entitlement and
+withdrawal against this corrected address are recorded in
+[`docs/LOOPHOLE_CORRECTED_LIVE_LIFECYCLE_2026-10-12.md`](LOOPHOLE_CORRECTED_LIVE_LIFECYCLE_2026-10-12.md).

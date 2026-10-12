@@ -1,0 +1,175 @@
+{
+  "observed_at": "2026-10-12",
+  "network": {
+    "chain_id_hex": "0xf22f",
+    "chain_id_decimal": 61999,
+    "rpc": "https://studio.genlayer.com/api",
+    "explorer": "https://explorer-studio.genlayer.com"
+  },
+  "contract": {
+    "address": "0xe5e2b5E9Bc53c9D19FEce32a72238842AD8B093e",
+    "source_sha256": "f173b087336403044db3ce793c2c0df57e5104b5078964b2ce8b8b7e88ccf8c7",
+    "mode": "DIRECT_ATOMIC"
+  },
+  "accounts": {
+    "organizer": "0xfcef676044658B5402f590dabe9E04A0F640522f",
+    "challenger_and_beneficiary": "0x81301DD9C3605a7DA743D87b803156d8445620B0"
+  },
+  "challenge": {
+    "challenge_id": "1",
+    "title": "Repeatable educational post loophole",
+    "prize_wei": "20000000000000000",
+    "bond_wei": "10000000000000000",
+    "create_transaction": {
+      "hash": "0xb22ffb39a5d18ba82aa646f428e9932a8a3b4dc3f469c184e327188f7d7972ae",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0xb22ffb39a5d18ba82aa646f428e9932a8a3b4dc3f469c184e327188f7d7972ae",
+      "status": "FINALIZED",
+      "result_name": "MAJORITY_AGREE",
+      "leader_execution": "SUCCESS",
+      "validator_votes": "5 AGREE",
+      "value_wei": "20000000000000000",
+      "value_credited": true
+    },
+    "state_after_settlement": {
+      "status": "WON",
+      "winner": "0x81301dd9c3605a7da743d87b803156d8445620b0",
+      "winner_attempt": "1",
+      "active_attempt": "0",
+      "active_round": "1"
+    }
+  },
+  "attempt": {
+    "attempt_id": "1",
+    "commit_transaction": {
+      "hash": "0x2d92802b2a5772e2732621271f3e722ca170a929562b2f074893187f1273f057",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0x2d92802b2a5772e2732621271f3e722ca170a929562b2f074893187f1273f057",
+      "status": "FINALIZED",
+      "result_name": "MAJORITY_AGREE",
+      "leader_execution": "SUCCESS",
+      "validator_votes": "3 AGREE, 2 IDLE after quorum",
+      "value_wei": "10000000000000000",
+      "value_credited": true
+    },
+    "reveal_transaction": {
+      "hash": "0x9c20d74900a7ffe615a4e2531e94ffe7caaea973ecf7cfd9628ec052b8f1428e",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0x9c20d74900a7ffe615a4e2531e94ffe7caaea973ecf7cfd9628ec052b8f1428e",
+      "status": "FINALIZED",
+      "result_name": "MAJORITY_AGREE",
+      "leader_execution": "SUCCESS",
+      "validator_votes": "3 AGREE, 2 IDLE after quorum",
+      "value_wei": "0",
+      "value_credited": false
+    },
+    "frozen_evidence": {
+      "evidence_hash": "dc0eea4ca6e74939a5fe7000fec080bb090b840c3e55ca7464204826a029cb4c",
+      "scenario": "I publish a five-word post that repeats an earlier explanation, attach a source link, and submit it as a new educational contribution to receive the points.",
+      "rule_quote": "Award 10 points to any public post with at least five words and one source link.",
+      "impact": "This lets a meaningless repeated post earn points while defeating the goal of rewarding original educational contributions."
+    },
+    "start_review_transaction": {
+      "hash": "0x439f492d16b0fe5e07d07b2e81b0ea46f4f5ffc4f678607941751259bf99a15d",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0x439f492d16b0fe5e07d07b2e81b0ea46f4f5ffc4f678607941751259bf99a15d",
+      "status": "FINALIZED",
+      "result_name": "MAJORITY_AGREE",
+      "leader_execution": "SUCCESS",
+      "validator_votes": "3 AGREE, 2 IDLE after quorum",
+      "state_readback": {
+        "active_attempt": "1",
+        "active_round": "1",
+        "attempt_status": "REVIEWING"
+      }
+    },
+    "adjudication_transaction": {
+      "hash": "0x6a92213a49bbc55e313e81a9aedf10068d65d91380cd8c9aa476def919918c89",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0x6a92213a49bbc55e313e81a9aedf10068d65d91380cd8c9aa476def919918c89",
+      "status": "FINALIZED",
+      "result_name": "MAJORITY_AGREE",
+      "leader_execution": "SUCCESS",
+      "leader_result": "AAA=",
+      "validator_votes": {
+        "agree": 3,
+        "disagree": 2,
+        "all_validator_executions": "SUCCESS",
+        "validator_addresses": [
+          "0x4aba638Cf0Cf5249437AaD968fC69dde46ae6BAC",
+          "0xDB1c35c1f05d885999b8f13e5735307BcC16Be88",
+          "0xec2Fb79cd12255Eb34886CEd7332f27B98DEe658",
+          "0xacc2459F341D7a887bcA8FAA62F1EC9378d4Bc67",
+          "0xBBb165E4c9d73a1493D363280f7067Cd07891dBE"
+        ],
+        "round_votes": ["AGREE", "DISAGREE", "AGREE", "AGREE", "DISAGREE"]
+      },
+      "state_readback": {
+        "challenge_status": "WON",
+        "winner": "0x81301dd9c3605a7da743d87b803156d8445620b0",
+        "winner_attempt": "1",
+        "attempt_status": "DECIDED",
+        "verdict": "VALID",
+        "letter": "PROVEN",
+        "purpose": "PROVEN",
+        "feasible": "PROVEN",
+        "settlement": "ATOMIC",
+        "adjudication_count": "1"
+      }
+    }
+  },
+  "entitlement": {
+    "amount_wei": "30000000000000000",
+    "amount_gen": "0.03",
+    "credit_before_withdrawal": "30000000000000000",
+    "credit_after_withdrawal": "0",
+    "total_locked_after_settlement": "0"
+  },
+  "withdrawal": {
+    "withdrawal_id": "1",
+    "parent_transaction": {
+      "hash": "0xdea2deed18247db21a2cd1fb2f150f2d1cd22b8775b5c378d378a612f06b8aa2",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0xdea2deed18247db21a2cd1fb2f150f2d1cd22b8775b5c378d378a612f06b8aa2",
+      "status": "FINALIZED",
+      "result_name": "MAJORITY_AGREE",
+      "leader_execution": "SUCCESS",
+      "evm_receipt_status": "0x1",
+      "triggered_child": "0x8fb540e4f09ac6e3ba5a33df87a62366238a7b0f70aef778ae2ad22f870806b6"
+    },
+    "child_transfer": {
+      "hash": "0x8fb540e4f09ac6e3ba5a33df87a62366238a7b0f70aef778ae2ad22f870806b6",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0x8fb540e4f09ac6e3ba5a33df87a62366238a7b0f70aef778ae2ad22f870806b6",
+      "from": "0xe5e2b5e9bc53c9d19fece32a72238842ad8b093e",
+      "to": "0x81301dd9c3605a7da743d87b803156d8445620b0",
+      "value_wei": "30000000000000000",
+      "status": "FINALIZED",
+      "evm_receipt_status": "0x1",
+      "value_credited": true,
+      "relationship": "parent.triggered_transactions[0] and child.triggered_by match"
+    },
+    "contract_readback": {
+      "record_status": "TRANSFER_EMITTED_UNVERIFIED",
+      "recipient": "0x81301dd9c3605a7da743d87b803156d8445620b0",
+      "amount_wei": "30000000000000000",
+      "credit_after_withdrawal_wei": "0",
+      "total_credit_wei": "0",
+      "withdrawal_count": "1"
+    },
+    "delivery_verifier_status": "DELIVERY VERIFIED",
+    "recipient_balance_snapshot_after_child_wei": "5371399999999999999885",
+    "recipient_balance_snapshot_after_child_gen": "5371.4",
+    "receipt_note": "The contract record remains TRANSFER_EMITTED_UNVERIFIED. Delivery verification is independent and matched the finalized child, exact origin, exact beneficiary, exact value, successful EVM receipt and value_credited=true."
+  },
+  "rpc_surface": {
+    "supported": ["eth_chainId", "eth_getTransactionByHash", "eth_getTransactionReceipt", "gen_getTransactionStatus"],
+    "unsupported_for_adjudication_probe": [
+      "gen_getTransactionReceipt",
+      "gen_getConsensusData",
+      "gen_getTransactionFee",
+      "gen_getTransactionFees",
+      "gen_getTransactionData",
+      "gen_getTransactionAllData",
+      "gen_getTransactionExecution",
+      "gen_getTransactionLogs",
+      "gen_getTransactionHistory",
+      "gen_getTransactionLifecycle",
+      "gen_dbg_traceTransaction"
+    ],
+    "unsupported_method_policy": "Unsupported RPC methods were recorded as unsupported and were not treated as evidence of failure or success."
+  }
+}

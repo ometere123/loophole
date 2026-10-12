@@ -50,5 +50,6 @@
     "evidence": "docs/evidence/loophole-deployment-2026-10-12.json"
   },
   "evidence": "docs/evidence/loophole-corrected-deployment-2026-10-12.json",
-  "economic_lifecycle_verified": false
+  "economic_lifecycle_verified": true,
+  "economic_lifecycle_evidence": "docs/evidence/loophole-corrected-live-lifecycle-2026-10-12.json"
 }
