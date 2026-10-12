@@ -4,16 +4,16 @@ The linked Vercel project `delealufejoel-4184s-projects/loophole` was deployed
 from the repository root with its verified `frontend` Root Directory setting.
 The deployment completed with state `READY` and target `production`.
 
-- Deployment: [`dpl_7fndczbfJhtg2rYYg8W3FXXSi4hf`](https://vercel.com/delealufejoel-4184s-projects/loophole/7fndczbfJhtg2rYYg8W3FXXSi4hf)
-- Deployment URL: [`https://loophole-rfao2i510-delealufejoel-4184s-projects.vercel.app`](https://loophole-rfao2i510-delealufejoel-4184s-projects.vercel.app)
+- Deployment: [`GGNFUySWc78dE5CkwyAmcx11o19L`](https://vercel.com/delealufejoel-4184s-projects/loophole/GGNFUySWc78dE5CkwyAmcx11o19L)
+- Deployment URL: [`https://loophole-23osdoxpv-delealufejoel-4184s-projects.vercel.app`](https://loophole-23osdoxpv-delealufejoel-4184s-projects.vercel.app)
 - Production alias: [`https://loophole-one.vercel.app/`](https://loophole-one.vercel.app/)
 - Public verification: HTTP `200`
 - Canonical address bundle hits: `1`
 - Historical RuleVault and GapJudge address bundle hits: `0`
 
 Vercel Production, Preview and Development contain
-`NEXT_PUBLIC_LOOPHOLE_ADDRESS` set to the source-verified monolith address
-`0x7a5eC154FfA7c05DDe0Fbb1a34286d2eaDA3FBaf`. The stale two-contract public
+`NEXT_PUBLIC_LOOPHOLE_ADDRESS` set to the corrected source-verified monolith
+address `0xe5e2b5E9Bc53c9D19FEce32a72238842AD8B093e`. The stale two-contract public
 address variables were removed. The RPC and explorer variables remain the
 Studionet values, and no signing secret is configured for the project.
 

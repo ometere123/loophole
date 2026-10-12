@@ -1,0 +1,94 @@
+{
+  "rpc": "https://studio.genlayer.com/api",
+  "chain_id": "0xf22f",
+  "expected_chain_id": "0xf22f",
+  "address": "0xe5e2b5E9Bc53c9D19FEce32a72238842AD8B093e",
+  "deployment_tx": "0xf27efe23174de8d46ace87bade177ebeb653d2a7a13c8f398bcfccfceb4dd1c3",
+  "source": {
+    "path": "contracts/Loophole.py",
+    "local_bytes": 28740,
+    "local_sha256": "f173b087336403044db3ce793c2c0df57e5104b5078964b2ce8b8b7e88ccf8c7",
+    "gen_getContractCode_bytes": 28740,
+    "gen_getContractCode_sha256": "f173b087336403044db3ce793c2c0df57e5104b5078964b2ce8b8b7e88ccf8c7",
+    "submitted_contract_code_bytes": 28740,
+    "submitted_contract_code_sha256": "f173b087336403044db3ce793c2c0df57e5104b5078964b2ce8b8b7e88ccf8c7",
+    "deployed_exact_match": true,
+    "submitted_exact_match": true
+  },
+  "finality": {
+    "gen_getTransactionStatus": "FINALIZED",
+    "eth_receipt_status": "0x1",
+    "from": "0x0d5540e0aD4B92Aa0ad4e5F1b8cD645ee1E363E7",
+    "to": "0xe5e2b5E9Bc53c9D19FEce32a72238842AD8B093e",
+    "consensus": {
+      "result_name": "MAJORITY_AGREE",
+      "result": 6,
+      "status_name": null,
+      "leader_execution": "SUCCESS",
+      "leader_result_code": null,
+      "votes": {
+        "0x4404Fb70d490c935758146f42A73DC850FF95C71": "agree",
+        "0x4EDbE1FC9EAeC7b0EBA849b0C76AE73Eb0ad5C47": "agree",
+        "0x5310dcF075E0BD47d29B8ec6581F736C767f54D2": "agree",
+        "0x90402341F0B0e97b23023c0a87de957FB7148E0F": "agree",
+        "0xec2Fb79cd12255Eb34886CEd7332f27B98DEe658": "agree"
+      },
+      "validator_count": 4,
+      "votes_committed": null,
+      "votes_revealed": null,
+      "num_of_rounds": "1",
+      "error": null
+    }
+  },
+  "schema": {
+    "constructor_params": [],
+    "method_count": 19,
+    "methods": [
+      "adjudicate_review",
+      "appeal_invalid",
+      "commit_attempt",
+      "create_challenge",
+      "finalize_invalid",
+      "get_adjudication",
+      "get_attempt",
+      "get_challenge",
+      "get_challenges_page",
+      "get_config",
+      "get_credit",
+      "get_withdrawal",
+      "get_withdrawals_page",
+      "recover_stalled_review",
+      "refund_unwon",
+      "reveal_attempt",
+      "settle_remaining_bond",
+      "start_review",
+      "withdraw"
+    ],
+    "expected_methods": [
+      "adjudicate_review",
+      "appeal_invalid",
+      "commit_attempt",
+      "create_challenge",
+      "finalize_invalid",
+      "get_adjudication",
+      "get_attempt",
+      "get_challenge",
+      "get_challenges_page",
+      "get_config",
+      "get_credit",
+      "get_withdrawal",
+      "get_withdrawals_page",
+      "recover_stalled_review",
+      "refund_unwon",
+      "reveal_attempt",
+      "settle_remaining_bond",
+      "start_review",
+      "withdraw"
+    ],
+    "exact_method_set": true
+  },
+  "verification": {
+    "passed": true,
+    "failures": []
+  }
+}

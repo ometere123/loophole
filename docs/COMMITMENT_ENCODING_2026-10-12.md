@@ -22,8 +22,9 @@ Verification completed before deployment:
 - The regression accepts pipe and Unicode characters in revealed fields and
   proves that an otherwise delimiter-shaped tuple hashes differently.
 
-The existing monolith at
-`0x7a5eC154FfA7c05DDe0Fbb1a34286d2eaDA3FBaf` remains unchanged at this stage.
-Its deployed source fingerprint is recorded in the existing deployment
-evidence. The corrected source requires one separately approved zero-value
-deployment before the frontend is switched to its new address.
+The corrected source is deployed at
+`0xe5e2b5E9Bc53c9D19FEce32a72238842AD8B093e`. Its finalized deployment and
+exact source correspondence are recorded in
+`docs/LOOPHOLE_CORRECTED_DEPLOYMENT_2026-10-12.md`. The earlier monolith at
+`0x7a5eC154FfA7c05DDe0Fbb1a34286d2eaDA3FBaf` remains unchanged as historical
+state, so its legacy commitments remain governed by its original encoding.
