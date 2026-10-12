@@ -1,3 +1,9 @@
+> **Historical superseded record.** This document records the earlier isolated
+> direct-workload experiment and its diagnostic purpose. It is not the current
+> production deployment or live economic result. The corrected single-contract
+> release and its successful funded lifecycle are documented in
+> [`LOOPHOLE corrected deployment live lifecycle — 2026-10-12`](LOOPHOLE_CORRECTED_LIVE_LIFECYCLE_2026-10-12.md).
+
 # Live direct workload probe: terminal result
 
 This is the single approved live diagnostic experiment. It used no payable

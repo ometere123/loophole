@@ -1,3 +1,9 @@
+> **Historical superseded record.** This file preserves the earlier
+> RuleVault/GapJudge deployment evidence, including its failed adjudication
+> experiments. The current production contract and successful live lifecycle
+> are documented in
+> [`LOOPHOLE corrected deployment live lifecycle — 2026-10-12`](LOOPHOLE_CORRECTED_LIVE_LIFECYCLE_2026-10-12.md).
+
 # Studionet 61999 live validation
 
 This record contains only transactions observed on the canonical deployment. It does not treat a finalized transaction as successful execution without checking the execution result, and it does not treat a parent transaction as proof of a child transfer.
