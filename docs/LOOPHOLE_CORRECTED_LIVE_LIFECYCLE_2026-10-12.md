@@ -28,11 +28,18 @@ read-only verifier reported `DELIVERY VERIFIED` from the finalized parent-child
 relationship, exact address/value match, successful transport receipt and
 authoritative credit evidence.
 
+A separate funded negative attempt on this deployment is recorded in
+[`LOOPHOLE_LIVE_NEGATIVE_ATTEMPT_2026-10-12.md`](LOOPHOLE_LIVE_NEGATIVE_ATTEMPT_2026-10-12.md).
+Its adjudication reached `MAJORITY_DISAGREE` after successful GenVM execution,
+so it remains `REVIEWING` with no payout. The record is preserved as evidence of
+the deployed equivalence check's supporting-field brittleness; it is not claimed
+as a settled INVALID outcome.
+
 ## Scope of verdict evidence
 
 This live record proves one genuine `VALID` adjudication and settlement on the
-corrected deployment. `INVALID` and `INCONCLUSIVE` behavior is covered by the
-simulator and Direct Mode suites, including appeal, refund and neutral
-settlement paths. This release does not claim additional live negative or
-neutral verdicts without separate funded challenge transactions and wallet
-approval.
+corrected deployment. The separate live negative attempt is not a terminal
+`INVALID` ruling. `INCONCLUSIVE` behavior is covered by the simulator and
+Direct Mode suites, including neutral settlement paths. A redeployed source
+correction and a fresh live negative or neutral terminal outcome are still
+required before claiming complete multi-outcome live verification.

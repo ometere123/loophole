@@ -142,6 +142,32 @@ def test_mutated_appeal_recipient_pays_invalid_bond_to_challenger(world, tmp_pat
     assert w.vault.get_credit(w.alice) == 2 * 10**16
 
 
+def test_mutated_materiality_guard_rejects_safe_invalid_variation(world, tmp_path):
+    old = "            return self._agreement_holds(proposed, actual)"
+    new = """            return (
+                proposed['verdict'] == actual['verdict'] and
+                proposed['letter'] == actual['letter'] and
+                proposed['purpose'] == actual['purpose'] and
+                proposed['feasible'] == actual['feasible'])"""
+    w = _mutated(world, tmp_path, (old, new))
+    _fund(w)
+    _revealed(w)
+    w.gl.nondet.answers = [
+        json.dumps({
+            'letter': 'DISPROVEN', 'purpose': 'UNKNOWN', 'feasible': 'PROVEN',
+            'reason': 'The explicit word-count condition is not satisfied by the attack.',
+        }),
+        json.dumps({
+            'letter': 'DISPROVEN', 'purpose': 'DISPROVEN', 'feasible': 'PROVEN',
+            'reason': 'The rule failure is decisive even though the purpose is also affected.',
+        }),
+    ]
+    w.run(w.vaddr, w.owner, 'start_review', 1)
+    with pytest.raises(Exception, match='disagreed'):
+        w.run(w.vaddr, w.owner, 'adjudicate_review', 1, 1, 1)
+    assert json.loads(w.vault.get_attempt(1))['status'] == 'REVIEWING'
+
+
 def test_monolith_has_no_forged_callback_surface():
     source = (ROOT / 'contracts' / 'Loophole.py').read_text(encoding='utf-8')
     assert 'def record_verdict' not in source

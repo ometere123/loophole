@@ -93,6 +93,45 @@ def test_direct_review_settles_once_with_tristate_findings(monolith):
     assert w.vault.total_locked == 2 * 10**18 + 10**16
 
 
+def test_invalid_consensus_ignores_only_non_decisive_support_variation(monolith):
+    w = monolith
+    _fund(w)
+    _revealed(w)
+    leader = json.dumps({
+        'letter': 'DISPROVEN', 'purpose': 'UNKNOWN', 'feasible': 'PROVEN',
+        'reason': 'The explicit word-count condition is not satisfied by the attack.',
+    })
+    validator = json.dumps({
+        'letter': 'DISPROVEN', 'purpose': 'DISPROVEN', 'feasible': 'PROVEN',
+        'reason': 'The rule failure is decisive even though the purpose is also affected.',
+    })
+    w.gl.nondet.answers = [leader, validator]
+    w.run(w.vaddr, w.owner, 'start_review', 1)
+    w.run(w.vaddr, w.owner, 'adjudicate_review', 1, 1, 1)
+    attempt = json.loads(w.vault.get_attempt(1))
+    assert attempt['status'] == 'INVALID_PENDING'
+    assert attempt['verdict'] == 'INVALID'
+
+
+def test_invalid_consensus_rejects_different_decisive_findings(monolith):
+    w = monolith
+    _fund(w)
+    _revealed(w)
+    leader = json.dumps({
+        'letter': 'DISPROVEN', 'purpose': 'UNKNOWN', 'feasible': 'PROVEN',
+        'reason': 'The exact written word-count condition is not met.',
+    })
+    validator = json.dumps({
+        'letter': 'PROVEN', 'purpose': 'DISPROVEN', 'feasible': 'PROVEN',
+        'reason': 'The stated goal is defeated even though the literal rule is met.',
+    })
+    w.gl.nondet.answers = [leader, validator]
+    w.run(w.vaddr, w.owner, 'start_review', 1)
+    with pytest.raises(Exception, match='disagreed'):
+        w.run(w.vaddr, w.owner, 'adjudicate_review', 1, 1, 1)
+    assert json.loads(w.vault.get_attempt(1))['status'] == 'REVIEWING'
+
+
 def test_tristate_unknown_is_inconclusive_and_returns_bond(monolith):
     w = monolith
     _fund(w)

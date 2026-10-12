@@ -1,0 +1,51 @@
+{
+  "observed_at": "2026-10-12",
+  "rpc": "https://studio.genlayer.com/api",
+  "chain_id": "0xf22f",
+  "contract": "0xe5e2b5E9Bc53c9D19FEce32a72238842AD8B093e",
+  "source_sha256_deployed": "f173b087336403044db3ce793c2c0df57e5104b5078964b2ce8b8b7e88ccf8c7",
+  "challenge_id": "2",
+  "attempt_id": "2",
+  "transactions": {
+    "create_challenge": "0x8206659db5e93af0136912a7e3eab332960c7395e6c94b049b7c962ac8b4c0f8",
+    "commit_attempt": "0x3614d6ca9126f2a537c72993fc6fbb5a2e6b144c34b6fa6047a50e32ce170e6d",
+    "reveal_attempt": "0xde3c97b5d8669a08b3688ca90982b8a3d907c60b8e221d9681ac6e85aaa53c53",
+    "start_review": "0xb8b97a2cb861b4958a68894a43a4b002bd9c77efcf551310ab276a42f3f6b431",
+    "adjudicate_review": "0x072460d1b5e494087098b0485f18c7b03fd48d61425a9f952c10c0b18c7c5104"
+  },
+  "transaction_results": {
+    "create_challenge": {"status": "FINALIZED", "evm_receipt": "0x1", "execution": "SUCCESS", "consensus": "MAJORITY_AGREE", "value_credited": true},
+    "commit_attempt": {"status": "FINALIZED", "evm_receipt": "0x1", "execution": "SUCCESS", "consensus": "MAJORITY_AGREE", "value_credited": true},
+    "reveal_attempt": {"status": "FINALIZED", "evm_receipt": "0x1", "execution": "SUCCESS", "consensus": "MAJORITY_AGREE"},
+    "start_review": {"status": "FINALIZED", "evm_receipt": "0x1", "execution": "SUCCESS", "consensus": "MAJORITY_AGREE"},
+    "adjudicate_review": {"status": "FINALIZED", "evm_receipt": "0x1", "execution": "SUCCESS", "consensus": "MAJORITY_DISAGREE", "agree": 1, "disagree": 3, "idle": 1, "rotations": 4}
+  },
+  "final_state": {
+    "challenge_status": "OPEN",
+    "active_attempt": "2",
+    "active_round": "1",
+    "attempt_status": "REVIEWING",
+    "verdict": "",
+    "total_credit_wei": "0",
+    "total_locked_wei": "20000000000000000",
+    "adjudication_count": "1",
+    "withdrawal_count": "1",
+    "payout_created": false
+  },
+  "leader_outputs": {
+    "all_completed_rounds": "INVALID",
+    "letter": "DISPROVEN",
+    "purpose": ["UNKNOWN", "UNKNOWN", "DISPROVEN", "DISPROVEN"]
+  },
+  "rpc_limitations": [
+    "gen_getTransactionReceipt: -32601 Method not found",
+    "gen_getConsensusData: -32601 Method not found",
+    "gen_getTransactionFee: -32601 Method not found",
+    "gen_getTransactionExecution: -32601 Method not found",
+    "gen_getTransactionLifecycle: -32601 Method not found",
+    "gen_dbg_traceTransaction: -32601 Method not found"
+  ],
+  "settled_invalid": false,
+  "payout_or_withdrawal_from_this_case": false,
+  "source_fix_deployed": false
+}

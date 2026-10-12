@@ -44,8 +44,12 @@ class GlFake:
             return result
     class nondet:
         answer='{"verdict":"VALID","letter":true,"purpose":true,"feasible":true,"reason":"Exact written rule permits repeated engagement farming despite the explicit purpose."}'
+        answers=[]
         @classmethod
-        def exec_prompt(cls,prompt,**kwargs):return cls.answer
+        def exec_prompt(cls,prompt,**kwargs):
+            if cls.answers:
+                return cls.answers.pop(0)
+            return cls.answer
     def __init__(self):
         self.address=''
         self.contracts={}
@@ -72,7 +76,7 @@ class ChildProxy:
 def world(monkeypatch):
     module=types.ModuleType('genlayer');module.Address=Address;module.TreeMap=dict;module.u256=int;module.gl=fake
     monkeypatch.setitem(sys.modules,'genlayer',module)
-    fake.__init__();fake.nondet.answer='{"verdict":"VALID","letter":true,"purpose":true,"feasible":true,"reason":"Exact written rule permits repeated engagement farming despite the explicit purpose."}'
+    fake.__init__();fake.nondet.answers=[];fake.nondet.answer='{"verdict":"VALID","letter":true,"purpose":true,"feasible":true,"reason":"Exact written rule permits repeated engagement farming despite the explicit purpose."}'
     def load(path,name):
         spec=importlib.util.spec_from_file_location(name,BASE/'contracts'/path);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
     j=load('historical/GapJudge.py','fake_gapjudge').GapJudge

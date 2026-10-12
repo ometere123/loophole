@@ -397,6 +397,38 @@ class Loophole(gl.Contract):
         return {'verdict': verdict, 'letter': letter, 'purpose': purpose,
                 'feasible': feasible, 'reason': reason}
 
+    def _agreement_holds(self, proposed: dict, actual: dict) -> bool:
+        """Compare only the findings that can change settlement.
+
+        Every validator still performs the complete independent assessment.
+        VALID requires all three findings to be PROVEN because that is how the
+        parser derives a payout.  INVALID requires a common DISPROVEN finding;
+        this prevents a leader from choosing an unsupported invalidation while
+        allowing validators to describe additional downstream harm differently
+        after the shared rule failure is established.  INCONCLUSIVE requires
+        no DISPROVEN finding and has no payout, so UNKNOWN/PROVEN support
+        variation is non-settling evidence rather than a consensus blocker.
+        """
+        if proposed['verdict'] != actual['verdict']:
+            return False
+        if proposed['verdict'] == 'VALID':
+            return all(
+                proposed[name] == FINDING_PROVEN and
+                actual[name] == FINDING_PROVEN
+                for name in ('letter', 'purpose', 'feasible')
+            )
+        if proposed['verdict'] == 'INVALID':
+            return any(
+                proposed[name] == FINDING_DISPROVEN and
+                actual[name] == FINDING_DISPROVEN
+                for name in ('letter', 'purpose', 'feasible')
+            )
+        return not any(
+            proposed[name] == FINDING_DISPROVEN or
+            actual[name] == FINDING_DISPROVEN
+            for name in ('letter', 'purpose', 'feasible')
+        )
+
     def _assess(self, frozen: dict) -> dict:
         evidence = json.dumps(frozen, sort_keys=True)
 
@@ -431,10 +463,7 @@ DATA_START
                 return False
             proposed = self._parse_assessment(leader.calldata)
             actual = assess()
-            return (proposed['verdict'] == actual['verdict'] and
-                    proposed['letter'] == actual['letter'] and
-                    proposed['purpose'] == actual['purpose'] and
-                    proposed['feasible'] == actual['feasible'])
+            return self._agreement_holds(proposed, actual)
 
         return gl.vm.run_nondet_unsafe(assess, independently_verify)
 
