@@ -34,7 +34,12 @@ function explorerMethod(row:ExplorerTransaction){
  if(explicit==='withdraw'||explicit.includes('methodwithdraw'))return 'withdraw';
  const encoded=row.data?.calldata||row.calldata;
  if(typeof encoded!=='string')return '';
- try{return atob(encoded).replaceAll('\0','').toLowerCase().includes('methodwithdraw')?'withdraw':'';}catch{return '';}
+ try{
+  const decoded=atob(encoded).replaceAll('\0','').toLowerCase();
+  // Studionet's calldata framing includes a one-byte type marker between
+  // the field name and the method text (for example, methodDwithdraw).
+  return /method[a-z]?withdraw/.test(decoded)?'withdraw':'';
+ }catch{return '';}
 }
 export async function findWithdrawalParentHashes(beneficiary:string):Promise<WithdrawalParentDiscovery>{
  try{
