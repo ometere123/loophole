@@ -4,8 +4,8 @@ The linked Vercel project `delealufejoel-4184s-projects/loophole` was deployed
 from the repository root with its verified `frontend` Root Directory setting.
 The deployment completed with state `READY` and target `production`.
 
-- Deployment: [`GGNFUySWc78dE5CkwyAmcx11o19L`](https://vercel.com/delealufejoel-4184s-projects/loophole/GGNFUySWc78dE5CkwyAmcx11o19L)
-- Deployment URL: [`https://loophole-23osdoxpv-delealufejoel-4184s-projects.vercel.app`](https://loophole-23osdoxpv-delealufejoel-4184s-projects.vercel.app)
+- Deployment: [`9ou5BbhvF3NTJurMbyuRPzWzshAG`](https://vercel.com/delealufejoel-4184s-projects/loophole/9ou5BbhvF3NTJurMbyuRPzWzshAG)
+- Deployment URL: [`https://loophole-fkoiqtd9d-delealufejoel-4184s-projects.vercel.app`](https://loophole-fkoiqtd9d-delealufejoel-4184s-projects.vercel.app)
 - Production alias: [`https://loophole-one.vercel.app/`](https://loophole-one.vercel.app/)
 - Public verification: HTTP `200`
 - Canonical address bundle hits: `1`
@@ -22,5 +22,6 @@ injected wallet connection, wrong-network blocking, wallet rejection and the
 mobile navigation. The public bundle check is reproducible with
 `node scripts/verify_frontend_deployment.mjs https://loophole-one.vercel.app`.
 
-The earlier 2026-10-11 deployment record remains historical evidence for the
-previous frontend binding; this deployment is the current release binding.
+The earlier 2026-10-11 deployment record and the previous 2026-10-12 deployment
+remain historical evidence; this deployment is the current release binding and
+includes the extended bounded wait for slow finalized consensus.
