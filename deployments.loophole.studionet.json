@@ -1,0 +1,43 @@
+{
+  "network": "studionet",
+  "chain_id": 61999,
+  "rpc": "https://studio.genlayer.com/api",
+  "explorer": "https://explorer-studio.genlayer.com",
+  "cli_version": "0.39.1",
+  "contract": "Loophole",
+  "address": "0x7a5eC154FfA7c05DDe0Fbb1a34286d2eaDA3FBaf",
+  "deploy_tx": "0x4ff23d2092cd920f535590e9aadf9bc5571934ab24d8aac56fae0ef3dc5947b9",
+  "deploy_explorer": "https://explorer-studio.genlayer.com/tx/0x4ff23d2092cd920f535590e9aadf9bc5571934ab24d8aac56fae0ef3dc5947b9",
+  "source": {
+    "path": "contracts/Loophole.py",
+    "sha256": "eea9c1252a08822694be4cbcf38a946387364e05f53b4063adb8ccd537b17500",
+    "rpc_method": "gen_getContractCode",
+    "exact_byte_match": true,
+    "bytes": 28363
+  },
+  "deployment_receipt": {
+    "status": "FINALIZED",
+    "result": 6,
+    "result_name": "MAJORITY_AGREE",
+    "leader_execution": "SUCCESS",
+    "value": 0,
+    "validator_votes": ["AGREE", "AGREE", "IDLE", "AGREE", "IDLE"]
+  },
+  "configuration": {
+    "contract": "Loophole",
+    "chain": "61999",
+    "adjudication_mode": "DIRECT_ATOMIC",
+    "challenge_count": "0",
+    "attempt_count": "0",
+    "adjudication_count": "0",
+    "withdrawal_count": "0",
+    "total_credit_wei": "0",
+    "total_locked_wei": "0"
+  },
+  "historical_deployments": {
+    "gapjudge": "0xb14B08cd35Fa64FE795e14931DdA09999627785d",
+    "rulevault": "0xa77A29C96c30B2A5dB865a2CE35c8F396d504F26"
+  },
+  "evidence": "docs/evidence/loophole-deployment-2026-10-12.json",
+  "economic_lifecycle_verified": false
+}

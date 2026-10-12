@@ -1,0 +1,2 @@
+# The deployed GenVM source is byte-verified; preserve its UTF-8 CRLF bytes.
+contracts/Loophole.py -text

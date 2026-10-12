@@ -106,7 +106,9 @@ def main() -> None:
     receipt = finalized_success(deploy_tx)
     address = parse_address(output + '\n' + receipt)
     config = run(['call', address, 'get_config'])
-    if 'Loophole' not in config or 'DIRECT_ATOMIC' not in config or "'61999'" not in config:
+    if ('"contract": "Loophole"' not in config or
+            '"adjudication_mode": "DIRECT_ATOMIC"' not in config or
+            '"chain": "61999"' not in config):
         raise RuntimeError('Deployed Loophole configuration did not prove the expected chain or mode.')
 
     manifest = {
