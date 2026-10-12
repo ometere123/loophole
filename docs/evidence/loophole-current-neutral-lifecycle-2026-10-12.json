@@ -1,0 +1,152 @@
+{
+  "observed_at": "2026-10-12T23:30:35+01:00",
+  "network": {
+    "chain_id_decimal": 61999,
+    "chain_id_hex": "0xf22f",
+    "rpc": "https://studio.genlayer.com/api",
+    "explorer": "https://explorer-studio.genlayer.com"
+  },
+  "contract": {
+    "name": "Loophole",
+    "address": "0xec98AFC80bda4b664F20d782aA8a0bd49e436233",
+    "source_sha256": "940446781007701148449db3316f8b0c0e6b04ee84a8de405f78d5789bc1dae1",
+    "deployment_transaction": "0xc5a5dee6cbbb2f081a37adefcb060061abe306044a46c17c2587f18577bda2d1",
+    "adjudication_mode": "DIRECT_ATOMIC"
+  },
+  "accounts": {
+    "organizer": "0xfcef676044658B5402f590daBe9E04A0F640522f",
+    "challenger_and_credit_recipient": "0x81301DD9C3605a7DA743D87b803156d8445620B0"
+  },
+  "challenge": {
+    "id": "3",
+    "title": "Ambiguous educational source rule",
+    "bounty_wei": "10000000000000000",
+    "bond_wei": "10000000000000000",
+    "create_transaction": {
+      "hash": "0x4893cf231f26e714b8301f719524c660cd1dac53e4f5d2b2b213196a6a2f1f9f",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0x4893cf231f26e714b8301f719524c660cd1dac53e4f5d2b2b213196a6a2f1f9f",
+      "status": "FINALIZED",
+      "evm_receipt_status": "0x1",
+      "leader_execution": "SUCCESS",
+      "validator_votes": "5 AGREE",
+      "value_wei": "10000000000000000"
+    }
+  },
+  "attempt": {
+    "id": "3",
+    "commit_transaction": {
+      "hash": "0x6d8ec88483ca854f902bbb93b705aac736a247f390f68b9f9462204b96eaf103",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0x6d8ec88483ca854f902bbb93b705aac736a247f390f68b9f9462204b96eaf103",
+      "status": "FINALIZED",
+      "evm_receipt_status": "0x1",
+      "leader_execution": "SUCCESS",
+      "validator_votes": "3 AGREE, 2 IDLE after quorum",
+      "value_wei": "10000000000000000"
+    },
+    "reveal_transaction": {
+      "hash": "0x7c8386ef4d4ccaee3a417f78570cd69af24bb18624eba7c1ec267a8a01b6d223",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0x7c8386ef4d4ccaee3a417f78570cd69af24bb18624eba7c1ec267a8a01b6d223",
+      "status": "FINALIZED",
+      "evm_receipt_status": "0x1",
+      "leader_execution": "SUCCESS",
+      "validator_votes": "5 AGREE",
+      "value_wei": "0"
+    },
+    "start_review_transaction": {
+      "hash": "0x0cf38b561b6ea24f9968c8848a2319591f3e70f6baaaa523a062647153867e81",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0x0cf38b561b6ea24f9968c8848a2319591f3e70f6baaaa523a062647153867e81",
+      "status": "FINALIZED",
+      "evm_receipt_status": "0x1",
+      "leader_execution": "SUCCESS",
+      "validator_votes": "3 AGREE, 2 IDLE after quorum",
+      "value_wei": "0"
+    },
+    "revealed_evidence": {
+      "scenario": "I publish a public post with exactly five ordinary words and one source link, but its educational value is unclear because the words form a question with no explanation. It meets the measurable conditions without showing whether readers learn anything.",
+      "rule_quote": "Award 10 points to a public post with at least five words and one source link.",
+      "impact": "The post satisfies the checklist, but the record does not establish that a bare question advances the educational goal. Validators must decide whether this is a real purpose conflict or only an underspecified example.",
+      "evidence_hash": "5fa94eda5bf0b30bfefff45f59e6fd8745f69155e8b21bb3d2af7aad5e3c34fd"
+    },
+    "adjudication_transaction": {
+      "hash": "0x9da51618d94d520d4a899af40067cb6ef3d78c0588b6dbadcfd76d55b52a8498",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0x9da51618d94d520d4a899af40067cb6ef3d78c0588b6dbadcfd76d55b52a8498",
+      "status": "FINALIZED",
+      "evm_receipt_status": "0x1",
+      "leader_execution": "SUCCESS",
+      "validator_votes": "3 AGREE, 2 DISAGREE",
+      "leader_findings": {
+        "feasible": "PROVEN",
+        "letter": "PROVEN",
+        "purpose": "UNKNOWN",
+        "verdict": "INCONCLUSIVE",
+        "reason": "The attack steps satisfy the exact written rule (5+ words, 1 source link). Purpose defeat is UNKNOWN: the limitations explicitly permit questions, so a bare question may be valid; the record is ambiguous whether this defeats the educational goal. Verdict: INCONCLUSIVE."
+      },
+      "triggered_transactions": []
+    },
+    "finalized_state": {
+      "challenge_status": "OPEN",
+      "active_attempt": "0",
+      "active_round": "1",
+      "attempt_status": "DECIDED",
+      "verdict": "INCONCLUSIVE",
+      "feasible": "PROVEN",
+      "letter": "PROVEN",
+      "purpose": "UNKNOWN",
+      "appeal_used": false,
+      "winner": "",
+      "claimable_credit_wei": "10000000000000000"
+    }
+  },
+  "accounting_readback_before_withdrawal": {
+    "wallet_a_credit_wei": "10000000000000000",
+    "total_credit_wei": "10000000000000000",
+    "total_locked_wei": "30000000000000000",
+    "withdrawal_count": "1"
+  },
+  "withdrawal": {
+    "id": "2",
+    "parent_transaction": {
+      "hash": "0x0aaca2400cd4c69815e70222b12b5c2a35f6250879e1b02fd55bb248c4b888a7",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0x0aaca2400cd4c69815e70222b12b5c2a35f6250879e1b02fd55bb248c4b888a7",
+      "status": "FINALIZED",
+      "evm_receipt_status": "0x1",
+      "leader_execution": "SUCCESS",
+      "validator_votes": "5 AGREE",
+      "value_wei": "0",
+      "triggered_child": "0x183eb660c710c5ef6852862b76f7d25397eb0576a4718fd2464df6f18cb10cc6"
+    },
+    "child_transfer": {
+      "hash": "0x183eb660c710c5ef6852862b76f7d25397eb0576a4718fd2464df6f18cb10cc6",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0x183eb660c710c5ef6852862b76f7d25397eb0576a4718fd2464df6f18cb10cc6",
+      "triggered_by": "0x0aaca2400cd4c69815e70222b12b5c2a35f6250879e1b02fd55bb248c4b888a7",
+      "triggered_on": "finalized",
+      "from": "0xec98afc80bda4b664f20d782aa8a0bd49e436233",
+      "to": "0x81301dd9c3605a7da743d87b803156d8445620b0",
+      "value_wei": "10000000000000000",
+      "status": "FINALIZED",
+      "evm_receipt_status": "0x1",
+      "value_credited": true,
+      "genvm_consensus": "not applicable to native transfer child"
+    },
+    "contract_record": {
+      "status": "TRANSFER_EMITTED_UNVERIFIED",
+      "recipient": "0x81301dd9c3605a7da743d87b803156d8445620b0",
+      "amount_wei": "10000000000000000",
+      "credit_after_withdrawal_wei": "0",
+      "withdrawal_count": "2"
+    },
+    "independent_delivery_status": "DELIVERY VERIFIED",
+    "delivery_basis": "The finalized parent explicitly triggered the finalized child. The child origin, beneficiary and exact value matched; its EVM receipt was 0x1 and authoritative value_credited was true."
+  },
+  "accounting_readback_after_withdrawal": {
+    "wallet_a_credit_wei": "0",
+    "total_credit_wei": "0",
+    "total_locked_wei": "30000000000000000",
+    "withdrawal_count": "2"
+  },
+  "rpc_surface": {
+    "supported": ["eth_chainId", "eth_getTransactionByHash", "eth_getTransactionReceipt", "gen_getTransactionStatus"],
+    "unsupported": ["gen_getTransactionReceipt", "gen_getConsensusData", "gen_getTransactionFee", "gen_getTransactionFees", "gen_getTransactionData", "gen_getTransactionAllData", "gen_getTransactionExecution", "gen_getTransactionLogs", "gen_getTransactionHistory", "gen_getTransactionLifecycle", "gen_dbg_traceTransaction"],
+    "policy": "Unsupported, rate-limited and temporary RPC failures were classified separately and never treated as success."
+  }
+}
