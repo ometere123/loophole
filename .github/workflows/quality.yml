@@ -51,3 +51,7 @@ jobs:
         run: npm --prefix frontend run build
       - name: Audit frontend lockfile
         run: npm --prefix frontend audit --audit-level=high
+      - name: Install Playwright Chromium
+        run: npx --prefix frontend playwright install --with-deps chromium
+      - name: Browser interaction tests
+        run: npm --prefix frontend run test:e2e

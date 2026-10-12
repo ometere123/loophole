@@ -38,3 +38,12 @@ evidence would invalidate the required verification environment.
 These findings are confined to the repository-local development CLI. The
 shipped frontend lockfile has zero audit findings. Re-run the two audit
 commands above to reproduce the result.
+
+## Browser gate
+
+The frontend lockfile now includes `@playwright/test@1.55.1`, the fixed
+release used by the browser gate. `npm --prefix frontend audit
+--audit-level=high` still reports zero vulnerabilities. The local Chromium
+suite covers public rendering, injected-wallet connection, wrong-network
+blocking, wallet rejection and mobile navigation; CI installs Chromium and
+runs the same suite.
