@@ -9,11 +9,14 @@ export interface EIP1193 {request(args:{method:string;params?:unknown[]}):Promis
 declare global {interface Window {ethereum?:EIP1193;}}
 const readClient = createClient({chain:studionet});
 const addr = VAULT_ADDRESS as `0x${string}`;
+const RPC_TIMEOUT_MS=15000;
+const READ_TIMEOUT_MS=20000;
 function requireDeployment(){if(!READY)throw new Error('The Loophole contract is not deployed/configured. Set NEXT_PUBLIC_LOOPHOLE_ADDRESS.');}
 function parseRecord<T>(data:unknown):T|null{if(!data||data==='')return null;const parsed=typeof data==='string'? JSON.parse(data): data;return parsed as T;}
+async function withTimeout<T>(promise:Promise<T>,milliseconds:number,label:string):Promise<T>{let timer:ReturnType<typeof setTimeout>|undefined;try{return await Promise.race([promise,new Promise<T>((_,reject)=>{timer=setTimeout(()=>reject(new Error(`${label} timed out after ${milliseconds}ms`)),milliseconds);})]);}finally{if(timer)clearTimeout(timer);}}
 export async function readVault(functionName:string,args:CalldataEncodable[]=[]):Promise<CalldataEncodable>{
   requireDeployment();
-  return readClient.readContract({address:addr,functionName,args,transactionHashVariant:TransactionHashVariant.LATEST_FINAL});
+  return withTimeout(readClient.readContract({address:addr,functionName,args,transactionHashVariant:TransactionHashVariant.LATEST_FINAL}),READ_TIMEOUT_MS,`Finalized ${functionName} read`);
 }
 export async function fetchConfig():Promise<VaultConfig|null>{return parseRecord(await readVault('get_config'));}
 export async function fetchChallenge(id:string):Promise<Challenge|null>{return parseRecord(await readVault('get_challenge',[BigInt(id)]));}
@@ -29,8 +32,11 @@ type RpcProbe={supported:true;result:any}|{supported:false;category:RpcFailureCa
 type RpcError=Error & {rpcCode?:number;httpStatus?:number};
 async function rawRpc(method:string,params:unknown[]){
  let response:Response;
- try{response=await fetch(deliveryRpc,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:Date.now(),method,params})});}
+ const controller=new AbortController();
+ const timer=setTimeout(()=>controller.abort(),RPC_TIMEOUT_MS);
+ try{response=await fetch(deliveryRpc,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:Date.now(),method,params}),signal:controller.signal});}
  catch(e){const error=new Error(`${method}: ${e instanceof Error?e.message:String(e)}`) as RpcError;throw error;}
+ finally{clearTimeout(timer);}
  if(!response.ok){const error=new Error(`${method}: RPC HTTP ${response.status}`) as RpcError;error.httpStatus=response.status;throw error;}
  const body=await response.json() as {result?:unknown;error?:{code?:number;message?:string}};
  if(body.error){const error=new Error(`${method}: ${body.error.message||'RPC error'}`) as RpcError;error.rpcCode=body.error.code;throw error;}
