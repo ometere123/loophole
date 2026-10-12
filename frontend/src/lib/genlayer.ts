@@ -43,7 +43,19 @@ function rpcFailureCategory(error:unknown):RpcFailureCategory{
  if([408,502,503,504].includes(e?.httpStatus||0)||/timeout|timed out|fetch failed|network|temporar/i.test(message))return 'temporary_failure';
  return 'error';
 }
-async function probeRpc(method:string,params:unknown[]):Promise<RpcProbe>{try{return {supported:true,result:await rawRpc(method,params)};}catch(error){return {supported:false,category:rpcFailureCategory(error),error:error instanceof Error?error.message:String(error)};}}
+async function probeRpc(method:string,params:unknown[]):Promise<RpcProbe>{
+ let last:unknown;
+ for(let attempt=0;attempt<2;attempt++){
+  try{return {supported:true,result:await rawRpc(method,params)};}
+  catch(error){
+   last=error;
+   const category=rpcFailureCategory(error);
+   if(attempt===1||(category!=='rate_limited'&&category!=='temporary_failure'))break;
+   await new Promise(resolve=>setTimeout(resolve,250));
+  }
+ }
+ return {supported:false,category:rpcFailureCategory(last),error:last instanceof Error?last.message:String(last)};
+}
 type ReceiptExecutionEvidence={execution_result?:string;result?:{status?:string}};
 function hasSuccessfulExecution(receipt:GenLayerTransaction):boolean{
   if(receipt.txExecutionResultName)return receipt.txExecutionResultName===ExecutionResult.FINISHED_WITH_RETURN;
