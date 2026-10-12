@@ -67,7 +67,8 @@ def _attack(w, salt='abcd012345678901'):
     scenario = 'I repeat meaningless words over one hundred times with the hashtag, farming a reward without original content.'
     quote = 'Every member who publishes a post of at least 100 words'
     impact = 'The post meets the length rule but violates the original educational contribution objective.'
-    preimage = '|'.join(['1', str(w.alice).lower(), salt, scenario, quote, impact])
+    fields = ['1', str(w.alice).lower(), salt, scenario, quote, impact]
+    preimage = ''.join(f'{len(field.encode("utf-8"))}:{field}' for field in fields)
     return hashlib.sha256(preimage.encode()).hexdigest(), (salt, scenario, quote, impact)
 
 

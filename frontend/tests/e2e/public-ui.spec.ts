@@ -45,7 +45,8 @@ async function installWallet(page: Page, options: WalletOptions = {}) {
 test('public home and create screens expose the live deployment state', async ({page}) => {
   await page.goto('/');
   await expect(page).toHaveTitle(/Loophole/i);
-  await expect(page.getByText('Deployment not configured', {exact: false})).toBeVisible();
+  await expect(page.getByRole('heading', {name: /good rules need/i})).toBeVisible();
+  await expect(page.getByRole('link', {name: /explore challenges/i})).toBeVisible();
   await page.goto('/create');
   await expect(page.getByRole('heading', {name: /what's the challenge/i})).toBeVisible();
 });

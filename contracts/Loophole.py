@@ -91,6 +91,11 @@ class Loophole(gl.Contract):
             'claimed_harm': a['impact'],
         }
 
+    def _commitment_preimage(self, challenge_id: str, sender: str, salt: str,
+                             scenario: str, rule_quote: str, impact: str) -> str:
+        fields = (challenge_id, sender, salt, scenario, rule_quote, impact)
+        return ''.join(str(len(field.encode('utf-8'))) + ':' + field for field in fields)
+
     def _evidence_hash(self, c: dict, a: dict) -> str:
         body = json.dumps(self._frozen(c, a), sort_keys=True, separators=(',', ':'))
         return hashlib.sha256(body.encode('utf-8')).hexdigest()
@@ -129,6 +134,7 @@ class Loophole(gl.Contract):
             'reveal_grace_seconds': str(REVEAL_GRACE),
             'review_timeout_seconds': str(REVIEW_TIMEOUT),
             'invalid_appeal_window_seconds': str(INVALID_APPEAL_WINDOW),
+            'commitment_encoding': 'length-prefixed-utf8-v1',
             'adjudication_mode': 'DIRECT_ATOMIC',
         }, sort_keys=True)
 
@@ -264,8 +270,8 @@ class Loophole(gl.Contract):
         if not (8 <= len(salt) <= 80 and 25 <= len(scenario) <= 2400 and
                 5 <= len(rule_quote) <= 650 and 15 <= len(impact) <= 1200):
             raise gl.vm.UserError('invalid reveal fields')
-        plaintext = (a['challenge_id'] + '|' + sender + '|' + salt + '|' +
-                     scenario + '|' + rule_quote + '|' + impact)
+        plaintext = self._commitment_preimage(
+            a['challenge_id'], sender, salt, scenario, rule_quote, impact)
         if hashlib.sha256(plaintext.encode('utf-8')).hexdigest() != a['commitment']:
             raise gl.vm.UserError('commitment does not match revealed attack')
         if rule_quote not in c['rule'] and rule_quote not in c['limitations']:

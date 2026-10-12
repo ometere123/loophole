@@ -6,7 +6,7 @@ The deployable release is one Intelligent Contract, `Loophole.py`. It stores the
 |---|---|---|
 | Funded text cannot be rewritten | no edit method; review uses a frozen snapshot and evidence hash | finality and network rollback are external concerns |
 | Organizer cannot submit an attempt | organizer address is rejected | Sybil identities are not solved |
-| A reveal must match its commitment | SHA-256 binds challenge, sender, salt and all revealed fields | a leaked local backup can reveal the secret |
+| A reveal must match its commitment | SHA-256 binds challenge, sender, salt and all revealed fields through a length-prefixed UTF-8 encoding | a leaked local backup can reveal the secret |
 | Reviews are bounded and ordered | one active review, FIFO eligible selection, reveal grace and 12 active/64 lifetime bounds | Sybil wallets can consume bounded capacity |
 | Stale or replayed adjudication cannot settle | current active attempt, round and evidence hash are required; case keys are idempotent | delayed network processing remains visible as pending |
 | No duplicate prize or bond credit | terminal challenge state, one decision record and exact credit accounting | live external execution still needs verification |

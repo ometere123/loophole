@@ -54,7 +54,8 @@ def _attack(challenge_id, sender, salt='abcd012345678901'):
     scenario = 'I repeat meaningless words over one hundred times with the hashtag, farming a reward without original content.'
     quote = 'Every member who publishes a post of at least 100 words'
     impact = 'The post meets the length rule but violates the original educational contribution objective.'
-    preimage = '|'.join([str(challenge_id), str(sender).lower(), salt, scenario, quote, impact])
+    fields = [str(challenge_id), str(sender).lower(), salt, scenario, quote, impact]
+    preimage = ''.join(f'{len(field.encode("utf-8"))}:{field}' for field in fields)
     return hashlib.sha256(preimage.encode()).hexdigest(), (salt, scenario, quote, impact)
 
 
@@ -151,3 +152,22 @@ def test_direct_review_rejects_stale_round_and_forged_state(monolith):
         w.run(w.vaddr, w.owner, 'adjudicate_review', 1, 1, 2)
     attempt = json.loads(w.vault.get_attempt(1))
     assert attempt['status'] == 'REVIEWING'
+
+
+def test_commitment_encoding_is_length_prefixed_and_delimiter_safe(monolith):
+    w = monolith
+    _fund(w)
+    salt = 'salt|é|🔒'
+    scenario = 'I use a pipe | and Unicode 🔎 inside the described sequence without changing its meaning.'
+    quote = 'Every member who publishes a post of at least 100 words'
+    impact = 'The result | defeats the stated educational purpose.'
+    fields = ['1', str(w.alice).lower(), salt, scenario, quote, impact]
+    preimage = ''.join(f'{len(field.encode("utf-8"))}:{field}' for field in fields)
+    digest = hashlib.sha256(preimage.encode('utf-8')).hexdigest()
+    w.run(w.vaddr, w.alice, 'commit_attempt', 1, digest, value=10**16)
+    w.run(w.vaddr, w.alice, 'reveal_attempt', 1, salt, scenario, quote, impact)
+    assert json.loads(w.vault.get_attempt(1))['status'] == 'REVEALED'
+
+    aliased = ['1', str(w.alice).lower(), 'salt', 'with', 'delimiters', scenario]
+    alias_preimage = ''.join(f'{len(field.encode("utf-8"))}:{field}' for field in aliased)
+    assert digest != hashlib.sha256(alias_preimage.encode('utf-8')).hexdigest()

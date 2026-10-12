@@ -16,7 +16,7 @@ export type Attempt = {
   reason: string; letter: boolean; purpose: boolean; feasible: boolean;
   appeal_used: boolean; appeal_deadline: number; appeal_bond_wei: string;
 };
-export type VaultConfig = {contract?: string;chain:string;challenge_count:string;attempt_count:string;adjudication_count?:string;withdrawal_count:string;total_credit_wei:string;total_locked_wei:string;adjudication_mode?:string};
+export type VaultConfig = {contract?: string;chain:string;challenge_count:string;attempt_count:string;adjudication_count?:string;withdrawal_count:string;total_credit_wei:string;total_locked_wei:string;commitment_encoding?:string;adjudication_mode?:string};
 export type TxPhase = 'idle' | 'awaiting_wallet' | 'submitted' | 'accepted' | 'finalized' | 'execution_failed' | 'unknown' | 'rejected';
 export type TxInfo = {phase: TxPhase; hash?: string; title?: string; error?: string};
 export type PersistedTransaction = {hash: string; account: string; phase: Exclude<TxPhase, 'idle'|'awaiting_wallet'|'rejected'|'finalized'>; title?: string; error?: string; updatedAt: number};

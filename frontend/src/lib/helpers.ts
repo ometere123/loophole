@@ -27,7 +27,9 @@ export function savePersistedTransaction(tx:PersistedTransaction){if(typeof wind
 export function getPersistedTransactions():PersistedTransaction[]{if(typeof window==='undefined')return[];try{const raw=localStorage.getItem(txKey);return raw?JSON.parse(raw) as PersistedTransaction[]:[];}catch{return[];}}
 export function getPendingTransaction(address:string):PersistedTransaction|null{return getPersistedTransactions().find(x=>x.account.toLowerCase()===address.toLowerCase())||null;}
 export function clearPersistedTransaction(hash:string){if(typeof window==='undefined')return;localStorage.setItem(txKey,JSON.stringify(getPersistedTransactions().filter(x=>x.hash!==hash)));}
-export async function makeCommitment(cid:string,address:string,salt:string,scenario:string,quote:string,impact:string){const raw=[cid,address.toLowerCase(),salt,scenario,quote,impact].join('|');const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(raw));return [...new Uint8Array(digest)].map(x=>x.toString(16).padStart(2,'0')).join('');}
+export type CommitmentEncoding='legacy-pipe-v0'|'length-prefixed-utf8-v1';
+function commitmentField(value:string){const bytes=new TextEncoder().encode(value);return `${bytes.length}:${value}`;}
+export async function makeCommitment(cid:string,address:string,salt:string,scenario:string,quote:string,impact:string,encoding:CommitmentEncoding='length-prefixed-utf8-v1'){const fields=[cid,address.toLowerCase(),salt,scenario,quote,impact];const raw=encoding==='legacy-pipe-v0'?fields.join('|'):fields.map(commitmentField).join('');const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(raw));return [...new Uint8Array(digest)].map(x=>x.toString(16).padStart(2,'0')).join('');}
 export function randomSalt(){const a=crypto.getRandomValues(new Uint8Array(32));return Array.from(a,x=>x.toString(16).padStart(2,'0')).join('');}
 export function explorerTx(hash:string){return `${EXPLORER}/tx/${encodeURIComponent(hash)}`;}
 export function explorerAddress(address:string){return `${EXPLORER}/address/${encodeURIComponent(address)}`;}

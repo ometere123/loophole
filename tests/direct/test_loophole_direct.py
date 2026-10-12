@@ -10,7 +10,8 @@ def _payload(address):
     scenario = 'I publish a qualifying post that satisfies the literal condition but does not create original educational value.'
     quote = 'A member earns 10 points when they publish a post containing #OurCampaign and at least 100 words.'
     impact = 'Mechanical repetition can satisfy the measurable condition while defeating the stated educational goal.'
-    raw = '|'.join(['1', Address(address).as_hex.lower(), salt, scenario, quote, impact])
+    fields = ['1', Address(address).as_hex.lower(), salt, scenario, quote, impact]
+    raw = ''.join(f'{len(field.encode("utf-8"))}:{field}' for field in fields)
     return hashlib.sha256(raw.encode()).hexdigest(), (salt, scenario, quote, impact)
 
 

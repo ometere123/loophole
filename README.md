@@ -39,7 +39,7 @@ The CI workflow validates the production source, historical source fixtures, dia
 ## Protocol flow
 
 1. An organizer publishes an immutable title, goal, rule, limitations, duration, bounty and exact challenger bond through `create_challenge`.
-2. A challenger commits a lowercase SHA-256 hash of the challenge ID, wallet address, salt, scenario, exact rule quote and impact. The client saves a local backup and offers JSON export; the contract stores only the commitment.
+2. A challenger commits a lowercase SHA-256 hash of the challenge ID, wallet address, salt, scenario, exact rule quote and impact. The fields use a length-prefixed UTF-8 encoding, so delimiters and Unicode cannot create ambiguous preimages. The client saves a local backup and offers JSON export; the contract stores only the commitment.
 3. The challenger reveals the original fields through `reveal_attempt`. The contract checks the exact commitment and requires the quoted passage to occur in the frozen policy.
 4. Anyone calls `start_review`. The contract serializes the FIFO queue, freezes the active attempt and increments the review round.
 5. Anyone calls `adjudicate_review`. The method reads the frozen state from the same contract, runs independent GenLayer validator assessment, derives the verdict from three tri-state material findings, records the result and settles the applicable liability atomically.
@@ -66,7 +66,7 @@ The original two-contract deployment remains authoritative for its existing fund
 
 The monolith deployment is recorded only after an explicitly approved, finalized zero-value deployment and exact source verification. No historical escrow is migrated automatically.
 
-The source-verified monolith is now deployed at [`0x7a5eC154FfA7c05DDe0Fbb1a34286d2eaDA3FBaf`](https://explorer-studio.genlayer.com/address/0x7a5eC154FfA7c05DDe0Fbb1a34286d2eaDA3FBaf). Its finalized zero-value deployment transaction is [`0x4ff23d2092cd920f535590e9aadf9bc5571934ab24d8aac56fae0ef3dc5947b9`](https://explorer-studio.genlayer.com/tx/0x4ff23d2092cd920f535590e9aadf9bc5571934ab24d8aac56fae0ef3dc5947b9), and the full evidence is recorded in [`docs/LOOPHOLE_DEPLOYMENT_2026-10-12.md`](docs/LOOPHOLE_DEPLOYMENT_2026-10-12.md).
+The source-verified monolith is deployed at [`0x7a5eC154FfA7c05DDe0Fbb1a34286d2eaDA3FBaf`](https://explorer-studio.genlayer.com/address/0x7a5eC154FfA7c05DDe0Fbb1a34286d2eaDA3FBaf). Its finalized zero-value deployment transaction is [`0x4ff23d2092cd920f535590e9aadf9bc5571934ab24d8aac56fae0ef3dc5947b9`](https://explorer-studio.genlayer.com/tx/0x4ff23d2092cd920f535590e9aadf9bc5571934ab24d8aac56fae0ef3dc5947b9), and the full evidence is recorded in [`docs/LOOPHOLE_DEPLOYMENT_2026-10-12.md`](docs/LOOPHOLE_DEPLOYMENT_2026-10-12.md). The current source adds the delimiter-safe commitment encoding described in [`docs/COMMITMENT_ENCODING_2026-10-12.md`](docs/COMMITMENT_ENCODING_2026-10-12.md); it is prepared for a separately approved replacement deployment and is not claimed as the source of this existing address.
 
 The first complete funded challenge, adjudication, entitlement and native GEN withdrawal is recorded in [`docs/LOOPHOLE_LIVE_LIFECYCLE_2026-10-12.md`](docs/LOOPHOLE_LIVE_LIFECYCLE_2026-10-12.md), including the independently verified external transfer child.
 
