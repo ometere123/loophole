@@ -60,6 +60,11 @@ function receiptEvidenceOptional(probe:RpcProbe){return !probe.supported&&probe.
 function receiptEvidenceAvailable(probe:RpcProbe){return receiptEvidenceOptional(probe)||(probe.supported&&probe.result!=null);}
 function rawFinal(tx:any,statusProbe:RpcProbe){return lifecycleStatus(tx,statusProbe)==='FINALIZED';}
 function rawSucceeded(tx:any){const leader=tx?.consensus_data?.leader_receipt?.[0]??tx?.leader_receipt?.[0];return leader?.execution_result==='SUCCESS'&&(leader?.result==='AAA='||leader?.result?.status==='return');}
+function childTransferSucceeded(tx:any,receiptProbe:RpcProbe){
+ if(tx?.consensus_data||tx?.leader_receipt)return rawSucceeded(tx);
+ const receiptOk=receiptSucceeded(receiptProbe);
+ return receiptOk===true||(receiptOk===null&&tx?.value_credited===true);
+}
 function rawFailed(tx:any,statusProbe:RpcProbe){const status=lifecycleStatus(tx,statusProbe);return ['CANCELED','CANCELLED','FAILED','REVERTED'].includes(status??'')||(rawFinal(tx,statusProbe)&&tx?.consensus_data&&rawSucceeded(tx)===false);}
 export async function reconcilePersistedTransaction(saved:PersistedTransaction):Promise<TxInfo>{
  const [tx,statusProbe,receiptProbe]=await Promise.all([rawRpc('eth_getTransactionByHash',[saved.hash]),probeRpc('gen_getTransactionStatus',[saved.hash]),probeRpc('eth_getTransactionReceipt',[saved.hash])]);
@@ -106,7 +111,7 @@ export async function verifyWithdrawalDelivery(parentHash:string,beneficiary:str
    if(blocked)return {...parentBase,status:'UNRESOLVED',childHash:blocked.hash,childLifecycleStatus:lifecycleStatus(blocked.tx,blocked.statusProbe),childEvmReceiptStatus:receiptStatus(blocked.receiptProbe),reasons:[`matching child is finalized, but its EVM receipt evidence is unavailable (${blocked.receiptProbe.supported?'not returned':blocked.receiptProbe.category})`]};
    const pending=exact.find(({tx,statusProbe})=>!rawFinal(tx,statusProbe));
    if(pending)return {...parentBase,status:'TRANSFER SUBMITTED',childHash:pending.hash,childLifecycleStatus:lifecycleStatus(pending.tx,pending.statusProbe),childEvmReceiptStatus:receiptStatus(pending.receiptProbe),reasons:['matching child transfer is not finalized']};
-   const credited=exact.find(({tx,statusProbe,receiptProbe})=>rawFinal(tx,statusProbe)&&rawSucceeded(tx)&&tx?.value_credited===true&&receiptEvidenceAvailable(receiptProbe)&&!(receiptProbe.supported&&receiptSucceeded(receiptProbe)===false));
+   const credited=exact.find(({tx,statusProbe,receiptProbe})=>rawFinal(tx,statusProbe)&&childTransferSucceeded(tx,receiptProbe)&&tx?.value_credited===true&&receiptEvidenceAvailable(receiptProbe)&&!(receiptProbe.supported&&receiptSucceeded(receiptProbe)===false));
    if(credited)return {...parentBase,status:'DELIVERY VERIFIED',childHash:credited.hash,childLifecycleStatus:lifecycleStatus(credited.tx,credited.statusProbe),childEvmReceiptStatus:receiptStatus(credited.receiptProbe),reasons:[]};
    return {...parentBase,status:'UNRESOLVED',reasons:['matching child finalized without authoritative successful value_credited evidence']};
  }catch(error){return {...base,status:'UNRESOLVED',reasons:[error instanceof Error?error.message:String(error)]};}

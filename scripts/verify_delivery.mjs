@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
 const RPC = process.env.LOOPHOLE_RPC ?? 'https://studio.genlayer.com/api';
-const VAULT = '0xa77A29C96c30B2A5dB865a2CE35c8F396d504F26'.toLowerCase();
+const VAULT = (process.env.LOOPHOLE_ADDRESS ??
+  process.env.RULE_VAULT_ADDRESS ??
+  '0x7a5eC154FfA7c05DDe0Fbb1a34286d2eaDA3FBaf').toLowerCase();
 const CHAIN_ID = '0xf22f';
 const DELIVERY_STATES = Object.freeze({
   CLAIMABLE: 'CLAIMABLE',
@@ -80,6 +82,15 @@ function executionSucceeded(tx) {
   const leader = tx?.consensus_data?.leader_receipt?.[0] ?? tx?.leader_receipt?.[0];
   return leader?.execution_result === 'SUCCESS' &&
     (leader?.result === 'AAA=' || leader?.result?.status === 'return');
+}
+
+function childTransferSucceeded(child, receiptProbe) {
+  // Native GEN child transfers do not run GenVM consensus. Their execution
+  // evidence is finalized transport success plus authoritative credit. A
+  // consensus-bearing child still requires successful GenVM execution.
+  if (child?.consensus_data || child?.leader_receipt) return executionSucceeded(child);
+  const receiptOk = receiptSucceeded(receiptProbe);
+  return receiptOk === true || (receiptOk === null && child?.value_credited === true);
 }
 
 function probeStatus(probe) {
@@ -200,7 +211,8 @@ try {
       matches: false,
     };
     record.exact_origin_recipient_value = childIsExactMatch(child, beneficiary, amountWei);
-    record.execution_succeeded = child ? executionSucceeded(child) : false;
+    record.execution_succeeded = child ? childTransferSucceeded(child, childReceiptProbe) : false;
+    record.genvm_execution_applicable = Boolean(child?.consensus_data || child?.leader_receipt);
     record.finalized = child ? final(child, childStatusProbe) : false;
     record.authoritative_credit = child?.value_credited === true;
     record.failed = child ? terminalFailure(child, childStatusProbe) : false;

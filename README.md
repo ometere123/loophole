@@ -68,6 +68,8 @@ The monolith deployment is recorded only after an explicitly approved, finalized
 
 The source-verified monolith is now deployed at [`0x7a5eC154FfA7c05DDe0Fbb1a34286d2eaDA3FBaf`](https://explorer-studio.genlayer.com/address/0x7a5eC154FfA7c05DDe0Fbb1a34286d2eaDA3FBaf). Its finalized zero-value deployment transaction is [`0x4ff23d2092cd920f535590e9aadf9bc5571934ab24d8aac56fae0ef3dc5947b9`](https://explorer-studio.genlayer.com/tx/0x4ff23d2092cd920f535590e9aadf9bc5571934ab24d8aac56fae0ef3dc5947b9), and the full evidence is recorded in [`docs/LOOPHOLE_DEPLOYMENT_2026-10-12.md`](docs/LOOPHOLE_DEPLOYMENT_2026-10-12.md).
 
+The first complete funded challenge, adjudication, entitlement and native GEN withdrawal is recorded in [`docs/LOOPHOLE_LIVE_LIFECYCLE_2026-10-12.md`](docs/LOOPHOLE_LIVE_LIFECYCLE_2026-10-12.md), including the independently verified external transfer child.
+
 ## Safety bounds and delivery
 
 Challenge durations are limited to 1–30 days, active attempts to 12, lifetime attempt records to 64, and two outstanding attempts per challenger. Native GEN amounts use `u256` atto units. No owner override can create a winner, alter a rulebook, or withdraw another recipient's credit. A failed or unresolved external child transfer never restores credit automatically and never triggers a blind retry.

@@ -1,0 +1,135 @@
+{
+  "observed_at": "2026-10-12",
+  "network": {
+    "chain_id_hex": "0xf22f",
+    "chain_id_decimal": 61999,
+    "rpc": "https://studio.genlayer.com/api",
+    "explorer": "https://explorer-studio.genlayer.com"
+  },
+  "contract": {
+    "address": "0x7a5eC154FfA7c05DDe0Fbb1a34286d2eaDA3FBaf",
+    "source_sha256": "eea9c1252a08822694be4cbcf38a946387364e05f53b4063adb8ccd537b17500",
+    "mode": "DIRECT_ATOMIC"
+  },
+  "accounts": {
+    "organizer": "0xfcef676044658b5402f590dabe9e04a0f640522f",
+    "challenger_and_beneficiary": "0x81301DD9C3605a7DA743D87b803156d8445620B0"
+  },
+  "challenge": {
+    "challenge_id": "1",
+    "title": "The Originality Loophole",
+    "prize_wei": "10000000000000000",
+    "bond_wei": "10000000000000000",
+    "create_transaction": {
+      "hash": "0xd89d1272e2155045f6bd3912f923b5814fd3f0ff0b98ca47e2d80828460adf55",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0xd89d1272e2155045f6bd3912f923b5814fd3f0ff0b98ca47e2d80828460adf55",
+      "status": "FINALIZED",
+      "result_name": "MAJORITY_AGREE",
+      "leader_execution": "SUCCESS",
+      "value_credited": true,
+      "value_wei": "10000000000000000"
+    }
+  },
+  "attempt": {
+    "attempt_id": "1",
+    "commit_transaction": {
+      "hash": "0x188a6ec1f45b8c0b2896771586f0c803f477b96ad557ef924acad9ccb9fb24eb",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0x188a6ec1f45b8c0b2896771586f0c803f477b96ad557ef924acad9ccb9fb24eb",
+      "status": "FINALIZED",
+      "result_name": "MAJORITY_AGREE",
+      "leader_execution": "SUCCESS",
+      "value_credited": true,
+      "value_wei": "10000000000000000"
+    },
+    "reveal_transaction": {
+      "hash": "0x690a6a4d5d03185fbb5d519f319c675d059dfd4f52d2cc3e2f58950b214e97f1",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0x690a6a4d5d03185fbb5d519f319c675d059dfd4f52d2cc3e2f58950b214e97f1",
+      "status": "FINALIZED",
+      "result_name": "MAJORITY_AGREE",
+      "leader_execution": "SUCCESS",
+      "value_credited": false,
+      "state_readback": "REVEALED",
+      "evidence_hash": "8a3c5301edb12cc61c2f3a870489c4e31a5bf67cb4907c8e1beb2dbebe9441f7",
+      "rpc_note": "The transaction-by-hash index was available during acceptance and later returned not-found after finalization; the finalized contract state, frontend tracker and explorer link were preserved. No receipt fields were inferred from the missing RPC index."
+    },
+    "start_review_transaction": {
+      "hash": "0xfb225acaf50305727c89ac69f3964339262042fc02cab11ef59059e34dbf7c2b",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0xfb225acaf50305727c89ac69f3964339262042fc02cab11ef59059e34dbf7c2b",
+      "status": "FINALIZED",
+      "result_name": "MAJORITY_AGREE",
+      "leader_execution": "SUCCESS",
+      "evm_receipt_status": "0x1",
+      "state_readback": {
+        "active_attempt": "1",
+        "active_round": "1",
+        "attempt_status": "REVIEWING"
+      }
+    },
+    "adjudication_transaction": {
+      "hash": "0x3cfd3f834a72e3a091039a6fb87f91bbe2b84fe9c17f5ee39034e94705dd69f5",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0x3cfd3f834a72e3a091039a6fb87f91bbe2b84fe9c17f5ee39034e94705dd69f5",
+      "status": "FINALIZED",
+      "result_name": "MAJORITY_AGREE",
+      "leader_execution": "SUCCESS",
+      "evm_receipt_status": "0x1",
+      "votes": {
+        "agree": 3,
+        "idle_after_quorum": 2
+      },
+      "verdict": {
+        "value": "VALID",
+        "letter": "PROVEN",
+        "purpose": "PROVEN",
+        "feasible": "PROVEN",
+        "settlement": "ATOMIC",
+        "reason": "The rule requires only #LearnTogether and 100 words; repetition satisfies both literally. The goal demands original educational content teaching a clear concept, which repetition defeats. The sequence needs no external prerequisites and is internally coherent."
+      },
+      "state_readback": {
+        "challenge_status": "WON",
+        "winner": "0x81301dd9c3605a7da743d87b803156d8445620b0",
+        "winner_attempt": "1",
+        "attempt_status": "DECIDED",
+        "adjudication_count": "1",
+        "total_credit_wei": "20000000000000000",
+        "total_locked_wei": "0"
+      }
+    }
+  },
+  "withdrawal": {
+    "parent_transaction": {
+      "hash": "0x8b0784f5cb6b403f5032be595c45f3cb827a97fbe53a1f007d9f4932930c4f09",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0x8b0784f5cb6b403f5032be595c45f3cb827a97fbe53a1f007d9f4932930c4f09",
+      "status": "FINALIZED",
+      "result_name": "MAJORITY_AGREE",
+      "leader_execution": "SUCCESS",
+      "evm_receipt_status": "0x1",
+      "value_wei": "0",
+      "triggered_child": "0xcc32663dafa27a99d04a595d1246e72cd64fc4c63fedb987c568350842c3816b"
+    },
+    "child_transfer": {
+      "hash": "0xcc32663dafa27a99d04a595d1246e72cd64fc4c63fedb987c568350842c3816b",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0xcc32663dafa27a99d04a595d1246e72cd64fc4c63fedb987c568350842c3816b",
+      "from": "0x7a5eC154FfA7c05DDe0Fbb1a34286d2eaDA3FBaf",
+      "to": "0x81301DD9C3605a7DA743D87b803156d8445620B0",
+      "value_wei": "20000000000000000",
+      "status": "FINALIZED",
+      "result_name": "NO_MAJORITY",
+      "genvm_consensus_applicable": false,
+      "evm_receipt_status": "0x1",
+      "value_credited": true
+    },
+    "contract_readback": {
+      "withdrawal_id": "1",
+      "record_status": "TRANSFER_EMITTED_UNVERIFIED",
+      "credit_after_withdrawal_wei": "0",
+      "total_credit_wei": "0",
+      "withdrawal_count": "1"
+    },
+    "delivery_verifier_status": "DELIVERY VERIFIED",
+    "recipient_balance_snapshot": {
+      "address": "0x81301DD9C3605a7DA743D87b803156d8445620B0",
+      "eth_getBalance_wei": "5371379999999999999885",
+      "note": "A pre-withdrawal balance snapshot was not captured; authoritative child value_credited, exact recipient/value matching and successful finalized transport receipt are the delivery proof."
+    }
+  }
+}
