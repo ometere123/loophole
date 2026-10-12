@@ -2,7 +2,7 @@ import { createClient } from 'genlayer-js';
 import { studionet } from 'genlayer-js/chains';
 import { ExecutionResult, TransactionHashVariant, TransactionStatus } from 'genlayer-js/types';
 import type { CalldataEncodable, GenLayerTransaction } from 'genlayer-js/types';
-import { clearPersistedTransaction, savePersistedTransaction, VAULT_ADDRESS, READY } from './helpers';
+import { clearPersistedTransaction, savePersistedTransaction, EXPLORER, VAULT_ADDRESS, READY } from './helpers';
 import type { Attempt, Challenge, DeliveryVerification, DeliveryStatus, PersistedTransaction, TxInfo, VaultConfig } from './types';
 
 export interface EIP1193 {request(args:{method:string;params?:unknown[]}):Promise<unknown>;on?(e:string,fn:(...args:any[])=>void):void;removeListener?(e:string,fn:(...args:any[])=>void):void;}
@@ -27,6 +27,26 @@ export async function fetchAttempt(id:string):Promise<Attempt|null>{return parse
 export async function fetchCredit(address:string):Promise<bigint>{return BigInt(String(await readVault('get_credit',[address])));}
 export async function fetchWithdrawal(id:string){return parseRecord<Record<string,string|number>>(await readVault('get_withdrawal',[BigInt(id)]));}
 export async function fetchWithdrawals(count:number){const out:Record<string,string|number>[]=[];for(let end=count;end>0;end=Math.max(0,end-24)){const page=parseRecord<string[]>(await readVault('get_withdrawals_page',[BigInt(end),BigInt(Math.min(24,end))]))||[];out.push(...page.map(item=>JSON.parse(item) as Record<string,string|number>));}return out;}
+type ExplorerTransaction={hash?:string;tx_hash?:string;transaction_hash?:string;from_address?:string;to_address?:string;status?:string;method?:string;calldata?:string;data?:{calldata?:string;decoded?:{method?:string}}};
+export type WithdrawalParentDiscovery={hashes:string[];error?:string};
+function explorerMethod(row:ExplorerTransaction){
+ const explicit=String(row.method||row.data?.decoded?.method||'').toLowerCase();
+ if(explicit==='withdraw'||explicit.includes('methodwithdraw'))return 'withdraw';
+ const encoded=row.data?.calldata||row.calldata;
+ if(typeof encoded!=='string')return '';
+ try{return atob(encoded).replaceAll('\0','').toLowerCase().includes('methodwithdraw')?'withdraw':'';}catch{return '';}
+}
+export async function findWithdrawalParentHashes(beneficiary:string):Promise<WithdrawalParentDiscovery>{
+ try{
+  const url=new URL('/api/transactions',EXPLORER);url.searchParams.set('search',beneficiary);url.searchParams.set('limit','100');
+  const response=await withTimeout(fetch(url,{headers:{accept:'application/json'}}),RPC_TIMEOUT_MS,'Explorer withdrawal history');
+  if(!response.ok)throw new Error(`Explorer withdrawal history returned HTTP ${response.status}`);
+  const body=await response.json() as ExplorerTransaction[]|{data?:ExplorerTransaction[];transactions?:ExplorerTransaction[];items?:ExplorerTransaction[]};
+  const rows=Array.isArray(body)?body:(body.data||body.transactions||body.items||[]);
+  const hashes=rows.map(row=>({row,hash:row.hash||row.tx_hash||row.transaction_hash})).filter(({row,hash})=>!!hash&&String(row.from_address||'').toLowerCase()===beneficiary.toLowerCase()&&String(row.to_address||'').toLowerCase()===VAULT_ADDRESS.toLowerCase()&&explorerMethod(row)==='withdraw').map(({hash})=>hash as string);
+  return {hashes:[...new Set(hashes)]};
+ }catch(error){return {hashes:[],error:error instanceof Error?error.message:String(error)};}
+}
 export async function fetchChallenges():Promise<Challenge[]>{const cfg=await fetchConfig();const count=Number(cfg?.challenge_count||0);if(count===0)return[];const out:Challenge[]=[];for(let upper=count;upper>0;upper-=24){const raw=await readVault('get_challenges_page',[BigInt(upper),24n]);const page=JSON.parse(String(raw)) as string[];out.push(...page.map(item=>JSON.parse(item) as Challenge));}return out;}
 export async function fetchAttempts(ids:string[]):Promise<Attempt[]>{const out=await Promise.all(ids.map(i=>fetchAttempt(i).catch(()=>null)));return out.filter((x):x is Attempt=>!!x);}
 const deliveryRpc=process.env.NEXT_PUBLIC_STUDIONET_RPC||'https://studio.genlayer.com/api';

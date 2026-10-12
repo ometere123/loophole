@@ -2,8 +2,8 @@
 
 Loophole withdrawal records remain `TRANSFER_EMITTED_UNVERIFIED` because an Intelligent Contract cannot synchronously prove delivery of a native GEN message to an EOA.
 
-The current default origin is the corrected Studionet monolith
-`0xe5e2b5E9Bc53c9D19FEce32a72238842AD8B093e`. Historical deployment addresses
+The current default origin is the source-verified Studionet monolith
+`0xec98AFC80bda4b664F20d782aA8a0bd49e436233`. Historical deployment addresses
 are never used as implicit defaults by the verifier.
 
 Use the read-only verifier after a withdrawal parent is finalized:

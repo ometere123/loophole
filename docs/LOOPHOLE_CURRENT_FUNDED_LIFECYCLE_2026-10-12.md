@@ -1,0 +1,15 @@
+# LOOPHOLE current funded lifecycle — 2026-10-12
+
+The source-verified single-contract deployment at [`0xec98AFC80bda4b664F20d782aA8a0bd49e436233`](https://explorer-studio.genlayer.com/address/0xec98AFC80bda4b664F20d782aA8a0bd49e436233) completed a real two-wallet Studionet lifecycle. The organizer funded challenge 1, the challenger committed and revealed an attempt, and a permissionless direct adjudication reached a finalized `VALID` result.
+
+- Create challenge: [`0xec23e78b15b7b135ad6807d203fdbbe62a7d758ac736739c618e0fcbde9542ee`](https://explorer-studio.genlayer.com/tx/0xec23e78b15b7b135ad6807d203fdbbe62a7d758ac736739c618e0fcbde9542ee)
+- Commit attempt: [`0x2372ac4dea71214dcc55aaa4f64c1695fe5f78e8ea725b7f92515c0d8d6e9bbf`](https://explorer-studio.genlayer.com/tx/0x2372ac4dea71214dcc55aaa4f64c1695fe5f78e8ea725b7f92515c0d8d6e9bbf)
+- Reveal attempt: [`0x21d383502210c733ef196a114de9136d93c987b364851746a9d9f8c6a98520cd`](https://explorer-studio.genlayer.com/tx/0x21d383502210c733ef196a114de9136d93c987b364851746a9d9f8c6a98520cd)
+- Freeze review: [`0xf203abd516cce3aba5ef787162a0ca4c478c79632b346039f2f0326816bbd74d`](https://explorer-studio.genlayer.com/tx/0xf203abd516cce3aba5ef787162a0ca4c478c79632b346039f2f0326816bbd74d)
+- Direct adjudication: [`0x6a98016a47ce937568e26f215f6baa4a339038693e333169f6fbd8f854a1493f`](https://explorer-studio.genlayer.com/tx/0x6a98016a47ce937568e26f215f6baa4a339038693e333169f6fbd8f854a1493f)
+
+The adjudication finalized with GenVM `SUCCESS`, EVM receipt `0x1`, `MAJORITY_AGREE`, three `AGREE` votes and two idle validators canceled after quorum. The leader and agreeing validators independently returned the same normalized material findings: `feasible=PROVEN`, `letter=PROVEN`, `purpose=PROVEN`, and `verdict=VALID`. The monolith settled atomically: challenge 1 became `WON`, attempt 1 became `DECIDED`, and the challenger received 0.02 GEN of claimable credit.
+
+The beneficiary then withdrew the full entitlement. The finalized withdrawal parent is [`0x14e231219a79b0315e406247195c754d8aadb1e22eb7322db75b0aeb4e1c212f`](https://explorer-studio.genlayer.com/tx/0x14e231219a79b0315e406247195c754d8aadb1e22eb7322db75b0aeb4e1c212f). Its `triggered_transactions[0]` is the finalized native GEN child [`0x72be28da6a0727936e66e8c59edd03285c8776aa1d4e85489d075ec122603f9d`](https://explorer-studio.genlayer.com/tx/0x72be28da6a0727936e66e8c59edd03285c8776aa1d4e85489d075ec122603f9d), from the canonical contract to the exact beneficiary for exactly 0.02 GEN. The child EVM receipt is `0x1` and authoritative `value_credited=true`. The contract record remains truthfully `TRANSFER_EMITTED_UNVERIFIED`; the independent verifier reports `DELIVERY VERIFIED`. Contract readback shows beneficiary credit 0, total credit 0, locked GEN 0 and withdrawal count 1.
+
+The complete machine-readable evidence is [`docs/evidence/loophole-current-funded-lifecycle-2026-10-12.json`](evidence/loophole-current-funded-lifecycle-2026-10-12.json). This monolith has no separate callback transaction: `adjudicate_review` performs the finalized consensus and atomic settlement in one contract.

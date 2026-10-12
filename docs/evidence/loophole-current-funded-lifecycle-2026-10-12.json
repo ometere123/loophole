@@ -1,0 +1,149 @@
+{
+  "observed_at": "2026-10-12T20:42:00Z",
+  "network": {
+    "chain_id_hex": "0xf22f",
+    "chain_id_decimal": 61999,
+    "rpc": "https://studio.genlayer.com/api",
+    "explorer": "https://explorer-studio.genlayer.com"
+  },
+  "contract": {
+    "name": "Loophole",
+    "address": "0xec98AFC80bda4b664F20d782aA8a0bd49e436233",
+    "source_sha256": "940446781007701148449db3316f8b0c0e6b04ee84a8de405f78d5789bc1dae1",
+    "deployment_transaction": "0xc5a5dee6cbbb2f081a37adefcb060061abe306044a46c17c2587f18577bda2d1",
+    "adjudication_mode": "DIRECT_ATOMIC"
+  },
+  "accounts": {
+    "organizer": "0x81301DD9C3605a7DA743D87b803156d8445620B0",
+    "challenger_and_beneficiary": "0xfcef676044658B5402f590daBe9E04A0F640522f"
+  },
+  "challenge": {
+    "id": "1",
+    "title": "Repeatable educational post loophole",
+    "prize_wei": "10000000000000000",
+    "bond_wei": "10000000000000000",
+    "create_transaction": {
+      "hash": "0xec23e78b15b7b135ad6807d203fdbbe62a7d758ac736739c618e0fcbde9542ee",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0xec23e78b15b7b135ad6807d203fdbbe62a7d758ac736739c618e0fcbde9542ee",
+      "status": "FINALIZED",
+      "evm_receipt_status": "0x1",
+      "leader_execution": "SUCCESS",
+      "consensus": "MAJORITY_AGREE",
+      "validator_votes": "4 AGREE, 1 IDLE",
+      "value_wei": "10000000000000000"
+    }
+  },
+  "attempt": {
+    "id": "1",
+    "commit_transaction": {
+      "hash": "0x2372ac4dea71214dcc55aaa4f64c1695fe5f78e8ea725b7f92515c0d8d6e9bbf",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0x2372ac4dea71214dcc55aaa4f64c1695fe5f78e8ea725b7f92515c0d8d6e9bbf",
+      "status": "FINALIZED",
+      "evm_receipt_status": "0x1",
+      "leader_execution": "SUCCESS",
+      "consensus": "MAJORITY_AGREE",
+      "validator_votes": "3 AGREE, 2 IDLE",
+      "value_wei": "10000000000000000"
+    },
+    "reveal_transaction": {
+      "hash": "0x21d383502210c733ef196a114de9136d93c987b364851746a9d9f8c6a98520cd",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0x21d383502210c733ef196a114de9136d93c987b364851746a9d9f8c6a98520cd",
+      "status": "FINALIZED",
+      "evm_receipt_status": "0x1",
+      "leader_execution": "SUCCESS",
+      "consensus": "MAJORITY_AGREE",
+      "validator_votes": "3 AGREE, 2 IDLE"
+    },
+    "start_review_transaction": {
+      "hash": "0xf203abd516cce3aba5ef787162a0ca4c478c79632b346039f2f0326816bbd74d",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0xf203abd516cce3aba5ef787162a0ca4c478c79632b346039f2f0326816bbd74d",
+      "status": "FINALIZED",
+      "evm_receipt_status": "0x1",
+      "leader_execution": "SUCCESS",
+      "consensus": "MAJORITY_AGREE",
+      "validator_votes": "3 AGREE, 2 IDLE",
+      "triggered_transactions": []
+    },
+    "adjudication_transaction": {
+      "hash": "0x6a98016a47ce937568e26f215f6baa4a339038693e333169f6fbd8f854a1493f",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0x6a98016a47ce937568e26f215f6baa4a339038693e333169f6fbd8f854a1493f",
+      "status": "FINALIZED",
+      "evm_receipt_status": "0x1",
+      "leader_execution": "SUCCESS",
+      "consensus": "MAJORITY_AGREE",
+      "validator_votes": {
+        "agree": 3,
+        "idle": 2,
+        "round": ["AGREE", "IDLE", "AGREE", "IDLE", "AGREE"],
+        "rotation_count": 0,
+        "round_count": 1
+      },
+      "leader_findings": {
+        "feasible": "PROVEN",
+        "letter": "PROVEN",
+        "purpose": "PROVEN",
+        "verdict": "VALID",
+        "reason": "Attack repeats sentence to meet exact word/link rule, defeating educational goal with a specific feasible sequence."
+      },
+      "triggered_transactions": []
+    },
+    "state_after_adjudication": {
+      "challenge_status": "WON",
+      "winner": "0xfcef676044658b5402f590dabe9e04a0f640522f",
+      "winner_attempt": "1",
+      "attempt_status": "DECIDED",
+      "verdict": "VALID",
+      "letter": true,
+      "purpose": true,
+      "feasible": true,
+      "adjudication_count": "1"
+    }
+  },
+  "entitlement": {
+    "amount_wei": "20000000000000000",
+    "amount_gen": "0.02",
+    "credit_before_withdrawal": "20000000000000000",
+    "credit_after_withdrawal": "0",
+    "total_credit_after_withdrawal": "0",
+    "total_locked_after_withdrawal": "0"
+  },
+  "withdrawal": {
+    "id": "1",
+    "parent_transaction": {
+      "hash": "0x14e231219a79b0315e406247195c754d8aadb1e22eb7322db75b0aeb4e1c212f",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0x14e231219a79b0315e406247195c754d8aadb1e22eb7322db75b0aeb4e1c212f",
+      "status": "FINALIZED",
+      "evm_receipt_status": "0x1",
+      "leader_execution": "SUCCESS",
+      "consensus": "MAJORITY_AGREE",
+      "validator_votes": "5 AGREE",
+      "triggered_child": "0x72be28da6a0727936e66e8c59edd03285c8776aa1d4e85489d075ec122603f9d"
+    },
+    "child_transfer": {
+      "hash": "0x72be28da6a0727936e66e8c59edd03285c8776aa1d4e85489d075ec122603f9d",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0x72be28da6a0727936e66e8c59edd03285c8776aa1d4e85489d075ec122603f9d",
+      "triggered_by": "0x14e231219a79b0315e406247195c754d8aadb1e22eb7322db75b0aeb4e1c212f",
+      "from": "0xec98afc80bda4b664f20d782aa8a0bd49e436233",
+      "to": "0xfcef676044658b5402f590dabe9e04a0f640522f",
+      "value_wei": "20000000000000000",
+      "status": "FINALIZED",
+      "evm_receipt_status": "0x1",
+      "value_credited": true,
+      "genvm_consensus": "not applicable to native transfer child"
+    },
+    "contract_record": {
+      "status": "TRANSFER_EMITTED_UNVERIFIED",
+      "recipient": "0xfcef676044658b5402f590dabe9e04a0f640522f",
+      "amount_wei": "20000000000000000",
+      "credit_after_withdrawal_wei": "0",
+      "withdrawal_count": "1"
+    },
+    "independent_delivery_status": "DELIVERY VERIFIED",
+    "delivery_basis": "Exact origin, beneficiary and value matched; parent and child were FINALIZED; child EVM receipt was 0x1; authoritative value_credited was true."
+  },
+  "rpc_surface": {
+    "supported": ["eth_chainId", "eth_getTransactionByHash", "eth_getTransactionReceipt", "gen_getTransactionStatus"],
+    "unsupported": ["gen_getTransactionReceipt", "gen_getConsensusData", "gen_getTransactionFee", "gen_getTransactionFees", "gen_getTransactionData", "gen_getTransactionAllData", "gen_getTransactionExecution", "gen_getTransactionLogs", "gen_getTransactionHistory", "gen_getTransactionLifecycle", "gen_dbg_traceTransaction"],
+    "policy": "Unsupported, rate-limited and temporary RPC failures were classified separately and never treated as success."
+  }
+}
