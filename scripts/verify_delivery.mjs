@@ -1,9 +1,12 @@
 #!/usr/bin/env node
 
 const RPC = process.env.LOOPHOLE_RPC ?? 'https://studio.genlayer.com/api';
+// Keep the verifier safe when run without shell configuration. The historical
+// RuleVault/GapJudge addresses are evidence only; using one as a default would
+// turn a valid current withdrawal into a false UNRESOLVED result.
 const VAULT = (process.env.LOOPHOLE_ADDRESS ??
-  process.env.RULE_VAULT_ADDRESS ??
-  '0x7a5eC154FfA7c05DDe0Fbb1a34286d2eaDA3FBaf').toLowerCase();
+  process.env.NEXT_PUBLIC_LOOPHOLE_ADDRESS ??
+  '0xe5e2b5E9Bc53c9D19FEce32a72238842AD8B093e').toLowerCase();
 const CHAIN_ID = '0xf22f';
 const DELIVERY_STATES = Object.freeze({
   CLAIMABLE: 'CLAIMABLE',
@@ -175,7 +178,7 @@ try {
   if (!parent) {
     result.reasons.push('parent transaction not found');
   } else if (parent.to_address?.toLowerCase() !== VAULT) {
-    result.reasons.push('parent destination is not the canonical RuleVault');
+    result.reasons.push('parent destination is not the configured Loophole contract');
   } else if (statusConflict(parent, parentStatusProbe)) {
     result.reasons.push('parent lifecycle status conflicts between transaction and gen_getTransactionStatus');
   } else if (parentReceiptProbe.supported && parentReceiptProbe.result == null) {
