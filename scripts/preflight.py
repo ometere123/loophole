@@ -6,21 +6,24 @@ import re,json,hashlib,sys
 root=Path(__file__).resolve().parents[1]
 errors=[]
 contracts=list((root/'contracts').glob('*.py'))
-if len(contracts)!=2: errors.append(f'Expected exactly two contracts; found {len(contracts)}')
+if [p.name for p in contracts] != ['Loophole.py']:
+    errors.append(f'Expected exactly one deployable contract named Loophole.py; found {[p.name for p in contracts]}')
+if not (root/'contracts/Loophole.py').exists(): errors.append('Missing Loophole.py')
+if not (root/'contracts/historical/RuleVault.py').exists() or not (root/'contracts/historical/GapJudge.py').exists():
+    errors.append('Missing historical production sources')
 for p in contracts:
     source=p.read_text(encoding='utf-8')
     if not source.startswith('# { "Depends": "py-genlayer:'): errors.append(f'{p.name}: missing GenVM pin')
     if 'from genlayer import *' not in source: errors.append(f'{p.name}: missing SDK')
     print(f'  {p.name}: {hashlib.sha256(p.read_bytes()).hexdigest()}')
-if not (root/'contracts/GapJudge.py').exists() or not (root/'contracts/RuleVault.py').exists(): errors.append('Missing critical contract')
-s=(root/'contracts/RuleVault.py').read_text()
-j=(root/'contracts/GapJudge.py').read_text()
-for method in ('create_challenge','commit_attempt','reveal_attempt','start_review','record_verdict','refund_unwon','recover_stalled_review','settle_remaining_bond','withdraw'):
-    if f'def {method}(' not in s:errors.append(f'Missing vault method: {method}')
-for method in ('adjudicate','bind_vault'):
-    if f'def {method}(' not in j:errors.append(f'Missing judge method: {method}')
-if 'run_nondet_unsafe(assess, independently_verify)' not in j:errors.append('Missing independent substantive validator')
-if "emit(on='finalized')" not in s or "emit(on='finalized')" not in j:errors.append('Missing finalized IC message')
+source=(root/'contracts/Loophole.py').read_text()
+for method in ('create_challenge','commit_attempt','reveal_attempt','start_review','adjudicate_review','finalize_invalid','appeal_invalid','refund_unwon','recover_stalled_review','settle_remaining_bond','withdraw'):
+    if f'def {method}(' not in source:errors.append(f'Missing monolith method: {method}')
+if 'run_nondet_unsafe(assess, independently_verify)' not in source:errors.append('Missing independent substantive validator')
+if "get_contract_at" in source or "emit(on='finalized')" in source or 'record_verdict' in source:
+    errors.append('Loophole.py must not depend on cross-contract callbacks')
+if 'FINDING_PROVEN' not in source or 'FINDING_DISPROVEN' not in source or 'FINDING_UNKNOWN' not in source:
+    errors.append('Missing tri-state substantive assessment rubric')
 if 'genlayer-js' not in (root/'frontend/package.json').read_text(): errors.append('Missing GenLayerJS')
 if json.loads((root/'package.json').read_text())['devDependencies']['genlayer']!='0.39.1':errors.append('Incorrect CLI pin')
 if 'window.ethereum' not in (root/'frontend/src/lib/genlayer.ts').read_text():errors.append('Missing injected wallet')

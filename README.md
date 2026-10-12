@@ -1,77 +1,86 @@
 # LOOPHOLE! · Break the rules before the rules break you
 
-A playful, two-contract GenLayer community-policy loophole bounty protocol on **Studionet 61999**.
+LOOPHOLE! is a single-contract GenLayer protocol on Studionet 61999. A rulebook organizer escrows a GEN bounty, challengers commit and reveal evidence, and anyone can run a direct validator adjudication against the frozen evidence. A finalized result settles the economic state atomically in the same contract.
 
-The **RuleVault** contract escrows challenge prizes and challenger bonds, holds immutable rulebooks, serializes case review, authenticates callbacks, records adjudicated entitlements and emits GEN withdrawals. **GapJudge** independently judges three substantive factors (literal compliance, purpose conflict, feasibility) with GenLayer validator consensus and returns its result via a *finalized* internal message. Its policy input is frozen in RuleVault; no server, hosted AI endpoint, administrator or frontend local state decides eligibility.
+The current repository contains the new deployable contract at `contracts/Loophole.py`. The earlier `RuleVault` and `GapJudge` sources are kept under `contracts/historical/` solely to preserve source correspondence and evidence for the existing Studionet deployments. The historical contracts and their funds are not migrated or modified by the monolith release.
 
-## Quick start
+## Environment
 
-Requirements: Node 22+, Python 3.12+, an injected EIP-1193 wallet, local GenLayer CLI wallet configured/funded on Studionet. The CLI is **repository-local `genlayer@0.39.1`**, never a global or `npx` latest installation. Wallet access is exclusively through the injected provider; there is no hosted signing backend.
+- Studionet chain `61999` (`0xF22F`)
+- RPC `https://studio.genlayer.com/api`
+- Repository-local GenLayer CLI `0.39.1`
+- Frontend SDK `genlayer-js@1.1.8`
+- Injected EIP-1193 wallet only
+- No Snaps, WalletConnect, hosted signer or privileged payout backend
+
+## Local verification
 
 ```bash
 npm ci
 npm --prefix frontend ci
 python -m pip install -r requirements.txt
 python scripts/preflight.py
-python -m pytest -q tests/
-genvm-lint check contracts/RuleVault.py
-genvm-lint check contracts/GapJudge.py
-./node_modules/.bin/genlayer network set studionet
-python deploy/deploy_studionet.py                    # verifies network, active wallet; dry run
-python deploy/deploy_studionet.py --execute --confirm-chain 61999
-cp frontend/.env.example frontend/.env.local         # fill the two addresses printed after deploy
-npm --prefix frontend run dev
+python -m pytest tests -m "not direct" -q
+genvm-lint check contracts/Loophole.py
+python scripts/validate_runner_headers.py
+python scripts/verify_prompt_parity.py
+npm --prefix frontend run typecheck
+npm --prefix frontend run build
 ```
 
-The verified Studionet deployment and public frontend are recorded in `deployments.studionet.json`. The frontend uses injected EIP-1193 payable writes; the funded economic lifecycle remains externally blocked by the observed Studionet triggered-consensus recovery failure.
+The Direct Mode suite is separate from the simulator suite:
 
-## End-to-end action sequence
+```bash
+GENVM_VERSION=v0.3.0-rc7 python -m pytest tests/direct -m direct -q
+```
 
-1. Deploy GapJudge and RuleVault through the active CLI wallet; bind judge once to vault using `bind_vault`.
-2. Organizer funds `create_challenge` with a GEN value (0.01–1,000,000 GEN), exact purpose/rule/limitations, challenge duration 1–30 days and a GEN bond (0.0001–1000 GEN).
-3. Challenger uses browser wallet to `commit_attempt` with an exact bond and lowercase SHA-256 commitment. A secret backup is saved locally; **export it**, because losing the salt makes the bond forfeitable.
-4. Before the deadline, challenger reveals the matching `salt`, `scenario`, `rule_quote` and `impact` with `reveal_attempt`.
-5. Anyone calls `start_review`. Vault sends finalized message to GapJudge. GapJudge compares a leader's verdict against an **independently derived** validator verdict, requiring agreement on verdict and all three material findings.
-6. GapJudge emits a finalized authenticated `record_verdict` callback. The vault credits prize + bond to first adjudicated VALID challenger, places the first INVALID result into a neutral appeal window, and returns INCONCLUSIVE bond to challenger.
-7. After expiry +48 hours, if no active review, `refund_unwon` credits organizer's unused bounty. `recover_stalled_review` releases a stalled review after 5 days and fences stale callbacks. `settle_remaining_bond` handles unopened commitments and unreviewed attempts after closure.
-8. `withdraw` emits a finalization-gated external GEN transfer. **This is asynchronous, not a synchronous confirmed payout**. Verify the child's actual execution and destination balance; failed child transfers are not automatically refunded on current GenLayer.
+The CI workflow validates the production source, historical source fixtures, diagnostics, mutation behavior, genuine Direct Mode and the frontend lockfile build.
 
-## Local state versus chain state
+## Protocol flow
 
-Real reads use `get_config`, `get_challenge`, `get_attempt`, `get_credit`, `get_withdrawal` from RuleVault. Each write obtains an injected EIP-1193 signature and tracks accepted versus finalized receipt **plus execution result**. On-chain async follow-up steps are shown separately; a transaction finalizing doesn't mean a child payout is confirmed. Challenge cards never come from a local mock seed. Local storage contains only *your own commitment recovery material*, not authoritative adjudications.
+1. An organizer publishes an immutable title, goal, rule, limitations, duration, bounty and exact challenger bond through `create_challenge`.
+2. A challenger commits a lowercase SHA-256 hash of the challenge ID, wallet address, salt, scenario, exact rule quote and impact. The client saves a local backup and offers JSON export; the contract stores only the commitment.
+3. The challenger reveals the original fields through `reveal_attempt`. The contract checks the exact commitment and requires the quoted passage to occur in the frozen policy.
+4. Anyone calls `start_review`. The contract serializes the FIFO queue, freezes the active attempt and increments the review round.
+5. Anyone calls `adjudicate_review`. The method reads the frozen state from the same contract, runs independent GenLayer validator assessment, derives the verdict from three tri-state material findings, records the result and settles the applicable liability atomically.
+6. `VALID` credits the challenger with bounty plus bond. The first `INVALID` result enters a bounded appeal window. An appeal requires an equal bond and creates a new review round. `INCONCLUSIVE` returns the affected bond without releasing the bounty.
+7. Unrevealed commitments expire after the reveal grace period. Stalled direct reviews can be recovered after five days. Organizer refund remains blocked while any legitimate challenger right is unresolved.
+8. `withdraw` clears the recipient's claimable credit before emitting the native GEN transfer. The record remains `TRANSFER_EMITTED_UNVERIFIED`; the frontend and `scripts/verify_delivery.mjs` reconcile the external child independently.
 
-## Controls and bounds
+## Consensus rubric
 
-- Challenge durations 1–30 days; 12 active attempt slots, 64 total attempt records, and 2 outstanding attempts per wallet; organizer barred from direct self-challenges.
-- Immutable rule, intent and exceptions; policy body up to 3,000 characters, objective up to 1,200; no external claims/source pages.
-- Commit/reveal is bound to *challenge ID, wallet address, salt, scenario, quote and impact*, concatenated with `|`, then SHA-256 hex. No client-side verdict.
-- FIFO among revealed attempts, one review active at a time; finalized, authenticated callbacks; idempotent judge cases; round fencing for stale callbacks.
-- The first INVALID verdict enters a 24-hour appeal window; anyone may finalize it after that window, while the challenger may appeal with an equal bond. INCONCLUSIVE refunds the applicable bond; absence of a reveal credits the organizer after expiry. A winner receives bounty and own bond. Revealed unreviewed cases get bonds back after win/refund.
-- Reveals remain open for 48 hours after challenge end. Active review can take 5+ days to recover, during which refund is blocked.
-- Native GEN amount accounting is in `u256` wei. Prize and bonds are liabilities until credited/withdrawn.
+Validators independently assess:
 
-## Limits and known operational risks
+- `letter`: whether every described step satisfies the exact written rule;
+- `purpose`: whether the documented outcome materially defeats the explicit goal;
+- `feasible`: whether the frozen text supplies an internally possible sequence without invented prerequisites.
 
-This package is not an audited system. Model verdict agreement is not a mathematical correctness proof; adversarial policy cases may legitimately be inconclusive or conflict. Studionet GEN is test currency. Withdrawals intentionally report `TRANSFER_EMITTED_UNVERIFIED` because GenLayer external message failure does not credit value back.
+Each finding is `PROVEN`, `DISPROVEN` or `UNKNOWN`. The contract derives `VALID` only when all three are `PROVEN`, `INVALID` when any one is `DISPROVEN`, and `INCONCLUSIVE` otherwise. Validators must agree on the three material findings and derived verdict; explanatory wording may differ. This keeps semantic checks substantive while avoiding brittle comparison of prose.
 
-## Scripts and audits
+## Historical deployments
 
-- `python scripts/preflight.py` — verifies source structure, GenVM pins, CLI pin, wallet and required write methods.
-- `pytest -q tests/` — offline deterministic state-machine tests using a deliberately small GenLayer simulator (not Direct Mode).
-- `genvm-lint check contracts/*.py` — actual SDK semantic lint once installed.
-- `python deploy/deploy_studionet.py` — guarded, repo-local CLI two-contract installer; requires FINALIZED successful execution and verifies reciprocal binding before writing the local manifest.
-- `node scripts/verify_delivery.mjs <withdrawal-parent-hash> <beneficiary> <amount-wei>` — read-only reconciliation of parent finality, child ancestry, exact recipient/value and authoritative `value_credited` evidence.
-- GitHub Actions — source checks, GenVM lint, Python state-machine tests, TypeScript check and frontend build.
+The original two-contract deployment remains authoritative for its existing funded challenges and is preserved as historical evidence:
 
-Additional design details are in `docs/SECURITY.md`, `docs/CONSENSUS.md`, and `docs/QA.md` (these are product documentation, not a handoff).
+- GapJudge: `0xb14B08cd35Fa64FE795e14931DdA09999627785d`
+- RuleVault: `0xa77A29C96c30B2A5dB865a2CE35c8F396d504F26`
 
-## GenLayer references
+The monolith deployment is recorded only after an explicitly approved, finalized zero-value deployment and exact source verification. No historical escrow is migrated automatically.
 
-- https://docs.genlayer.com/developers/intelligent-contracts/features/messages
-- https://docs.genlayer.com/developers/intelligent-contracts/features/value-transfers
-- https://docs.genlayer.com/developers/intelligent-contracts/equivalence-principle
-- https://docs.genlayer.com/developers/intelligent-contracts/features/transaction-context
-- https://docs.genlayer.com/api-references/genlayer-cli
-- https://www.npmjs.com/package/genlayer-js
+## Safety bounds and delivery
 
-License: MIT. No copied Jestor branding, assets, designs or components.
+Challenge durations are limited to 1–30 days, active attempts to 12, lifetime attempt records to 64, and two outstanding attempts per challenger. Native GEN amounts use `u256` atto units. No owner override can create a winner, alter a rulebook, or withdraw another recipient's credit. A failed or unresolved external child transfer never restores credit automatically and never triggers a blind retry.
+
+The frontend reads challenges and verdicts from chain state, gates wallet writes to EIP-1193 chain 61999, distinguishes accepted from finalized execution, restores pending transaction provenance after refresh, and shows unresolved delivery with explorer links.
+
+## Deployment
+
+The guarded deployment helper performs a dry-run by default and refuses any network other than Studionet 61999 or any CLI other than the repository-local 0.39.1:
+
+```bash
+python deploy/deploy_studionet.py
+python deploy/deploy_studionet.py --execute --confirm-chain 61999
+```
+
+The second command requires explicit authorization for the one GEN-spending deployment action. It deploys only `contracts/Loophole.py`, waits for finalized successful execution, verifies `get_config`, writes the local manifest and prints `NEXT_PUBLIC_LOOPHOLE_ADDRESS`.
+
+License: MIT.

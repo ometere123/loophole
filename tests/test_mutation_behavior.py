@@ -28,8 +28,8 @@ def _load(path: Path, name: str):
 
 def _mutated_world(world, tmp_path, vault_mutations=(), judge_mutations=()):
     """Create a fresh simulator world with source mutations applied."""
-    vault_source = (ROOT / "contracts" / "RuleVault.py").read_text(encoding="utf-8")
-    judge_source = (ROOT / "contracts" / "GapJudge.py").read_text(encoding="utf-8")
+    vault_source = (ROOT / "contracts" / "historical" / "RuleVault.py").read_text(encoding="utf-8")
+    judge_source = (ROOT / "contracts" / "historical" / "GapJudge.py").read_text(encoding="utf-8")
     for old, new in vault_mutations:
         assert vault_source.count(old) == 1, old
         vault_source = vault_source.replace(old, new, 1)

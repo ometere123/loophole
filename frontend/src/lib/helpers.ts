@@ -1,10 +1,10 @@
 import type { Category, CommitmentBackup, PersistedTransaction, WithdrawalProvenance } from './types';
 export const CHAIN_ID = 61999;
 export const CHAIN_HEX = '0xf22f';
-export const VAULT_ADDRESS = process.env.NEXT_PUBLIC_RULE_VAULT_ADDRESS || '';
-export const JUDGE_ADDRESS = process.env.NEXT_PUBLIC_GAP_JUDGE_ADDRESS || '';
+export const LOOPHOLE_ADDRESS = process.env.NEXT_PUBLIC_LOOPHOLE_ADDRESS || '';
+export const VAULT_ADDRESS = LOOPHOLE_ADDRESS;
 export const EXPLORER = process.env.NEXT_PUBLIC_STUDIONET_EXPLORER || 'https://explorer-studio.genlayer.com';
-export const READY = /^0x[a-fA-F0-9]{40}$/.test(VAULT_ADDRESS) && /^0x[a-fA-F0-9]{40}$/.test(JUDGE_ADDRESS);
+export const READY = /^0x[a-fA-F0-9]{40}$/.test(LOOPHOLE_ADDRESS);
 export const isAddress = (s:string): boolean => /^0x[a-fA-F0-9]{40}$/.test(s);
 export const short = (s?:string) => s ? `${s.slice(0,6)}…${s.slice(-4)}` : '';
 export function fromWei(s:string|bigint) { const v=BigInt(s||'0'); return (Number(v/10n**14n)/1e4).toLocaleString('en-US',{maximumFractionDigits:4}); }

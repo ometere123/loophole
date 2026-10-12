@@ -15,19 +15,20 @@ jobs:
         run: pip install -r requirements.txt
       - name: Run real GenVM lint
         run: |
-          GENVM_VERSION=v0.3.0-rc7 genvm-lint check contracts/RuleVault.py
-          GENVM_VERSION=v0.3.0-rc7 genvm-lint check contracts/GapJudge.py
+          GENVM_VERSION=v0.3.0-rc7 genvm-lint check contracts/Loophole.py
+          GENVM_VERSION=v0.3.0-rc7 genvm-lint check contracts/historical/RuleVault.py
+          GENVM_VERSION=v0.3.0-rc7 genvm-lint check contracts/historical/GapJudge.py
           GENVM_VERSION=v0.3.0-rc7 genvm-lint check diagnostics/AdjudicationProbe.py
           GENVM_VERSION=v0.3.0-rc7 genvm-lint check diagnostics/CrossContractRelay.py
           GENVM_VERSION=v0.3.0-rc7 genvm-lint check diagnostics/DirectGapJudgeWorkloadProbe.py
       - name: Compile Python
-        run: python -m py_compile contracts/*.py diagnostics/*.py scripts/*.py
+        run: python -m compileall -q contracts diagnostics scripts
       - name: Validate GenVM runner headers
-        run: python scripts/validate_runner_headers.py
+        run: python scripts/validate_runner_headers.py contracts/Loophole.py contracts/historical/RuleVault.py contracts/historical/GapJudge.py diagnostics/AdjudicationProbe.py diagnostics/CrossContractRelay.py diagnostics/DirectGapJudgeWorkloadProbe.py
       - name: Verify production and diagnostic prompt parity
         run: python scripts/verify_prompt_parity.py
       - name: Run protocol state-machine tests
-        run: python -m pytest tests/test_protocol.py tests/test_mutation_behavior.py -m "not direct" -q
+        run: python -m pytest tests -m "not direct" -q
       - name: Run GenVM Direct Mode tests
         env:
           GENVM_GITHUB_TOKEN: ${{ github.token }}

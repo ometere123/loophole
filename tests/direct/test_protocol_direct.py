@@ -15,7 +15,7 @@ def _payload(vm, address):
 
 def test_rulevault_direct_create_commit_reveal(direct_vm, direct_deploy, direct_owner, direct_alice):
     direct_vm._chain_id = 61999
-    vault = direct_deploy('contracts/RuleVault.py', '0x' + 'a' * 40)
+    vault = direct_deploy('contracts/historical/RuleVault.py', '0x' + 'a' * 40)
     direct_vm.sender = direct_owner
     direct_vm.value = 2 * 10**18
     vault.create_challenge(
@@ -37,12 +37,12 @@ def test_rulevault_direct_create_commit_reveal(direct_vm, direct_deploy, direct_
 def test_rulevault_direct_rejects_wrong_chain(direct_vm, direct_deploy):
     direct_vm._chain_id = 61998
     with direct_vm.expect_revert('Studionet 61999'):
-        direct_deploy('contracts/RuleVault.py', '0x' + 'a' * 40)
+        direct_deploy('contracts/historical/RuleVault.py', '0x' + 'a' * 40)
 
 
 def test_rulevault_direct_rejects_forged_reveal(direct_vm, direct_deploy, direct_owner, direct_alice, direct_bob):
     direct_vm._chain_id = 61999
-    vault = direct_deploy('contracts/RuleVault.py', '0x' + 'a' * 40)
+    vault = direct_deploy('contracts/historical/RuleVault.py', '0x' + 'a' * 40)
     direct_vm.sender = direct_owner
     direct_vm.value = 10**16
     vault.create_challenge('Direct challenge', 'A sufficiently specific objective for testing.',
@@ -59,7 +59,7 @@ def test_rulevault_direct_rejects_forged_reveal(direct_vm, direct_deploy, direct
 
 def test_gapjudge_direct_validates_frozen_evidence_hash(direct_vm, direct_deploy, direct_owner, direct_alice):
     direct_vm._chain_id = 61999
-    judge = direct_deploy('contracts/GapJudge.py')
+    judge = direct_deploy('contracts/historical/GapJudge.py')
     direct_vm.sender = direct_owner
     judge.bind_vault('0x' + 'b' * 40)
     direct_vm.sender = direct_alice
@@ -83,7 +83,7 @@ def test_gapjudge_direct_substantive_verdict(direct_vm, direct_deploy, direct_ow
             'reason': 'The literal condition is met while the stated educational purpose is defeated.',
         }),
     )
-    judge = direct_deploy('contracts/GapJudge.py')
+    judge = direct_deploy('contracts/historical/GapJudge.py')
     vault_address = '0x' + direct_alice.hex()
     direct_vm.sender = direct_owner
     judge.bind_vault(vault_address)

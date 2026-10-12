@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Guarded, resumable deployment for exactly Studionet 61999.
+"""Guarded deployment for the single Loophole contract on Studionet 61999.
 
-The script never creates wallets, prints secrets, or treats ACCEPTED as execution
-success. It writes only the ignored local manifest when a real transaction exists.
+This script never touches the historical RuleVault/GapJudge deployments. It
+never creates wallets, prints secrets, or treats ACCEPTED as execution success.
 """
 from pathlib import Path
 import argparse
@@ -21,8 +21,8 @@ CLI = ROOT / 'node_modules' / '.bin' / ('genlayer.cmd' if os.name == 'nt' else '
 RPC = 'https://studio.genlayer.com/api'
 CHAIN_ID = '61999'
 EXPLORER = 'https://explorer-studio.genlayer.com'
-ADDR = re.compile(r"(?:Contract Address|contract_address)\s*[:=]\s*['\"]?(0x[0-9a-fA-F]{40})", re.I)
 TX = re.compile(r'(?:Transaction Hash|Deployment Transaction Hash|Write Transaction Hash)\s*:\s*(0x[0-9a-fA-F]{64})', re.I)
+ADDR = re.compile(r'(?:Contract Address|contract_address)\s*[:=]\s*[\'\"]?(0x[0-9a-fA-F]{40})', re.I)
 
 
 def run(args: list[str]) -> str:
@@ -60,8 +60,11 @@ def finalized_success(tx_hash: str) -> str:
 
 
 def source_hashes() -> dict[str, str]:
-    return {p.name: hashlib.sha256(p.read_bytes()).hexdigest()
-            for p in sorted((ROOT / 'contracts').glob('*.py'))}
+    paths = [ROOT / 'contracts' / 'Loophole.py',
+             ROOT / 'contracts' / 'historical' / 'RuleVault.py',
+             ROOT / 'contracts' / 'historical' / 'GapJudge.py']
+    return {str(path.relative_to(ROOT)).replace('\\', '/'): hashlib.sha256(path.read_bytes()).hexdigest()
+            for path in paths}
 
 
 def verify_environment() -> tuple[str, str]:
@@ -83,69 +86,45 @@ def write_manifest(path: Path, data: dict) -> None:
     path.write_text(json.dumps(data, indent=2, sort_keys=True) + '\n', encoding='utf-8')
 
 
-def deploy_contract(path: str, args: list[str]) -> tuple[str, str]:
-    output = run(['deploy', '--contract', path, *(['--args', *args] if args else [])])
-    tx_hash = parse_tx(output)
-    receipt_output = finalized_success(tx_hash)
-    return parse_address(output + '\n' + receipt_output), tx_hash
-
-
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument('--execute', action='store_true')
     parser.add_argument('--confirm-chain', default='')
     parser.add_argument('--manifest', default='deployments.local.json')
-    parser.add_argument('--resume-judge-address', default='')
-    parser.add_argument('--resume-judge-tx', default='')
-    parser.add_argument('--resume-vault-address', default='')
-    parser.add_argument('--resume-vault-tx', default='')
     args = parser.parse_args()
+
     print(f'LOOPHOLE deployment preflight: Studionet {CHAIN_ID} ({RPC})')
     version, account = verify_environment()
     manifest_path = ROOT / args.manifest
     if not args.execute or args.confirm_chain != CHAIN_ID:
         print('DRY RUN ONLY: environment, CLI version, network, active wallet and source inputs verified.')
-        print('Add --execute --confirm-chain 61999 only when you intend to sign deployment transactions.')
+        print('Add --execute --confirm-chain 61999 only when you intend to sign one deployment transaction.')
         return
 
-    manifest = {'network': 'studionet', 'chain_id': int(CHAIN_ID), 'rpc': RPC,
-                'explorer': EXPLORER, 'cli_version': version, 'account_output': account,
-                'source_sha256': source_hashes(), 'finality_verified': False,
-                'economic_lifecycle_verified': False}
-    if bool(args.resume_judge_address) != bool(args.resume_judge_tx):
-        raise RuntimeError('Resume requires both the real judge address and its real deployment transaction.')
-    if bool(args.resume_vault_address) != bool(args.resume_vault_tx):
-        raise RuntimeError('Resume requires both the real vault address and its real deployment transaction.')
-    if args.resume_judge_address and args.resume_judge_tx:
-        finalized_success(args.resume_judge_tx)
-        judge, judge_tx = args.resume_judge_address, args.resume_judge_tx
-    else:
-        judge, judge_tx = deploy_contract('contracts/GapJudge.py', [])
-    manifest.update({'judge': judge, 'judge_deploy_tx': judge_tx,
-                     'judge_deploy_explorer': f'{EXPLORER}/tx/{judge_tx}'})
-    write_manifest(manifest_path, manifest)
-    if args.resume_vault_address and args.resume_vault_tx:
-        finalized_success(args.resume_vault_tx)
-        vault, vault_tx = args.resume_vault_address, args.resume_vault_tx
-    else:
-        vault, vault_tx = deploy_contract('contracts/RuleVault.py', [judge])
-    manifest.update({'vault': vault, 'vault_deploy_tx': vault_tx,
-                     'vault_deploy_explorer': f'{EXPLORER}/tx/{vault_tx}'})
-    write_manifest(manifest_path, manifest)
-    bind_output = run(['write', judge, 'bind_vault', '--args', vault])
-    bind_tx = parse_tx(bind_output)
-    finalized_success(bind_tx)
-    manifest.update({'bind_tx': bind_tx, 'bind_explorer': f'{EXPLORER}/tx/{bind_tx}'})
-    judge_config = run(['call', judge, 'get_configuration'])
-    vault_config = run(['call', vault, 'get_config'])
-    if vault.lower() not in judge_config.lower() or judge.lower() not in vault_config.lower():
-        raise RuntimeError('Reciprocal judge/vault binding was not verified by finalized reads.')
-    manifest.update({'binding_verified': True, 'judge_configuration': judge_config,
-                     'vault_configuration': vault_config, 'finality_verified': True})
+    output = run(['deploy', '--contract', 'contracts/Loophole.py'])
+    deploy_tx = parse_tx(output)
+    receipt = finalized_success(deploy_tx)
+    address = parse_address(output + '\n' + receipt)
+    config = run(['call', address, 'get_config'])
+    if 'Loophole' not in config or 'DIRECT_ATOMIC' not in config or "'61999'" not in config:
+        raise RuntimeError('Deployed Loophole configuration did not prove the expected chain or mode.')
+
+    manifest = {
+        'network': 'studionet', 'chain_id': int(CHAIN_ID), 'rpc': RPC,
+        'explorer': EXPLORER, 'cli_version': version,
+        'account_output': account, 'contract': 'Loophole', 'address': address,
+        'deploy_tx': deploy_tx, 'deploy_explorer': f'{EXPLORER}/tx/{deploy_tx}',
+        'source_sha256': source_hashes(), 'deployment_receipt': receipt,
+        'configuration': config, 'finality_verified': True,
+        'economic_lifecycle_verified': False,
+        'historical_deployments': {
+            'gapjudge': '0xb14B08cd35Fa64FE795e14931DdA09999627785d',
+            'rulevault': '0xa77A29C96c30B2A5dB865a2CE35c8F396d504F26',
+        },
+    }
     write_manifest(manifest_path, manifest)
     print(f'Verified deployment manifest written to {manifest_path}')
-    print(f'NEXT_PUBLIC_RULE_VAULT_ADDRESS={vault}')
-    print(f'NEXT_PUBLIC_GAP_JUDGE_ADDRESS={judge}')
+    print(f'NEXT_PUBLIC_LOOPHOLE_ADDRESS={address}')
 
 
 if __name__ == '__main__':

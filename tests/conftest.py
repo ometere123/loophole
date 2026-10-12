@@ -75,8 +75,8 @@ def world(monkeypatch):
     fake.__init__();fake.nondet.answer='{"verdict":"VALID","letter":true,"purpose":true,"feasible":true,"reason":"Exact written rule permits repeated engagement farming despite the explicit purpose."}'
     def load(path,name):
         spec=importlib.util.spec_from_file_location(name,BASE/'contracts'/path);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
-    j=load('GapJudge.py','fake_gapjudge').GapJudge
-    v=load('RuleVault.py','fake_rulevault').RuleVault
+    j=load('historical/GapJudge.py','fake_gapjudge').GapJudge
+    v=load('historical/RuleVault.py','fake_rulevault').RuleVault
     owner=Address('0x'+'1'*40);alice=Address('0x'+'2'*40);bob=Address('0x'+'3'*40)
     judge_addr=Address('0x'+'a'*40);vault_addr=Address('0x'+'b'*40)
     def run(addr,sender,method,*args,value=0):

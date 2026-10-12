@@ -9,8 +9,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).parents[1]
-VAULT = (ROOT / "contracts" / "RuleVault.py").read_text(encoding="utf-8")
-JUDGE = (ROOT / "contracts" / "GapJudge.py").read_text(encoding="utf-8")
+VAULT = (ROOT / "contracts" / "historical" / "RuleVault.py").read_text(encoding="utf-8")
+JUDGE = (ROOT / "contracts" / "historical" / "GapJudge.py").read_text(encoding="utf-8")
 
 
 def test_mutating_callback_authentication_is_detectable():

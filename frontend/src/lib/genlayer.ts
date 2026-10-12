@@ -9,7 +9,7 @@ export interface EIP1193 {request(args:{method:string;params?:unknown[]}):Promis
 declare global {interface Window {ethereum?:EIP1193;}}
 const readClient = createClient({chain:studionet});
 const addr = VAULT_ADDRESS as `0x${string}`;
-function requireDeployment(){if(!READY)throw new Error('Contracts are not deployed/configured. Set both public contract addresses.');}
+function requireDeployment(){if(!READY)throw new Error('The Loophole contract is not deployed/configured. Set NEXT_PUBLIC_LOOPHOLE_ADDRESS.');}
 function parseRecord<T>(data:unknown):T|null{if(!data||data==='')return null;const parsed=typeof data==='string'? JSON.parse(data): data;return parsed as T;}
 export async function readVault(functionName:string,args:CalldataEncodable[]=[]):Promise<CalldataEncodable>{
   requireDeployment();
@@ -86,7 +86,7 @@ export async function verifyWithdrawalDelivery(parentHash:string,beneficiary:str
    if(!parent)return {...base,status:'UNRESOLVED',reasons:['parent transaction is unavailable']};
    const parentStatus=lifecycleStatus(parent,parentStatusProbe),parentReceipt=receiptStatus(parentReceiptProbe);
    const parentBase={...base,parentLifecycleStatus:parentStatus,parentEvmReceiptStatus:parentReceipt};
-   if(String(parent.to_address||'').toLowerCase()!==VAULT_ADDRESS.toLowerCase())return {...parentBase,status:'UNRESOLVED',reasons:['parent destination is not the canonical RuleVault']};
+   if(String(parent.to_address||'').toLowerCase()!==VAULT_ADDRESS.toLowerCase())return {...parentBase,status:'UNRESOLVED',reasons:['parent destination is not the configured Loophole contract']};
    if(statusConflict(parent,parentStatusProbe))return {...parentBase,status:'UNRESOLVED',reasons:['parent lifecycle status conflicts between transaction and gen_getTransactionStatus']};
    if(rawFailed(parent,parentStatusProbe))return {...parentBase,status:'FAILED',reasons:['parent transaction failed or finalized without successful execution']};
    if(parentReceiptProbe.supported&&parentReceiptProbe.result==null)return {...parentBase,status:'UNRESOLVED',reasons:['parent EVM receipt is not available yet']};

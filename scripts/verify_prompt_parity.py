@@ -19,7 +19,7 @@ def extract(path: Path) -> str:
 
 
 def main() -> int:
-    production = extract(ROOT / "contracts" / "GapJudge.py")
+    production = extract(ROOT / "contracts" / "Loophole.py")
     diagnostic = extract(ROOT / "diagnostics" / "DirectGapJudgeWorkloadProbe.py")
     if production != diagnostic:
         print("PROMPT PARITY: FAIL")

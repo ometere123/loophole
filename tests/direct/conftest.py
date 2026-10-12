@@ -23,6 +23,12 @@ VERSION = os.environ.get("GENVM_DIRECT_VERSION", "v0.3.0-rc7")
 ASSET = "genvm-runners-all.tar.xz" if VERSION.startswith("v0.3.") else "genvm-universal.tar.xz"
 CACHE = Path.home() / ".cache" / "gltest-direct"
 METADATA = CACHE / f"genvm-{VERSION}.json"
+PINNED_ARTIFACT = {
+    "version": "v0.3.0-rc7",
+    "asset": "genvm-runners-all.tar.xz",
+    "sha256": "e218a1854214681560351051f76fe2b878545cf3409455ef372d57014a88ca67",
+    "size": 134842512,
+}
 
 
 def _github_headers(accept: str = "application/vnd.github+json") -> dict[str, str]:
@@ -56,11 +62,6 @@ def _download_artifacts(version: str) -> Path:
     if version != VERSION:
         raise RuntimeError(f"Direct Mode is pinned to {VERSION}; received {version}")
     CACHE.mkdir(parents=True, exist_ok=True)
-    asset = _release_asset()
-    expected = str(asset.get("digest", "")).removeprefix("sha256:")
-    size = asset.get("size")
-    if len(expected) != 64 or any(c not in "0123456789abcdefABCDEF" for c in expected):
-        raise RuntimeError(f"GenVM release {VERSION} did not publish a SHA-256 digest for {ASSET}")
     destination = CACHE / f"genvm-universal-{VERSION}.tar.xz"
     metadata = None
     if METADATA.exists():
@@ -68,11 +69,31 @@ def _download_artifacts(version: str) -> Path:
             metadata = json.loads(METADATA.read_text(encoding="utf-8"))
         except (OSError, ValueError):
             metadata = None
-    cache_matches = (
-        destination.exists()
-        and metadata == {"version": VERSION, "asset": ASSET, "sha256": expected, "size": size}
-        and _sha256(destination) == expected
-    )
+    cache_matches = False
+    if destination.exists() and isinstance(metadata, dict):
+        cache_matches = (
+            metadata.get("version") == VERSION
+            and metadata.get("asset") == ASSET
+            and isinstance(metadata.get("sha256"), str)
+            and len(metadata["sha256"]) == 64
+            and isinstance(metadata.get("size"), int)
+            and destination.stat().st_size == metadata["size"]
+            and _sha256(destination) == metadata["sha256"]
+        )
+        if VERSION == PINNED_ARTIFACT["version"]:
+            cache_matches = cache_matches and metadata == PINNED_ARTIFACT
+    if cache_matches:
+        return destination
+
+    asset = _release_asset()
+    expected = str(asset.get("digest", "")).removeprefix("sha256:")
+    size = asset.get("size")
+    if len(expected) != 64 or any(c not in "0123456789abcdefABCDEF" for c in expected):
+        raise RuntimeError(f"GenVM release {VERSION} did not publish a SHA-256 digest for {ASSET}")
+    if VERSION == PINNED_ARTIFACT["version"] and {
+        "version": VERSION, "asset": ASSET, "sha256": expected, "size": size
+    } != PINNED_ARTIFACT:
+        raise RuntimeError(f"GenVM release metadata changed for pinned {VERSION} {ASSET}")
     if not cache_matches:
         destination.unlink(missing_ok=True)
         METADATA.unlink(missing_ok=True)

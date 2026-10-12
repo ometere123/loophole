@@ -1,22 +1,25 @@
 {
-  "network": "studionet",
-  "chain_id": 61999,
-  "rpc": "https://studio.genlayer.com/api",
-  "explorer": "https://explorer-studio.genlayer.com",
-  "cli_version": "0.39.1",
-  "judge": "0xb14B08cd35Fa64FE795e14931DdA09999627785d",
-  "judge_deploy_tx": "0xbd61daebc588802a6369d5fa5165aaa2d463d2721b54bae7ff07b13846fb2f01",
-  "vault": "0xa77A29C96c30B2A5dB865a2CE35c8F396d504F26",
-  "vault_deploy_tx": "0x8dcf1b238d5df05cf62c9c6837ca247efb238069fc259c4fb1990214696bcfb7",
   "bind_tx": "0x43eaaf452fc79998b2277e00aa291f235c18e1789df50ae50d68628e98e225e5",
   "binding_verified": true,
-  "finality_verified": true,
-  "source_correspondence_verified": true,
-  "source_verification_method": "genlayer code at each canonical address; endpoint trailing blank lines normalized before SHA-256",
+  "chain_id": 61999,
+  "cli_version": "0.39.1",
   "economic_lifecycle_verified": false,
+  "explorer": "https://explorer-studio.genlayer.com",
+  "finality_verified": true,
+  "frontend": "https://loophole-one.vercel.app",
+  "historical_note": "These addresses and funds remain authoritative for the earlier two-contract deployment; no migration is implied.",
+  "judge": "0xb14B08cd35Fa64FE795e14931DdA09999627785d",
+  "judge_deploy_tx": "0xbd61daebc588802a6369d5fa5165aaa2d463d2721b54bae7ff07b13846fb2f01",
+  "network": "studionet",
+  "production_contract": "contracts/Loophole.py is not deployed in this historical manifest",
+  "rpc": "https://studio.genlayer.com/api",
+  "source_correspondence_verified": true,
   "source_sha256": {
-    "GapJudge.py": "747e44975d6a3a7d56cf04c3575bb54f675d8cda776b1231dcddcc7b99ac853d",
-    "RuleVault.py": "a6b11a310d5a263b0f9a9d64570a386b24a305e75a56a24e6f1afae9d675aa4d"
+    "contracts/historical/GapJudge.py": "747e44975d6a3a7d56cf04c3575bb54f675d8cda776b1231dcddcc7b99ac853d",
+    "contracts/historical/RuleVault.py": "a6b11a310d5a263b0f9a9d64570a386b24a305e75a56a24e6f1afae9d675aa4d"
   },
-  "frontend": "https://loophole-one.vercel.app"
+  "source_verification_method": "genlayer code at each canonical address; endpoint trailing blank lines normalized before SHA-256",
+  "status": "historical",
+  "vault": "0xa77A29C96c30B2A5dB865a2CE35c8F396d504F26",
+  "vault_deploy_tx": "0x8dcf1b238d5df05cf62c9c6837ca247efb238069fc259c4fb1990214696bcfb7"
 }

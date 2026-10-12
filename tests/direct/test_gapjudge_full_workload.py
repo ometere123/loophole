@@ -51,7 +51,7 @@ def _challenge_two_args():
 
 
 def _deploy_bound_judge(direct_vm, direct_deploy, direct_owner, direct_alice):
-    judge = direct_deploy("contracts/GapJudge.py")
+    judge = direct_deploy("contracts/historical/GapJudge.py")
     vault_address = "0x" + direct_alice.hex()
     direct_vm.sender = direct_owner
     judge.bind_vault(vault_address)
@@ -66,7 +66,7 @@ def test_gapjudge_direct_full_challenge_two_normalizes_contradictory_output(
     direct_vm._chain_id = 61999
     direct_vm.clear_mocks()
     direct_vm.mock_llm(
-        r".*Return ONLY a compact JSON object.*",
+            r".*ROLE: independent, cautious reward-policy red-team adjudicator.*",
         json.dumps(
             {
                 "verdict": "VALID",
@@ -140,7 +140,7 @@ def test_direct_workload_probe_harness_uses_the_same_full_assessment(
     direct_vm._chain_id = 61999
     direct_vm.clear_mocks()
     direct_vm.mock_llm(
-        r".*Return ONLY a compact JSON object.*",
+        r".*ROLE: independent, cautious reward-policy red-team adjudicator.*",
         json.dumps(
             {
                 "verdict": "INCONCLUSIVE",
