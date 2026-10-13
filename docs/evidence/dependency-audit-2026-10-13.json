@@ -1,0 +1,252 @@
+{
+  "observed_at": "2026-10-13T20:09:28.013583Z",
+  "commands": {
+    "root_full": "npm audit --json",
+    "root_production": "npm audit --omit=dev --audit-level=high",
+    "frontend_full": "npm --prefix frontend audit --json --audit-level=high"
+  },
+  "root_full": {
+    "exit_code": 1,
+    "metadata": {
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 4,
+        "high": 0,
+        "critical": 2,
+        "total": 6
+      },
+      "dependencies": {
+        "prod": 1,
+        "dev": 486,
+        "optional": 57,
+        "peer": 73,
+        "peerOptional": 0,
+        "total": 486
+      }
+    },
+    "vulnerabilities": {
+      "@vitest/mocker": {
+        "name": "@vitest/mocker",
+        "severity": "moderate",
+        "isDirect": false,
+        "via": [
+          {
+            "source": 1193684,
+            "name": "@vitest/mocker",
+            "dependency": "@vitest/mocker",
+            "title": "Vitest: Path Traversal / Arbitrary File Read via @vitest/mocker Redirect Mock",
+            "url": "https://github.com/advisories/GHSA-82fw-gwwq-j7x9",
+            "severity": "moderate",
+            "cwe": [
+              "CWE-22"
+            ],
+            "cvss": {
+              "score": 5.9,
+              "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N"
+            },
+            "range": ">=2.1.0 <4.1.11"
+          }
+        ],
+        "effects": [
+          "vitest"
+        ],
+        "range": "2.1.0 - 4.1.10",
+        "nodes": [
+          "node_modules/@vitest/mocker"
+        ],
+        "fixAvailable": {
+          "name": "genlayer",
+          "version": "0.0.35",
+          "isSemVerMajor": true
+        }
+      },
+      "dockerode": {
+        "name": "dockerode",
+        "severity": "moderate",
+        "isDirect": false,
+        "via": [
+          "uuid"
+        ],
+        "effects": [],
+        "range": "4.0.3 - 4.0.12",
+        "nodes": [
+          "node_modules/dockerode"
+        ],
+        "fixAvailable": true
+      },
+      "genlayer": {
+        "name": "genlayer",
+        "severity": "moderate",
+        "isDirect": true,
+        "via": [
+          "vitest"
+        ],
+        "effects": [],
+        "range": ">=0.1.0",
+        "nodes": [
+          "node_modules/genlayer"
+        ],
+        "fixAvailable": {
+          "name": "genlayer",
+          "version": "0.0.35",
+          "isSemVerMajor": true
+        }
+      },
+      "tinypool": {
+        "name": "tinypool",
+        "severity": "critical",
+        "isDirect": false,
+        "via": [
+          {
+            "source": 1241260,
+            "name": "tinypool",
+            "dependency": "tinypool",
+            "title": "Tinypool: Prototype Pollution gadget in worker options leads to Remote Code Execution",
+            "url": "https://github.com/advisories/GHSA-5gmw-xhrv-c9v3",
+            "severity": "critical",
+            "cwe": [
+              "CWE-1321"
+            ],
+            "cvss": {
+              "score": 0,
+              "vectorString": null
+            },
+            "range": "<=2.1.0"
+          },
+          {
+            "source": 1241261,
+            "name": "tinypool",
+            "dependency": "tinypool",
+            "title": "Tinypool: Prototype Pollution Gadget to RCE in run() options",
+            "url": "https://github.com/advisories/GHSA-85c8-ppgw-ccpr",
+            "severity": "critical",
+            "cwe": [
+              "CWE-94",
+              "CWE-1321"
+            ],
+            "cvss": {
+              "score": 0,
+              "vectorString": null
+            },
+            "range": "<2.1.2"
+          }
+        ],
+        "effects": [
+          "vitest"
+        ],
+        "range": "<=2.1.1",
+        "nodes": [
+          "node_modules/tinypool"
+        ],
+        "fixAvailable": {
+          "name": "genlayer",
+          "version": "0.0.35",
+          "isSemVerMajor": true
+        }
+      },
+      "uuid": {
+        "name": "uuid",
+        "severity": "moderate",
+        "isDirect": false,
+        "via": [
+          {
+            "source": 1119441,
+            "name": "uuid",
+            "dependency": "uuid",
+            "title": "uuid: Missing buffer bounds check in v3/v5/v6 when buf is provided",
+            "url": "https://github.com/advisories/GHSA-w5hq-g745-h8pq",
+            "severity": "moderate",
+            "cwe": [
+              "CWE-787",
+              "CWE-1285"
+            ],
+            "cvss": {
+              "score": 7.5,
+              "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
+            },
+            "range": "<11.1.1"
+          }
+        ],
+        "effects": [
+          "dockerode"
+        ],
+        "range": "<11.1.1",
+        "nodes": [
+          "node_modules/dockerode/node_modules/uuid"
+        ],
+        "fixAvailable": true
+      },
+      "vitest": {
+        "name": "vitest",
+        "severity": "critical",
+        "isDirect": false,
+        "via": [
+          "@vitest/mocker",
+          {
+            "source": 1193683,
+            "name": "vitest",
+            "dependency": "vitest",
+            "title": "Vitest: Path Traversal / Arbitrary File Read via @vitest/mocker Redirect Mock",
+            "url": "https://github.com/advisories/GHSA-82fw-gwwq-j7x9",
+            "severity": "moderate",
+            "cwe": [
+              "CWE-22"
+            ],
+            "cvss": {
+              "score": 5.9,
+              "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N"
+            },
+            "range": ">=2.1.0 <4.1.11"
+          },
+          "tinypool"
+        ],
+        "effects": [
+          "genlayer"
+        ],
+        "range": "0.0.95 - 4.1.10",
+        "nodes": [
+          "node_modules/vitest"
+        ],
+        "fixAvailable": {
+          "name": "genlayer",
+          "version": "0.0.35",
+          "isSemVerMajor": true
+        }
+      }
+    },
+    "advisories": 2
+  },
+  "root_production": {
+    "exit_code": 0,
+    "metadata": {},
+    "vulnerabilities": {}
+  },
+  "frontend_full": {
+    "exit_code": 0,
+    "metadata": {
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      },
+      "dependencies": {
+        "prod": 164,
+        "dev": 6,
+        "optional": 40,
+        "peer": 78,
+        "peerOptional": 0,
+        "total": 286
+      }
+    },
+    "vulnerabilities": {}
+  },
+  "interpretation": {
+    "frontend_production_tree": "clean at high severity threshold",
+    "root_production_tree": "clean at high severity threshold",
+    "root_development_tree": "six transitive advisories remain through the required genlayer@0.39.1 CLI; npm audit fix --force proposes breaking genlayer@0.0.35 and was not applied"
+  }
+}

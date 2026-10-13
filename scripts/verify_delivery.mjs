@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+import {classifyDelivery, DELIVERY_STATES} from './delivery_classifier.mjs';
+
 const RPC = process.env.LOOPHOLE_RPC ?? 'https://studio.genlayer.com/api';
 // Keep the verifier safe when run without shell configuration. The historical
 // RuleVault/GapJudge addresses are evidence only; using one as a default would
@@ -8,15 +10,6 @@ const VAULT = (process.env.LOOPHOLE_ADDRESS ??
   process.env.NEXT_PUBLIC_LOOPHOLE_ADDRESS ??
   '0xB87353201CeC791cc16c25e8eE1077076D90548E').toLowerCase();
 const CHAIN_ID = '0xf22f';
-const DELIVERY_STATES = Object.freeze({
-  CLAIMABLE: 'CLAIMABLE',
-  TRANSFER_SUBMITTED: 'TRANSFER SUBMITTED',
-  PARENT_FINALIZED: 'PARENT FINALIZED',
-  DELIVERY_VERIFIED: 'DELIVERY VERIFIED',
-  FAILED: 'FAILED',
-  UNRESOLVED: 'UNRESOLVED',
-});
-
 function usage() {
   console.error('Usage: node scripts/verify_delivery.mjs <withdrawal-parent-hash> <beneficiary> <amount-wei>');
   process.exit(2);
@@ -228,46 +221,24 @@ try {
     result.children.push(record);
   }
 
-  if (!parent) {
-    result.status = DELIVERY_STATES.UNRESOLVED;
-    result.reasons.push('parent transaction is unavailable');
-  } else if (parent.to_address?.toLowerCase() !== VAULT) {
-    result.status = DELIVERY_STATES.UNRESOLVED;
-  } else if (statusConflict(parent, parentStatusProbe)) {
-    result.status = DELIVERY_STATES.UNRESOLVED;
-  } else if (terminalFailure(parent, parentStatusProbe)) {
-    result.status = DELIVERY_STATES.FAILED;
-    result.reasons.push('parent transaction failed or finalized without successful execution');
-  } else if (parentReceiptProbe.supported && parentReceiptProbe.result == null) {
-    result.status = DELIVERY_STATES.UNRESOLVED;
-  } else if (!parentReceiptProbe.supported && !receiptEvidenceOptional(parentReceiptProbe)) {
-    result.status = DELIVERY_STATES.UNRESOLVED;
-  } else if (parentReceiptProbe.supported && receiptSucceeded(parentReceiptProbe) === false) {
-    result.status = DELIVERY_STATES.FAILED;
-  } else if (!final(parent, parentStatusProbe)) {
-    result.status = DELIVERY_STATES.TRANSFER_SUBMITTED;
-    result.reasons.push(`parent status is ${txStatus(parent, parentStatusProbe) ?? 'unknown'}`);
-  } else if (result.children.some((child) => child.matches)) {
-    result.status = DELIVERY_STATES.DELIVERY_VERIFIED;
-  } else if (result.children.some((child) => child.exact_origin_recipient_value && child.failed)) {
-    result.status = DELIVERY_STATES.FAILED;
-    result.reasons.push('matching child transfer failed or finalized without successful execution');
-  } else if (result.children.some((child) => child.exact_origin_recipient_value && child.receipt_failed)) {
-    result.status = DELIVERY_STATES.FAILED;
-    result.reasons.push('matching child EVM receipt reports unsuccessful transport execution');
-  } else if (result.children.some((child) => child.exact_origin_recipient_value && child.finalized && !child.receipt_acceptable)) {
-    result.status = DELIVERY_STATES.UNRESOLVED;
-    result.reasons.push('matching child is finalized, but its EVM receipt evidence is unavailable or temporarily inaccessible');
-  } else if (result.children.some((child) => child.exact_origin_recipient_value && !child.finalized)) {
-    result.status = DELIVERY_STATES.TRANSFER_SUBMITTED;
-    result.reasons.push('matching child transfer is not finalized');
-  } else if (!result.children.length) {
-    result.status = DELIVERY_STATES.PARENT_FINALIZED;
-    result.reasons.push('parent finalized, but no external child transfer is visible yet');
-  } else {
-    result.status = DELIVERY_STATES.UNRESOLVED;
-    result.reasons.push('child transactions exist, but none matched the vault, beneficiary, amount, finality, and authoritative credit evidence');
-  }
+  const classification = classifyDelivery({
+    parent: {
+      found: Boolean(parent),
+      destination_matches: Boolean(parent && parent.to_address?.toLowerCase() === VAULT),
+      status_conflict: statusConflict(parent, parentStatusProbe),
+      failed: terminalFailure(parent, parentStatusProbe),
+      receipt_pending: parentReceiptProbe.supported && parentReceiptProbe.result == null,
+      receipt_unavailable: !parentReceiptProbe.supported && !receiptEvidenceOptional(parentReceiptProbe),
+      receipt_category: parentReceiptProbe.category,
+      receipt_failed: parentReceiptProbe.supported && receiptSucceeded(parentReceiptProbe) === false,
+      finalized: Boolean(parent && final(parent, parentStatusProbe)),
+      execution_failed: Boolean(parent && final(parent, parentStatusProbe) && parent.consensus_data && executionSucceeded(parent) === false),
+      status: txStatus(parent, parentStatusProbe),
+    },
+    children: result.children,
+  });
+  result.status = classification.status;
+  result.reasons.push(...classification.reasons);
   console.log(JSON.stringify(result, null, 2));
   process.exit(result.status === DELIVERY_STATES.DELIVERY_VERIFIED ? 0 : 1);
 } catch (error) {

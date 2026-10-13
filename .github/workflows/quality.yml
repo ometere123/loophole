@@ -37,6 +37,10 @@ jobs:
         run: python -m pytest tests/direct -m direct -q
       - name: Run source invariants
         run: python scripts/preflight.py
+      - name: Verify active release consistency
+        run: python scripts/verify_release_integrity.py
+      - name: Test delivery state classification
+        run: node --test scripts/delivery_classifier.test.mjs
   frontend:
     runs-on: ubuntu-latest
     steps:
@@ -47,6 +51,8 @@ jobs:
         run: npm ci --no-audit --no-fund && npm --prefix frontend ci --no-audit --no-fund
       - name: Enforce local CLI version
         run: node -e "const p=require('./node_modules/genlayer/package.json');if(p.version!=='0.39.1')process.exit(1)"
+      - name: Audit repository production dependencies
+        run: npm audit --omit=dev --audit-level=high
       - name: Type-check
         run: npm --prefix frontend run typecheck
       - name: Build frontend

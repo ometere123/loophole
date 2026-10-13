@@ -1,5 +1,10 @@
 # Frontend production deployment — 2026-10-12
 
+> **Historical environment record.** The address recorded below belonged to
+> the superseded `0xec98…` monolith. The active public frontend binding was
+> independently rechecked against `0xB873…` on 2026-10-13 in
+> [`FRONTEND_DEPLOYMENT_2026-10-13.md`](FRONTEND_DEPLOYMENT_2026-10-13.md).
+
 The linked Vercel project `delealufejoel-4184s-projects/loophole` was rebuilt
 from the repository root with its verified `frontend` Root Directory setting.
 The deployment completed with state `READY` and target `production`.
@@ -11,9 +16,9 @@ The deployment completed with state `READY` and target `production`.
 - Canonical address bundle hits: `1`
 - Historical RuleVault and GapJudge address bundle hits: `0`
 
-Vercel Development, Preview and Production contain
-`NEXT_PUBLIC_LOOPHOLE_ADDRESS` set to the current source-verified monolith
-address `0xec98AFC80bda4b664F20d782aA8a0bd49e436233`. The stale two-contract
+Vercel Development, Preview and Production contained
+`NEXT_PUBLIC_LOOPHOLE_ADDRESS` set to the then-current source-verified
+monolith address `0xec98AFC80bda4b664F20d782aA8a0bd49e436233`. The stale two-contract
 public address variables were removed. The RPC and explorer variables remain
 the Studionet values, and no signing secret is configured for the project.
 

@@ -1,6 +1,6 @@
-# LOOPHOLE current invalid lifecycle — 2026-10-12
+# LOOPHOLE historical invalid lifecycle — 2026-10-12
 
-The source-verified single-contract deployment at [`0xec98AFC80bda4b664F20d782aA8a0bd49e436233`](https://explorer-studio.genlayer.com/address/0xec98AFC80bda4b664F20d782aA8a0bd49e436233) completed a real two-wallet negative lifecycle on Studionet 61999. Wallet `0xfcef…522f` organized challenge 2 and Wallet `0x8130…20B0` submitted the challenger attempt.
+The superseded source-verified single-contract deployment at [`0xec98AFC80bda4b664F20d782aA8a0bd49e436233`](https://explorer-studio.genlayer.com/address/0xec98AFC80bda4b664F20d782aA8a0bd49e436233) completed a real two-wallet negative lifecycle on Studionet 61999. This record is historical evidence and is not proof for the active `0xB873…` release. Wallet `0xfcef…522f` organized challenge 2 and Wallet `0x8130…20B0` submitted the challenger attempt.
 
 - Create and fund challenge 2: [`0xcb8211cb64193d6e17e9c588a5e624077a89386f8822bff34155dfa82e36692a`](https://explorer-studio.genlayer.com/tx/0xcb8211cb64193d6e17e9c588a5e624077a89386f8822bff34155dfa82e36692a)
 - Commit attempt 2: [`0xab473c548350a6dec8b20cc5e4b859a601eddefe52ede6aac090c9846cb0734a`](https://explorer-studio.genlayer.com/tx/0xab473c548350a6dec8b20cc5e4b859a601eddefe52ede6aac090c9846cb0734a)

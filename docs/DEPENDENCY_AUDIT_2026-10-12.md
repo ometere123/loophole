@@ -1,4 +1,8 @@
-# Dependency audit — 2026-10-12
+# Dependency audit — 2026-10-13 refresh
+
+The fresh lockfile audit evidence is recorded in
+[`evidence/dependency-audit-2026-10-13.json`](evidence/dependency-audit-2026-10-13.json).
+The 2026-10-12 filename is retained so earlier release links remain stable.
 
 Audits were run against both committed lockfiles in the current checkout. The
 frontend was installed with `npm --prefix frontend ci` and the repository root
@@ -47,3 +51,8 @@ release used by the browser gate. `npm --prefix frontend audit
 suite covers public rendering, injected-wallet connection, wrong-network
 blocking, wallet rejection and mobile navigation; CI installs Chromium and
 runs the same suite.
+
+The refresh repeated the full commands: `npm audit --json` exited 1 with four
+moderate and two critical transitive development-tool findings, while
+`npm audit --omit=dev --audit-level=high` exited 0 and the full frontend audit
+exited 0 with zero findings. No forced CLI replacement was applied.

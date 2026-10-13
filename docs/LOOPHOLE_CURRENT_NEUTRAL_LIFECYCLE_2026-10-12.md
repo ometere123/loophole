@@ -1,6 +1,6 @@
-# LOOPHOLE current neutral lifecycle — 2026-10-12
+# LOOPHOLE historical neutral lifecycle — 2026-10-12
 
-The current source-verified monolith at [`0xec98AFC80bda4b664F20d782aA8a0bd49e436233`](https://explorer-studio.genlayer.com/address/0xec98AFC80bda4b664F20d782aA8a0bd49e436233) completed a second real two-wallet Studionet lifecycle using a deliberately ambiguous, rule-compliant submission. The result was a finalized `INCONCLUSIVE` adjudication with independent validator disagreement, followed by a returned bond credit and independently verified native GEN delivery.
+The superseded source-verified monolith at [`0xec98AFC80bda4b664F20d782aA8a0bd49e436233`](https://explorer-studio.genlayer.com/address/0xec98AFC80bda4b664F20d782aA8a0bd49e436233) completed a second real two-wallet Studionet lifecycle using a deliberately ambiguous, rule-compliant submission. This record is historical evidence and is not proof for the active `0xB873…` release. The result was a finalized `INCONCLUSIVE` adjudication with independent validator disagreement, followed by a returned bond credit and independently verified native GEN delivery.
 
 - Create challenge 3: [`0x4893cf231f26e714b8301f719524c660cd1dac53e4f5d2b2b213196a6a2f1f9f`](https://explorer-studio.genlayer.com/tx/0x4893cf231f26e714b8301f719524c660cd1dac53e4f5d2b2b213196a6a2f1f9f)
 - Commit attempt 3: [`0x6d8ec88483ca854f902bbb93b705aac736a247f390f68b9f9462204b96eaf103`](https://explorer-studio.genlayer.com/tx/0x6d8ec88483ca854f902bbb93b705aac736a247f390f68b9f9462204b96eaf103)

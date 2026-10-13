@@ -1,6 +1,8 @@
-# LOOPHOLE current funded lifecycle — 2026-10-12
+# LOOPHOLE historical funded lifecycle — 2026-10-12
 
-The source-verified single-contract deployment at [`0xec98AFC80bda4b664F20d782aA8a0bd49e436233`](https://explorer-studio.genlayer.com/address/0xec98AFC80bda4b664F20d782aA8a0bd49e436233) completed a real two-wallet Studionet lifecycle. The organizer funded challenge 1, the challenger committed and revealed an attempt, and a permissionless direct adjudication reached a finalized `VALID` result.
+The superseded source-verified single-contract deployment at [`0xec98AFC80bda4b664F20d782aA8a0bd49e436233`](https://explorer-studio.genlayer.com/address/0xec98AFC80bda4b664F20d782aA8a0bd49e436233) completed a real two-wallet Studionet lifecycle. This record is historical evidence and is not proof for the active `0xB873…` release.
+
+The organizer funded challenge 1, the challenger committed and revealed an attempt, and a permissionless direct adjudication reached a finalized `VALID` result.
 
 - Create challenge: [`0xec23e78b15b7b135ad6807d203fdbbe62a7d758ac736739c618e0fcbde9542ee`](https://explorer-studio.genlayer.com/tx/0xec23e78b15b7b135ad6807d203fdbbe62a7d758ac736739c618e0fcbde9542ee)
 - Commit attempt: [`0x2372ac4dea71214dcc55aaa4f64c1695fe5f78e8ea725b7f92515c0d8d6e9bbf`](https://explorer-studio.genlayer.com/tx/0x2372ac4dea71214dcc55aaa4f64c1695fe5f78e8ea725b7f92515c0d8d6e9bbf)
