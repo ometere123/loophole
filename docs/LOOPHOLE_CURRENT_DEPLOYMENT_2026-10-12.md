@@ -1,4 +1,8 @@
-# LOOPHOLE current deployment — 2026-10-12
+# LOOPHOLE previous deployment — 2026-10-12
+
+This record is retained as historical evidence for the 2026-10-12 monolith.
+It was superseded by the source-verified release deployment recorded in
+[`LOOPHOLE_RELEASE_DEPLOYMENT_2026-10-13.md`](LOOPHOLE_RELEASE_DEPLOYMENT_2026-10-13.md).
 
 The approved one-time zero-value deployment of the corrected single-contract
 release finalized on Studionet 61999 using repository-local GenLayer CLI

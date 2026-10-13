@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const url = process.argv[2] ?? 'https://loophole-one.vercel.app';
-const canonical = (process.argv[3] ?? process.env.NEXT_PUBLIC_LOOPHOLE_ADDRESS ?? '0xec98afc80bda4b664f20d782aa8a0bd49e436233').toLowerCase();
+const canonical = (process.argv[3] ?? process.env.NEXT_PUBLIC_LOOPHOLE_ADDRESS ?? '0xb87353201cec791cc16c25e8ee1077076d90548e').toLowerCase();
 const historical = [
   '0xa77a29c96c30b2a5db865a2ce35c8f396d504f26',
   '0xb14b08cd35fa64fe795e14931dda09999627785d',
