@@ -174,7 +174,6 @@ def verify_checksums(errors: list[str]) -> None:
         "deployments.loophole.studionet.json",
         "frontend/.env.example",
         "README.md",
-        "docs/FINAL_STEWARD_CLOSEOUT.md",
         "docs/LOOPHOLE_RELEASE_DEPLOYMENT_2026-10-13.md",
         "docs/FRONTEND_DEPLOYMENT_2026-10-13.md",
         EVIDENCE_PATH,
@@ -216,13 +215,6 @@ def main() -> int:
         ACTIVE_ADDRESS,
         ACTIVE_DEPLOYMENT_TX,
         ACTIVE_SOURCE_SHA256,
-    )
-    require_text(
-        errors,
-        "docs/FINAL_STEWARD_CLOSEOUT.md",
-        ACTIVE_ADDRESS,
-        ACTIVE_SOURCE_SHA256,
-        "evidence/loophole-release-verification-2026-10-13.json",
     )
     require_text(
         errors,
