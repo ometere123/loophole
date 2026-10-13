@@ -292,7 +292,8 @@
   "rpc_inspection": {
     "gen_getTransactionStatus": "supported and FINALIZED for every listed transaction",
     "eth_getTransactionReceipt": "supported with status 0x1 for every listed transaction",
-    "optional_lifecycle_probes": "The read-only inspection attempted gen_getTransactionReceipt and related methods. After the endpoint 30-requests-per-minute limit was reached, those probes returned -32029 rate_limited. They were recorded as rate_limited, not unsupported; no missing result was treated as success.",
+    "gen_getTransactionReceipt": "unsupported on a fresh single-transaction probe: -32601 Method not found",
+    "optional_lifecycle_probes": "The bulk read-only inspection attempted gen_getTransactionReceipt and related methods. After the endpoint 30-requests-per-minute limit was reached, later probes returned -32029 rate_limited. The inspector records unsupported, rate_limited and temporary failures separately; no missing result was treated as success.",
     "recovery_errors": []
   },
   "limitations": [

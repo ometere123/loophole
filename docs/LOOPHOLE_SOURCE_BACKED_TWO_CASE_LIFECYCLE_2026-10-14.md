@@ -48,6 +48,10 @@ The parent finalized with result name MAJORITY_AGREE, successful GenVM execution
 
 The verifier classified the result DELIVERY VERIFIED. The contract withdrawal record remains TRANSFER_EMITTED_UNVERIFIED because the contract cannot observe this external child proof itself. The post-withdraw state readback showed Wallet B credit zero and withdrawal count one.
 
+## RPC inspection
+
+The read-only inspector confirmed `gen_getTransactionStatus` as `FINALIZED` and `eth_getTransactionReceipt` with status `0x1` for every listed transaction. A fresh single-transaction probe returned `-32601 Method not found` for `gen_getTransactionReceipt`, so that method is recorded as unsupported. The bulk diagnostic pass later reached the endpoint's 30-requests-per-minute limit and recorded `-32029` responses as rate-limited. Unsupported, rate-limited and temporary failures are kept distinct; no absent optional response was treated as proof of success.
+
 ## Source-backed INVALID case
 
 Challenge 3 was funded with 0.01 GEN. Attempt 5 used a 0.01 GEN bond. Its frozen sequence explicitly avoided forge update and master, so it did not satisfy the quoted subsequent-update condition and did not defeat the stated goal.
