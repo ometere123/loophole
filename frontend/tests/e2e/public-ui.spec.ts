@@ -117,6 +117,6 @@ test('creation wizard rejects incomplete rulebooks before any wallet submission'
   await page.getByRole('button', {name: /continue/i}).click();
   await expect(page.getByRole('heading', {name: /write the rulebook/i})).toBeVisible();
   await page.getByRole('button', {name: /continue/i}).click();
-  await expect(page.getByRole('alert')).toContainText(/Publish at least 20 characters of rules/i);
+  await expect(page.locator('.wizard-card .notice.danger[role="alert"]')).toContainText(/Publish at least 20 characters of rules/i);
   await expect(page.getByRole('heading', {name: /write the rulebook/i})).toBeVisible();
 });
