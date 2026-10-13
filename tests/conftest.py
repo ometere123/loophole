@@ -25,6 +25,14 @@ class UserError(Exception): pass
 class Return:
     def __init__(self,calldata):self.calldata=calldata
 
+class FakeWeb:
+    responses = {}
+
+    @classmethod
+    def get(cls, url):
+        status, body = cls.responses[url]
+        return types.SimpleNamespace(status=status, body=body)
+
 class GlFake:
     Contract=object
     public=Decorators()
@@ -45,8 +53,11 @@ class GlFake:
     class nondet:
         answer='{"verdict":"VALID","letter":true,"purpose":true,"feasible":true,"reason":"Exact written rule permits repeated engagement farming despite the explicit purpose."}'
         answers=[]
+        prompts=[]
+        web=FakeWeb
         @classmethod
         def exec_prompt(cls,prompt,**kwargs):
+            cls.prompts.append(prompt)
             if cls.answers:
                 return cls.answers.pop(0)
             return cls.answer
@@ -76,7 +87,7 @@ class ChildProxy:
 def world(monkeypatch):
     module=types.ModuleType('genlayer');module.Address=Address;module.TreeMap=dict;module.u256=int;module.gl=fake
     monkeypatch.setitem(sys.modules,'genlayer',module)
-    fake.__init__();fake.nondet.answers=[];fake.nondet.answer='{"verdict":"VALID","letter":true,"purpose":true,"feasible":true,"reason":"Exact written rule permits repeated engagement farming despite the explicit purpose."}'
+    fake.__init__();fake.nondet.answers=[];fake.nondet.prompts=[];fake.nondet.web.responses={};fake.nondet.answer='{"verdict":"VALID","letter":true,"purpose":true,"feasible":true,"reason":"Exact written rule permits repeated engagement farming despite the explicit purpose."}'
     def load(path,name):
         spec=importlib.util.spec_from_file_location(name,BASE/'contracts'/path);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
     j=load('historical/GapJudge.py','fake_gapjudge').GapJudge

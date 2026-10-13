@@ -33,3 +33,5 @@ export async function makeCommitment(cid:string,address:string,salt:string,scena
 export function randomSalt(){const a=crypto.getRandomValues(new Uint8Array(32));return Array.from(a,x=>x.toString(16).padStart(2,'0')).join('');}
 export function explorerTx(hash:string){return `${EXPLORER}/tx/${encodeURIComponent(hash)}`;}
 export function explorerAddress(address:string){return `${EXPLORER}/address/${encodeURIComponent(address)}`;}
+export function isPinnedSourceUrl(value:string){return /^https:\/\/raw\.githubusercontent\.com\/[^/]+\/[^/]+\/[0-9a-fA-F]{40}\/[^?#\s]+$/.test(value.trim())&&value.length<=500;}
+export function isSha256(value:string){return /^[0-9a-f]{64}$/.test(value.trim());}

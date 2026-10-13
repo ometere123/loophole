@@ -2,6 +2,36 @@
 
 import hashlib
 import json
+import re
+
+
+def _source_payload(address):
+    goal = 'Reward genuinely original educational contributions to the campaign.'
+    rule = 'A member earns 10 points when they publish a post containing #OurCampaign and at least 100 words.'
+    limitations = 'Posts must be newly written by the member.'
+    rule_url = 'https://raw.githubusercontent.com/example/rules/' + 'a' * 40 + '/rulebook.txt'
+    evidence_url = 'https://raw.githubusercontent.com/example/evidence/' + 'b' * 40 + '/attempt.txt'
+    rule_body = 'RULEBOOK-V1\n' + goal + '\n' + rule + '\n' + limitations + '\n'
+    evidence_body = 'EVIDENCE-V1\nThe archived post is the claimant evidence snapshot.\n'
+    salt = 'direct-source-salt'
+    scenario = 'I publish a qualifying post that satisfies the literal condition but does not create original educational value.'
+    quote = rule
+    impact = 'Mechanical repetition can satisfy the measurable condition while defeating the stated educational goal.'
+    sender = ('0x' + address.hex()) if isinstance(address, bytes) else str(address).lower()
+    fields = ['1', sender, salt, scenario, quote, impact]
+    raw = ''.join(f'{len(field.encode("utf-8"))}:{field}' for field in fields)
+    commitment = hashlib.sha256(raw.encode()).hexdigest()
+    return {
+        'goal': goal, 'rule': rule, 'limitations': limitations,
+        'rule_url': rule_url, 'rule_body': rule_body,
+        'rule_sha256': hashlib.sha256(rule_body.encode()).hexdigest(),
+        'rule_version': 'RULEBOOK-V1', 'evidence_url': evidence_url,
+        'evidence_body': evidence_body,
+        'evidence_sha256': hashlib.sha256(evidence_body.encode()).hexdigest(),
+        'evidence_version': 'EVIDENCE-V1',
+        'commitment': commitment,
+        'reveal': (salt, scenario, quote, impact),
+    }
 
 
 def _payload(address):
@@ -86,3 +116,80 @@ def test_loophole_direct_wrong_chain_is_rejected(direct_vm, direct_deploy):
     direct_vm._chain_id = 61998
     with direct_vm.expect_revert('Studionet 61999'):
         direct_deploy('contracts/Loophole.py')
+
+
+def test_loophole_direct_pinned_source_is_verified_by_each_execution(
+        direct_vm, direct_deploy, direct_owner, direct_alice):
+    direct_vm._chain_id = 61999
+    case = _source_payload(direct_alice)
+    direct_vm.mock_web(re.escape(case['rule_url']), {
+        'status': 200, 'body': case['rule_body'],
+    })
+    direct_vm.mock_web(re.escape(case['evidence_url']), {
+        'status': 200, 'body': case['evidence_body'],
+    })
+    direct_vm.mock_llm(
+        r'.*Return only this JSON shape.*',
+        json.dumps({
+            'letter': 'PROVEN', 'purpose': 'UNKNOWN', 'feasible': 'PROVEN',
+            'reason': 'The authenticated source does not establish the purpose conflict.',
+        }),
+    )
+    loophole = direct_deploy('contracts/Loophole.py')
+    direct_vm.sender = direct_owner
+    direct_vm.value = 2 * 10**18
+    loophole.create_source_challenge(
+        'Pinned source challenge', case['goal'], case['rule'], case['limitations'],
+        'CONTENT', 86400, 10**16, case['rule_url'], case['rule_sha256'],
+        case['rule_version'],
+    )
+    direct_vm.sender = direct_alice
+    direct_vm.value = 10**16
+    loophole.commit_source_attempt(
+        1, case['commitment'], case['evidence_url'], case['evidence_sha256'],
+        case['evidence_version'],
+    )
+    loophole.reveal_source_attempt(1, *case['reveal'])
+    direct_vm.value = 0
+    loophole.start_review(1)
+    loophole.adjudicate_review(1, 1, 1)
+    attempt = json.loads(loophole.get_attempt(1))
+    adjudication = json.loads(loophole.get_adjudication('1:1:1'))
+    assert attempt['verdict'] == 'INCONCLUSIVE'
+    assert attempt['evidence_state'] == 'VERIFIED'
+    assert adjudication['evidence_state'] == 'VERIFIED'
+    assert loophole.get_credit(direct_alice) == 10**16
+
+
+def test_loophole_direct_pinned_source_hash_failure_pays_no_prize(
+        direct_vm, direct_deploy, direct_owner, direct_alice):
+    direct_vm._chain_id = 61999
+    case = _source_payload(direct_alice)
+    direct_vm.mock_web(re.escape(case['rule_url']), {
+        'status': 200, 'body': case['rule_body'],
+    })
+    direct_vm.mock_web(re.escape(case['evidence_url']), {
+        'status': 200, 'body': 'EVIDENCE-V1\nsubstituted bytes',
+    })
+    loophole = direct_deploy('contracts/Loophole.py')
+    direct_vm.sender = direct_owner
+    direct_vm.value = 2 * 10**18
+    loophole.create_source_challenge(
+        'Pinned source failure', case['goal'], case['rule'], case['limitations'],
+        'CONTENT', 86400, 10**16, case['rule_url'], case['rule_sha256'],
+        case['rule_version'],
+    )
+    direct_vm.sender = direct_alice
+    direct_vm.value = 10**16
+    loophole.commit_source_attempt(
+        1, case['commitment'], case['evidence_url'], case['evidence_sha256'],
+        case['evidence_version'],
+    )
+    loophole.reveal_source_attempt(1, *case['reveal'])
+    direct_vm.value = 0
+    loophole.start_review(1)
+    loophole.adjudicate_review(1, 1, 1)
+    attempt = json.loads(loophole.get_attempt(1))
+    assert attempt['verdict'] == 'INCONCLUSIVE'
+    assert attempt['evidence_state'] == 'UNVERIFIED'
+    assert loophole.get_credit(direct_alice) == 10**16

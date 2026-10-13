@@ -93,7 +93,7 @@ def test_direct_review_settles_once_with_tristate_findings(monolith):
     assert w.vault.total_locked == 2 * 10**18 + 10**16
 
 
-def test_invalid_consensus_ignores_only_non_decisive_support_variation(monolith):
+def test_invalid_consensus_rejects_non_decisive_support_variation(monolith):
     w = monolith
     _fund(w)
     _revealed(w)
@@ -107,10 +107,9 @@ def test_invalid_consensus_ignores_only_non_decisive_support_variation(monolith)
     })
     w.gl.nondet.answers = [leader, validator]
     w.run(w.vaddr, w.owner, 'start_review', 1)
-    w.run(w.vaddr, w.owner, 'adjudicate_review', 1, 1, 1)
-    attempt = json.loads(w.vault.get_attempt(1))
-    assert attempt['status'] == 'INVALID_PENDING'
-    assert attempt['verdict'] == 'INVALID'
+    with pytest.raises(Exception, match='disagreed'):
+        w.run(w.vaddr, w.owner, 'adjudicate_review', 1, 1, 1)
+    assert json.loads(w.vault.get_attempt(1))['status'] == 'REVIEWING'
 
 
 def test_invalid_consensus_rejects_different_decisive_findings(monolith):
@@ -210,3 +209,54 @@ def test_commitment_encoding_is_length_prefixed_and_delimiter_safe(monolith):
     aliased = ['1', str(w.alice).lower(), 'salt', 'with', 'delimiters', scenario]
     alias_preimage = ''.join(f'{len(field.encode("utf-8"))}:{field}' for field in aliased)
     assert digest != hashlib.sha256(alias_preimage.encode('utf-8')).hexdigest()
+
+
+def _source_case(w):
+    goal = 'Reward only genuinely original contributions to this campaign.'
+    rule = 'Every member who publishes a post of at least 100 words with #OURCAMPAIGN earns points.'
+    limitations = 'Posts must happen during the campaign.'
+    rule_url = 'https://raw.githubusercontent.com/example/rules/' + 'a' * 40 + '/rulebook.txt'
+    evidence_url = 'https://raw.githubusercontent.com/example/evidence/' + 'b' * 40 + '/attempt.txt'
+    rule_body = ('RULEBOOK-V1\n' + goal + '\n' + rule + '\n' + limitations + '\n').encode('utf-8')
+    evidence_body = b'EVIDENCE-V1\nThe archived post is the claimant evidence snapshot.\n'
+    w.gl.nondet.web.responses[rule_url] = (200, rule_body)
+    w.gl.nondet.web.responses[evidence_url] = (200, evidence_body)
+    w.run(w.vaddr, w.owner, 'create_source_challenge', 'Pinned policy', goal, rule,
+          limitations, 'CONTENT', 86400, 10**16, rule_url,
+          hashlib.sha256(rule_body).hexdigest(), 'RULEBOOK-V1', value=2 * 10**18)
+    digest, payload = _attack(1, w.alice)
+    w.run(w.vaddr, w.alice, 'commit_source_attempt', 1, digest, evidence_url,
+          hashlib.sha256(evidence_body).hexdigest(), 'EVIDENCE-V1', value=10**16)
+    w.run(w.vaddr, w.alice, 'reveal_source_attempt', 1, *payload)
+    w.run(w.vaddr, w.owner, 'start_review', 1)
+    return rule_url, evidence_url, rule_body, evidence_body
+
+
+def test_pinned_source_is_authenticated_and_changes_assessment_context(monolith):
+    w = monolith
+    _source_case(w)
+    w.gl.nondet.answer = json.dumps({
+        'letter': 'PROVEN', 'purpose': 'UNKNOWN', 'feasible': 'PROVEN',
+        'reason': 'The authenticated evidence does not establish the claimed purpose conflict.',
+    })
+    w.run(w.vaddr, w.owner, 'adjudicate_review', 1, 1, 1)
+    attempt = json.loads(w.vault.get_attempt(1))
+    adjudication = json.loads(w.vault.get_adjudication('1:1:1'))
+    assert attempt['status'] == 'DECIDED'
+    assert attempt['verdict'] == 'INCONCLUSIVE'
+    assert attempt['evidence_state'] == 'VERIFIED'
+    assert adjudication['evidence_state'] == 'VERIFIED'
+    assert any('RULEBOOK-V1' in prompt and 'EVIDENCE-V1' in prompt
+               for prompt in w.gl.nondet.prompts)
+
+
+def test_pinned_source_hash_failure_is_inconclusive_without_payout(monolith):
+    w = monolith
+    _, evidence_url, _, _ = _source_case(w)
+    w.gl.nondet.web.responses[evidence_url] = (200, b'EVIDENCE-V1\nsubstituted bytes')
+    w.run(w.vaddr, w.owner, 'adjudicate_review', 1, 1, 1)
+    attempt = json.loads(w.vault.get_attempt(1))
+    assert attempt['status'] == 'DECIDED'
+    assert attempt['verdict'] == 'INCONCLUSIVE'
+    assert attempt['evidence_state'] == 'UNVERIFIED'
+    assert w.vault.get_credit(w.alice) == 10**16

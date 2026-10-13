@@ -17,9 +17,11 @@ for p in contracts:
     if 'from genlayer import *' not in source: errors.append(f'{p.name}: missing SDK')
     print(f'  {p.name}: {hashlib.sha256(p.read_bytes()).hexdigest()}')
 source=(root/'contracts/Loophole.py').read_text()
-for method in ('create_challenge','commit_attempt','reveal_attempt','start_review','adjudicate_review','finalize_invalid','appeal_invalid','refund_unwon','recover_stalled_review','settle_remaining_bond','withdraw'):
+for method in ('create_challenge','create_source_challenge','commit_attempt','commit_source_attempt','reveal_attempt','reveal_source_attempt','start_review','adjudicate_review','finalize_invalid','appeal_invalid','refund_unwon','recover_stalled_review','settle_remaining_bond','withdraw'):
     if f'def {method}(' not in source:errors.append(f'Missing monolith method: {method}')
 if 'run_nondet_unsafe(assess, independently_verify)' not in source:errors.append('Missing independent substantive validator')
+if 'gl.nondet.web.get' not in source or 'MAX_SOURCE_BYTES' not in source:errors.append('Missing independent pinned-source retrieval')
+if "fields = ('verdict', 'letter', 'purpose', 'feasible', 'evidence_state')" not in source:errors.append('Missing exact tri-state validator agreement')
 if "get_contract_at" in source or "emit(on='finalized')" in source or 'record_verdict' in source:
     errors.append('Loophole.py must not depend on cross-contract callbacks')
 if 'FINDING_PROVEN' not in source or 'FINDING_DISPROVEN' not in source or 'FINDING_UNKNOWN' not in source:

@@ -3,7 +3,11 @@ import {defineConfig, devices} from '@playwright/test';
 export default defineConfig({
   testDir: './tests/e2e',
   timeout: 30_000,
-  fullyParallel: true,
+  // The production server is shared by both device projects. A single worker
+  // keeps the first cold request deterministic in CI without weakening any
+  // browser assertions.
+  fullyParallel: false,
+  workers: 1,
   reporter: process.env.CI ? [['line'], ['html', {open: 'never'}]] : 'list',
   use: {
     baseURL: 'http://127.0.0.1:3100',

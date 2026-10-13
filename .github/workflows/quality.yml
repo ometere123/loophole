@@ -29,6 +29,8 @@ jobs:
         run: python scripts/verify_prompt_parity.py
       - name: Run protocol state-machine tests
         run: python -m pytest tests -m "not direct" -q
+      - name: Verify source-backed and mutation behavior explicitly
+        run: python -m pytest tests/test_monolith_protocol.py tests/test_monolith_mutation_behavior.py -q
       - name: Run GenVM Direct Mode tests
         env:
           GENVM_GITHUB_TOKEN: ${{ github.token }}

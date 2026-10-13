@@ -142,13 +142,9 @@ def test_mutated_appeal_recipient_pays_invalid_bond_to_challenger(world, tmp_pat
     assert w.vault.get_credit(w.alice) == 2 * 10**16
 
 
-def test_mutated_materiality_guard_rejects_safe_invalid_variation(world, tmp_path):
-    old = "            return self._agreement_holds(proposed, actual)"
-    new = """            return (
-                proposed['verdict'] == actual['verdict'] and
-                proposed['letter'] == actual['letter'] and
-                proposed['purpose'] == actual['purpose'] and
-                proposed['feasible'] == actual['feasible'])"""
+def test_mutated_exact_finding_guard_accepts_incompatible_invalid_verdict(world, tmp_path):
+    old = "        fields = ('verdict', 'letter', 'purpose', 'feasible', 'evidence_state')"
+    new = "        fields = ('verdict',)"
     w = _mutated(world, tmp_path, (old, new))
     _fund(w)
     _revealed(w)
@@ -163,9 +159,8 @@ def test_mutated_materiality_guard_rejects_safe_invalid_variation(world, tmp_pat
         }),
     ]
     w.run(w.vaddr, w.owner, 'start_review', 1)
-    with pytest.raises(Exception, match='disagreed'):
-        w.run(w.vaddr, w.owner, 'adjudicate_review', 1, 1, 1)
-    assert json.loads(w.vault.get_attempt(1))['status'] == 'REVIEWING'
+    w.run(w.vaddr, w.owner, 'adjudicate_review', 1, 1, 1)
+    assert json.loads(w.vault.get_attempt(1))['status'] == 'INVALID_PENDING'
 
 
 def test_monolith_has_no_forged_callback_surface():

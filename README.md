@@ -47,6 +47,8 @@ The CI workflow validates the production source, historical source fixtures, dia
 7. Unrevealed commitments expire after the reveal grace period. Stalled direct reviews can be recovered after five days. Organizer refund remains blocked while any legitimate challenger right is unresolved.
 8. `withdraw` clears the recipient's claimable credit before emitting the native GEN transfer. The record remains `TRANSFER_EMITTED_UNVERIFIED`; the frontend and `scripts/verify_delivery.mjs` reconcile the external child independently.
 
+The optional `PINNED_SOURCE` mode adds an evidence-backed path without changing the hypothetical path. An organizer pins a raw GitHub rulebook URL to a full commit, its exact UTF-8 SHA-256 digest and a version marker; a challenger supplies an equally pinned evidence snapshot. Every validator independently retrieves both sources, checks status, size, digest, version and required rulebook text, and returns `INCONCLUSIVE` without settlement when the bytes are unavailable, substituted or contradictory. This authenticates stable public bytes and binds them to the frozen review; it does not attest to real-world execution or to the identity of a repository owner.
+
 ## Consensus rubric
 
 Validators independently assess:
