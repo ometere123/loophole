@@ -35,12 +35,12 @@
     "commitment_encoding": "length-prefixed-utf8-v1"
   },
   "live_state_at_last_readback": {
-    "challenge_count": "1",
-    "attempt_count": "3",
-    "adjudication_count": "2",
-    "withdrawal_count": "0",
+    "challenge_count": "3",
+    "attempt_count": "5",
+    "adjudication_count": "4",
+    "withdrawal_count": "1",
     "total_credit_wei": "10000000000000000",
-    "total_locked_wei": "30000000000000000"
+    "total_locked_wei": "50000000000000000"
   },
   "live_evidence": {
     "source_backed_lifecycle": {
@@ -48,17 +48,27 @@
       "document": "docs/LOOPHOLE_SOURCE_BACKED_LIFECYCLE_2026-10-13.md",
       "machine_record": "docs/evidence/loophole-source-backed-lifecycle-2026-10-13.json"
     },
+    "source_backed_two_case_lifecycle": {
+      "verified": true,
+      "document": "docs/LOOPHOLE_SOURCE_BACKED_TWO_CASE_LIFECYCLE_2026-10-14.md",
+      "machine_record": "docs/evidence/loophole-source-backed-two-case-lifecycle-2026-10-14.json",
+      "valid_challenge_id": "2",
+      "valid_attempt_id": "4",
+      "invalid_challenge_id": "3",
+      "invalid_attempt_id": "5",
+      "delivery_status": "DELIVERY VERIFIED"
+    },
     "full_valid_withdrawal_lifecycle": {
-      "verified": false,
-      "document": "docs/LOOPHOLE_SOURCE_BACKED_VALID_PROGRESS_2026-10-13.md",
-      "machine_record": "docs/evidence/loophole-source-backed-valid-progress-2026-10-13.json",
+      "verified": true,
+      "document": "docs/LOOPHOLE_SOURCE_BACKED_TWO_CASE_LIFECYCLE_2026-10-14.md",
+      "machine_record": "docs/evidence/loophole-source-backed-two-case-lifecycle-2026-10-14.json",
       "requires_explicit_approval": false,
-      "status": "IN_PROGRESS",
-      "note": "Approval was granted. The Wallet B commitment and reveal finalized successfully; adjudication and withdrawal remain pending the attempt 2 appeal deadline."
+      "status": "VERIFIED",
+      "note": "Challenge 2 reached VALID, credited 0.03 GEN, and its withdrawal child finalized with authoritative value_credited=true."
     }
   },
-  "economic_lifecycle_verified": false,
-  "economic_lifecycle_scope": "source-backed fail-closed INCONCLUSIVE and INVALID_PENDING adjudications plus a current-release Wallet B commitment/reveal; no current-release VALID verdict, withdrawal or recipient credit claimed",
+  "economic_lifecycle_verified": true,
+  "economic_lifecycle_scope": "source-backed VALID settlement with 0.03 GEN entitlement and independently verified native child delivery, plus source-backed INVALID_PENDING adjudication with no entitlement; appeal and timeout paths remain unclaimed",
   "historical_deployments": {
     "gapjudge": {
       "status": "historical",
