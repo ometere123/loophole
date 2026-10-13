@@ -6,7 +6,7 @@ export type EvidenceMode = 'HYPOTHETICAL' | 'PINNED_SOURCE';
 export type Challenge = {
   id: string; organizer: string; title: string; goal: string; rule: string;
   limitations: string; category: Category; prize_wei: string; bond_wei: string;
-  created_at: number; ends_at: number; status: ChallengeStatus; winner: string;
+  created_at: number; ends_at: number; reveal_deadline: number; status: ChallengeStatus; winner: string;
   winner_attempt: string; active_attempt: string; active_round: string;
   review_started: number; attempts: string[]; evidence_mode?: EvidenceMode;
   source_url?: string; source_ref?: string; source_sha256?: string;
