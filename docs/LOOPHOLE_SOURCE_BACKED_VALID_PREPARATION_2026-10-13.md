@@ -1,9 +1,12 @@
 # LOOPHOLE source-backed VALID and delivery preparation — 2026-10-13
 
-This document prepares one bounded live test on the existing source-verified
-monolith. It contains no transaction receipts and records no new blockchain
-write. The sequence is awaiting explicit approval for the attached 0.01 GEN
-challenger bond and the resulting withdrawal.
+This document records the original bounded live-test proposal and its exact
+arguments. The approval was subsequently granted and the commitment and reveal
+were executed successfully. Current status and receipts are maintained in
+[`LOOPHOLE_SOURCE_BACKED_VALID_PROGRESS_2026-10-13.md`](LOOPHOLE_SOURCE_BACKED_VALID_PROGRESS_2026-10-13.md)
+and [`evidence/loophole-source-backed-valid-progress-2026-10-13.json`](evidence/loophole-source-backed-valid-progress-2026-10-13.json).
+This preparation record remains useful for reproducing the proposed sequence;
+it is no longer a statement that the sequence is wholly unexecuted.
 
 ## Preconditions observed read-only
 
@@ -98,4 +101,7 @@ match beneficiary `0xb845a69860ba4cdf19cfdc5afbaf2e20b6be86b0` and amount
 authoritative `value_credited=true`. The contract record remains
 `TRANSFER_EMITTED_UNVERIFIED`.
 
-This is a preparation record only. It does not authorize the writes above.
+The original preparation record did not authorize the writes. Authorization was
+later provided in the task conversation; only the commitment and reveal have
+completed so far. The remaining sequence is still subject to the appeal-window
+ordering and the stop conditions in the progress record.

@@ -1,0 +1,141 @@
+{
+  "observed_at": "2026-10-13T21:32:35.392Z",
+  "status": "PARTIALLY_EXECUTED",
+  "network": {
+    "chain_id_decimal": 61999,
+    "chain_id_hex": "0xf22f",
+    "rpc": "https://studio.genlayer.com/api",
+    "explorer": "https://explorer-studio.genlayer.com"
+  },
+  "contract": {
+    "name": "Loophole",
+    "address": "0xB87353201CeC791cc16c25e8eE1077076D90548E",
+    "source_sha256": "423b42cb64edb3de95f27dcedeb12aeca42f8d82b709e3a92ec47c69f87d1222",
+    "adjudication_mode": "DIRECT_ATOMIC"
+  },
+  "signer": {
+    "role": "challenger_and_candidate_beneficiary",
+    "address": "0xb845a69860ba4cdf19cfdc5afbaf2e20b6be86b0",
+    "account_name": "walletB",
+    "account_source": "repository-local GenLayer CLI keychain",
+    "private_key_recorded": false
+  },
+  "source_inputs": {
+    "rulebook_ref": "https://raw.githubusercontent.com/ometere123/loophole/37822b9333e064e632896a8318f2fee5bb4dd1cd/docs/evidence/source-backed-rulebook-2026-10-13.md",
+    "rulebook_sha256": "5df4be40f2b68695c555c1e99c03c7cc0784b810b9d9ccf1cf218fadb3b7459a",
+    "rulebook_version": "loophole-source-backed-demo-v1",
+    "evidence_ref": "https://raw.githubusercontent.com/ometere123/loophole/f73c308f34e1e50c427148ff708da67f6a647bb1/docs/evidence/source-backed-valid-evidence-2026-10-13.md",
+    "evidence_sha256": "8a854ec05202de38007b0604ced411bc7de8a501260a8d92140964c72d9d74ef",
+    "evidence_version": "loophole-source-backed-valid-evidence-v1"
+  },
+  "candidate": {
+    "challenge_id": "1",
+    "attempt_id": "3",
+    "commitment": "fadfdadde62e0c6195abe9f877fdc9ae48bc897c8f910dc2245fe19d537b2ece",
+    "evidence_hash_after_reveal": "20502c9b61a7d89c465cf957837dd7be59a7b9467494f2c11892900fefb750",
+    "salt": "source-valid-salt-20261013",
+    "scenario": "Publish a public post with six words and one source link, then add a new explanation that deliberately reverses the linked source's conclusion while presenting the reversal as education; do not copy an earlier post.",
+    "rule_quote": "Award 10 points to any public post with at least five words and one source link.",
+    "impact": "The post meets the five-word and source-link conditions and adds a new explanation, but the intentionally reversed explanation defeats the goal of a genuine educational contribution."
+  },
+  "transactions": [
+    {
+      "hash": "0x9e513b578b7432d8b41708054c130f4fc20df6447efc35222e4d668270a9753a",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0x9e513b578b7432d8b41708054c130f4fc20df6447efc35222e4d668270a9753a",
+      "method": "commit_source_attempt",
+      "arguments": ["1", "fadfdadde62e0c6195abe9f877fdc9ae48bc897c8f910dc2245fe19d537b2ece", "https://raw.githubusercontent.com/ometere123/loophole/f73c308f34e1e50c427148ff708da67f6a647bb1/docs/evidence/source-backed-valid-evidence-2026-10-13.md", "8a854ec05202de38007b0604ced411bc7de8a501260a8d92140964c72d9d74ef", "loophole-source-backed-valid-evidence-v1"],
+      "attached_value_wei": "10000000000000000",
+      "from": "0xb845a69860ba4cdf19cfdc5afbaf2e20b6be86b0",
+      "to": "0xB87353201CeC791cc16c25e8eE1077076D90548E",
+      "status": "FINALIZED",
+      "result_name": "MAJORITY_AGREE",
+      "leader_execution": "SUCCESS",
+      "gen_getTransactionStatus": "FINALIZED",
+      "eth_getTransactionReceipt_status": "0x1",
+      "gen_getTransactionReceipt": {
+        "supported": false,
+        "category": "unsupported",
+        "error": "gen_getTransactionReceipt: -32601 Method not found: gen_getTransactionReceipt"
+      },
+      "rpc_vote_entries": [
+        {"address": "0x36728d2a123aB444E603EE5b2ad17d18Bb193557", "vote": "agree"},
+        {"address": "0x4aba638Cf0Cf5249437AaD968fC69dde46ae6BAC", "vote": "agree"},
+        {"address": "0x5310dcF075E0BD47d29B8ec6581F736C767f54D2", "vote": "agree"},
+        {"address": "0x90402341F0B0e97b23023c0a87de957FB7148E0F", "vote": "agree"},
+        {"address": "0xDB1c35c1f05d885999b8f13e5735307BcC16Be88", "vote": "agree"}
+      ],
+      "triggered_transactions": []
+    },
+    {
+      "hash": "0xc14521665aed28cb7703d09e99394add6b0dfc0c6d0261f65e03fc594f6fe387",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0xc14521665aed28cb7703d09e99394add6b0dfc0c6d0261f65e03fc594f6fe387",
+      "method": "reveal_source_attempt",
+      "arguments": ["3", "source-valid-salt-20261013", "Publish a public post with six words and one source link, then add a new explanation that deliberately reverses the linked source's conclusion while presenting the reversal as education; do not copy an earlier post.", "Award 10 points to any public post with at least five words and one source link.", "The post meets the five-word and source-link conditions and adds a new explanation, but the intentionally reversed explanation defeats the goal of a genuine educational contribution."],
+      "attached_value_wei": "0",
+      "from": "0xb845a69860ba4cdf19cfdc5afbaf2e20b6be86b0",
+      "to": "0xB87353201CeC791cc16c25e8eE1077076D90548E",
+      "status": "FINALIZED",
+      "result_name": "MAJORITY_AGREE",
+      "leader_execution": "SUCCESS",
+      "gen_getTransactionStatus": "FINALIZED",
+      "eth_getTransactionReceipt_status": "0x1",
+      "gen_getTransactionReceipt": {
+        "supported": false,
+        "category": "unsupported",
+        "error": "gen_getTransactionReceipt: -32601 Method not found: gen_getTransactionReceipt"
+      },
+      "rpc_vote_entries": [
+        {"address": "0x3D83ab507785b95ca5C208bEc80CCe3D5ca98100", "vote": "agree"},
+        {"address": "0x3E5ee2507cc167C9925Bf10c67D7986581112024", "vote": "agree"},
+        {"address": "0xDB1c35c1f05d885999b8f13e5735307BcC16Be88", "vote": "agree"},
+        {"address": "0xE6BD8050758CB15fC88387223E31Ae2708B119dC", "vote": "agree"},
+        {"address": "0xcE1d6bBB36B744536153966B4DD42276f5ADd0F8", "vote": "agree"}
+      ],
+      "triggered_transactions": []
+    }
+  ],
+  "finalized_state_readback": {
+    "challenge": {
+      "id": "1",
+      "status": "OPEN",
+      "active_attempt": "0",
+      "active_round": "2",
+      "active_slots": "2",
+      "ends_at": "2026-10-14T18:11:13Z"
+    },
+    "attempt_2": {
+      "status": "INVALID_PENDING",
+      "appeal_used": false,
+      "appeal_deadline": "2026-10-14T18:38:05Z"
+    },
+    "attempt_3": {
+      "id": "3",
+      "challenge_id": "1",
+      "challenger": "0xb845a69860ba4cdf19cfdc5afbaf2e20b6be86b0",
+      "status": "REVEALED",
+      "commitment": "fadfdadde62e0c6195abe9f877fdc9ae48bc897c8f910dc2245fe19d537b2ece",
+      "evidence_hash": "20502c9b61a7d89c465cf957837dd7be59a7b9467494f2c11892900fefb750",
+      "evidence_ref": "https://raw.githubusercontent.com/ometere123/loophole/f73c308f34e1e50c427148ff708da67f6a647bb1/docs/evidence/source-backed-valid-evidence-2026-10-13.md",
+      "evidence_sha256": "8a854ec05202de38007b0604ced411bc7de8a501260a8d92140964c72d9d74ef",
+      "evidence_version": "loophole-source-backed-valid-evidence-v1",
+      "verdict": "",
+      "revealed_at": "2026-10-13T21:32:01Z"
+    },
+    "config": {
+      "attempt_count": "3",
+      "adjudication_count": "2",
+      "withdrawal_count": "0",
+      "total_credit_wei": "10000000000000000",
+      "total_locked_wei": "30000000000000000"
+    },
+    "wallet_b_credit_wei": "0"
+  },
+  "remaining": {
+    "next_eligible_write_at": "2026-10-14T18:38:05Z",
+    "pending_methods": ["finalize_invalid(2)", "start_review(1)", "adjudicate_review(1,3,3)"],
+    "withdrawal_parent": null,
+    "withdrawal_child": null,
+    "recipient_credit_proven": false,
+    "stop_on_state_mismatch_or_unsuccessful_execution": true
+  }
+}

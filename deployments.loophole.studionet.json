@@ -36,11 +36,11 @@
   },
   "live_state_at_last_readback": {
     "challenge_count": "1",
-    "attempt_count": "2",
+    "attempt_count": "3",
     "adjudication_count": "2",
     "withdrawal_count": "0",
     "total_credit_wei": "10000000000000000",
-    "total_locked_wei": "20000000000000000"
+    "total_locked_wei": "30000000000000000"
   },
   "live_evidence": {
     "source_backed_lifecycle": {
@@ -50,13 +50,15 @@
     },
     "full_valid_withdrawal_lifecycle": {
       "verified": false,
-      "document": null,
-      "requires_explicit_approval": true,
-      "note": "The current release has not yet been authorized for another funded VALID and withdrawal sequence."
+      "document": "docs/LOOPHOLE_SOURCE_BACKED_VALID_PROGRESS_2026-10-13.md",
+      "machine_record": "docs/evidence/loophole-source-backed-valid-progress-2026-10-13.json",
+      "requires_explicit_approval": false,
+      "status": "IN_PROGRESS",
+      "note": "Approval was granted. The Wallet B commitment and reveal finalized successfully; adjudication and withdrawal remain pending the attempt 2 appeal deadline."
     }
   },
   "economic_lifecycle_verified": false,
-  "economic_lifecycle_scope": "source-backed fail-closed INCONCLUSIVE and INVALID_PENDING adjudications; no current-release VALID withdrawal claimed",
+  "economic_lifecycle_scope": "source-backed fail-closed INCONCLUSIVE and INVALID_PENDING adjudications plus a current-release Wallet B commitment/reveal; no current-release VALID verdict, withdrawal or recipient credit claimed",
   "historical_deployments": {
     "gapjudge": {
       "status": "historical",
