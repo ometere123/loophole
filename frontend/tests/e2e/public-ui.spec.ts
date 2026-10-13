@@ -10,7 +10,8 @@ async function installWallet(page: Page, options: WalletOptions = {}) {
       for (const listener of listeners[event] ?? []) listener(...args);
     };
     const ethereum = {
-      isMetaMask: true,
+      // A minimal EIP-1193 provider; no wallet-vendor extensions are assumed.
+      __emit: emit,
       selectedAddress: '0x951e6b75530774ff82321a5ae54e14f778f0c855',
       chainId,
       on(event: string, listener: (...args: unknown[]) => void) {
@@ -78,4 +79,44 @@ test('mobile navigation opens without horizontal overflow', async ({page}) => {
   await page.getByRole('button', {name: /toggle menu/i}).click();
   await expect(page.getByRole('navigation', {name: /main navigation/i})).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBeTruthy();
+});
+
+test('wallet network change is reflected without a reload', async ({page}) => {
+  await installWallet(page);
+  await page.goto('/');
+  await page.getByRole('button', {name: /connect wallet/i}).click();
+  await expect(page.getByRole('button', {name: /0x951e/i})).toBeVisible();
+  await page.evaluate(() => {
+    const wallet = (window as any).ethereum;
+    wallet.chainId = '0x1';
+    wallet.__emit('chainChanged', '0x1');
+  });
+  await expect(page.getByRole('button', {name: /switch network/i})).toBeVisible();
+  await page.getByRole('button', {name: /switch network/i}).click();
+  await expect(page.getByRole('button', {name: /0x951e/i})).toBeVisible();
+});
+
+test('account change invalidates previous wallet identity', async ({page}) => {
+  await installWallet(page);
+  await page.goto('/');
+  await page.getByRole('button', {name: /connect wallet/i}).click();
+  await page.evaluate(() => {
+    const wallet = (window as any).ethereum;
+    wallet.selectedAddress = '0x2222222222222222222222222222222222222222';
+    wallet.__emit('accountsChanged', [wallet.selectedAddress]);
+  });
+  await expect(page.getByRole('button', {name: /0x2222/i})).toBeVisible();
+  await expect(page.getByRole('button', {name: /0x951e/i})).toHaveCount(0);
+});
+
+test('creation wizard rejects incomplete rulebooks before any wallet submission', async ({page}) => {
+  await installWallet(page);
+  await page.goto('/create');
+  await page.getByPlaceholder('e.g. The Originality Olympics').fill('Unclear eligibility');
+  await page.getByPlaceholder(/Our campaign should reward educational/i).fill('Reward original meaningful educational work rather than spam posts.');
+  await page.getByRole('button', {name: /continue/i}).click();
+  await expect(page.getByRole('heading', {name: /write the rulebook/i})).toBeVisible();
+  await page.getByRole('button', {name: /continue/i}).click();
+  await expect(page.getByRole('alert')).toContainText(/Publish at least 20 characters of rules/i);
+  await expect(page.getByRole('heading', {name: /write the rulebook/i})).toBeVisible();
 });
