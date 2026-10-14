@@ -72,6 +72,8 @@ The historical `0xec98…` monolith's funded `VALID`, `INVALID` and `INCONCLUSIV
 
 The latest active-release eligibility readback is preserved in [`docs/evidence/active-release-eligibility-2026-10-14.json`](docs/evidence/active-release-eligibility-2026-10-14.json). It shows the exact UTC prerequisites for the still-open appeal windows and confirms that no deadline was shortened and no live write was submitted during the readback.
 
+The subsequent eligible sequence on the same active deployment is recorded in [`docs/LOOPHOLE_ACTIVE_RELEASE_ELIGIBLE_SEQUENCE_2026-10-14.md`](docs/LOOPHOLE_ACTIVE_RELEASE_ELIGIBLE_SEQUENCE_2026-10-14.md), with machine-readable evidence in [`docs/evidence/loophole-active-release-eligible-sequence-2026-10-14.json`](docs/evidence/loophole-active-release-eligible-sequence-2026-10-14.json). Existing challenge 1 attempt 2 was finalized as INVALID, attempt 3 was adjudicated as source-backed VALID by real consensus, wallet B received the exact 0.02 GEN entitlement, and the external child transfer was independently verified with `value_credited=true`. The contract withdrawal record remains `TRANSFER_EMITTED_UNVERIFIED`, and no appeal, timeout recovery or failed-transfer recovery is claimed here.
+
 An offline Direct Mode regression also covers source-backed `VALID` settlement. The earlier Wallet B preparation record in [`docs/LOOPHOLE_SOURCE_BACKED_VALID_PROGRESS_2026-10-13.md`](docs/LOOPHOLE_SOURCE_BACKED_VALID_PROGRESS_2026-10-13.md) remains a historical snapshot; the active-release adjudication, entitlement, withdrawal and recipient-credit proof is in the completed two-case record linked above.
 
 ## Safety bounds and delivery

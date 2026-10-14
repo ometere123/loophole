@@ -1,0 +1,190 @@
+{
+  "observed_at": "2026-10-14",
+  "network": {
+    "chain_id_decimal": 61999,
+    "chain_id_hex": "0xf22f",
+    "rpc": "https://studio.genlayer.com/api",
+    "explorer": "https://explorer-studio.genlayer.com",
+    "cli_version": "0.39.1"
+  },
+  "contract": {
+    "name": "Loophole",
+    "address": "0xB87353201CeC791cc16c25e8eE1077076D90548E",
+    "source_sha256": "423b42cb64edb3de95f27dcedeb12aeca42f8d82b709e3a92ec47c69f87d1222",
+    "source_unchanged": true
+  },
+  "cli_accounts": {
+    "wallet_a": {
+      "address": "0x951e6b75530774ff82321a5ae54e14f778f0c855",
+      "role_in_this_sequence": "nonpayable lifecycle operator",
+      "status": "unlocked"
+    },
+    "wallet_b": {
+      "address": "0xb845a69860ba4cdf19cfdc5afbaf2e20b6be86b0",
+      "role_in_this_sequence": "attempt 3 challenger and withdrawal beneficiary",
+      "status": "unlocked"
+    },
+    "challenge_1_organizer": "0xfcef676044658b5402f590dabe9e04a0f640522f",
+    "attempt_2_challenger": "0x81301dd9c3605a7da743d87b803156d8445620b0",
+    "attempt_3_challenger": "0xb845a69860ba4cdf19cfdc5afbaf2e20b6be86b0"
+  },
+  "sequence": [
+    {
+      "method": "finalize_invalid",
+      "args": [2],
+      "sender": "0x951e6b75530774ff82321a5ae54e14f778f0c855",
+      "attached_value_wei": "0",
+      "hash": "0xfca07a7207aec6cf6f7ac25ee97572273b7611c008f7d53c385238ae4fdd1905",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0xfca07a7207aec6cf6f7ac25ee97572273b7611c008f7d53c385238ae4fdd1905",
+      "created_at": "2026-10-14T18:45:32.520635+00:00",
+      "status": "FINALIZED",
+      "rpc_status": "FINALIZED",
+      "evm_receipt_status": "0x1",
+      "genvm_execution": "SUCCESS",
+      "consensus_result": "MAJORITY_AGREE",
+      "validator_votes": ["AGREE", "AGREE", "AGREE", "AGREE", "AGREE"]
+    },
+    {
+      "method": "start_review",
+      "args": [1],
+      "sender": "0x951e6b75530774ff82321a5ae54e14f778f0c855",
+      "attached_value_wei": "0",
+      "hash": "0x6ba23000181abd16bc02e9a9abf2b240ec87b241356836ad865d8590a92d7106",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0x6ba23000181abd16bc02e9a9abf2b240ec87b241356836ad865d8590a92d7106",
+      "created_at": "2026-10-14T18:46:44.118953+00:00",
+      "status": "FINALIZED",
+      "rpc_status": "FINALIZED",
+      "evm_receipt_status": "0x1",
+      "genvm_execution": "SUCCESS",
+      "consensus_result": "MAJORITY_AGREE",
+      "validator_votes": ["AGREE", "AGREE", "AGREE", "AGREE", "AGREE"]
+    },
+    {
+      "method": "adjudicate_review",
+      "args": [1, 3, 3],
+      "sender": "0x951e6b75530774ff82321a5ae54e14f778f0c855",
+      "attached_value_wei": "0",
+      "hash": "0x91f7c418cac52d4695f7ccf4b16d2d8491f2c73e43792faa7cb727ab179fa996",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0x91f7c418cac52d4695f7ccf4b16d2d8491f2c73e43792faa7cb727ab179fa996",
+      "created_at": "2026-10-14T18:47:37.173325+00:00",
+      "status": "FINALIZED",
+      "rpc_status": "FINALIZED",
+      "evm_receipt_status": "0x1",
+      "genvm_execution": "SUCCESS",
+      "consensus_result": "MAJORITY_AGREE",
+      "validator_votes": ["AGREE", "IDLE", "AGREE", "AGREE", "IDLE"],
+      "decision": {
+        "evidence_state": "VERIFIED",
+        "letter": "PROVEN",
+        "purpose": "PROVEN",
+        "feasible": "PROVEN",
+        "verdict": "VALID"
+      }
+    },
+    {
+      "method": "withdraw",
+      "args": [],
+      "sender": "0xb845a69860ba4cdf19cfdc5afbaf2e20b6be86b0",
+      "attached_value_wei": "0",
+      "hash": "0x0daabaca54cf07cfda6956d371b61cce1f651ff76929f2c60e8553c409b86785",
+      "explorer": "https://explorer-studio.genlayer.com/tx/0x0daabaca54cf07cfda6956d371b61cce1f651ff76929f2c60e8553c409b86785",
+      "created_at": "2026-10-14T18:50:05.737352+00:00",
+      "status": "FINALIZED",
+      "rpc_status": "FINALIZED",
+      "evm_receipt_status": "0x1",
+      "genvm_execution": "SUCCESS",
+      "consensus_result": "MAJORITY_AGREE",
+      "validator_votes": ["AGREE", "AGREE", "AGREE", "AGREE", "AGREE"],
+      "emitted_child": "0x8ef262753d3bb2b14fc262c45830da0d8029f316b609c9cec6283af729dd1da8",
+      "emitted_value_wei": "20000000000000000"
+    }
+  ],
+  "state_readbacks": {
+    "after_finalize_invalid": {
+      "attempt_2_status": "DECIDED",
+      "attempt_2_verdict": "INVALID",
+      "challenge_1_status": "OPEN",
+      "challenge_1_active_attempt": "0",
+      "challenge_1_active_slots": "1",
+      "wallet_a_credit_wei": "10000000000000000",
+      "total_credit_wei": "20000000000000000"
+    },
+    "after_start_review": {
+      "attempt_3_status": "REVIEWING",
+      "challenge_1_active_attempt": "3",
+      "challenge_1_active_round": "3",
+      "challenge_1_review_started": 1792003604
+    },
+    "after_adjudication": {
+      "challenge_1_status": "WON",
+      "challenge_1_winner": "0xb845a69860ba4cdf19cfdc5afbaf2e20b6be86b0",
+      "challenge_1_winner_attempt": "3",
+      "attempt_3_status": "DECIDED",
+      "attempt_3_verdict": "VALID",
+      "attempt_3_evidence_state": "VERIFIED",
+      "attempt_3_letter_state": "PROVEN",
+      "attempt_3_purpose_state": "PROVEN",
+      "attempt_3_feasible_state": "PROVEN",
+      "attempt_3_entitlement_wei": "20000000000000000",
+      "wallet_b_credit_wei": "20000000000000000",
+      "total_credit_wei": "40000000000000000",
+      "total_locked_wei": "20000000000000000"
+    },
+    "after_withdrawal": {
+      "wallet_b_credit_wei": "0",
+      "organizer_credit_wei": "10000000000000000",
+      "withdrawal_id": "2",
+      "withdrawal_amount_wei": "20000000000000000",
+      "withdrawal_status": "TRANSFER_EMITTED_UNVERIFIED",
+      "withdrawal_source_contract": "0xB87353201CeC791cc16c25e8eE1077076D90548E",
+      "withdrawal_count": "2",
+      "total_credit_wei": "20000000000000000",
+      "total_locked_wei": "20000000000000000"
+    }
+  },
+  "adjudication_record": {
+    "key": "1:3:3",
+    "evidence_hash": "20502c9b61a7d89c465cf95783723dd7be59a7b9467494f2c11892900fefb750",
+    "settlement": "ATOMIC",
+    "verdict": "VALID"
+  },
+  "delivery_verification": {
+    "parent_hash": "0x0daabaca54cf07cfda6956d371b61cce1f651ff76929f2c60e8553c409b86785",
+    "child_hash": "0x8ef262753d3bb2b14fc262c45830da0d8029f316b609c9cec6283af729dd1da8",
+    "status": "DELIVERY VERIFIED",
+    "parent_finalized": true,
+    "parent_execution_success": true,
+    "child_finalized": true,
+    "child_execution_success": true,
+    "child_genvm_execution": "NOT_APPLICABLE_NATIVE_TRANSFER",
+    "origin": "0xB87353201CeC791cc16c25e8eE1077076D90548E",
+    "recipient": "0xb845a69860ba4cdf19cfdc5afbaf2e20b6be86b0",
+    "amount_wei": "20000000000000000",
+    "origin_matches": true,
+    "recipient_matches": true,
+    "amount_matches": true,
+    "value_credited": true,
+    "receipt_status_parent": "0x1",
+    "receipt_status_child": "0x1",
+    "parent_child_relationship_observed": true
+  },
+  "balance_readback": {
+    "wallet_b_balance_before_withdrawal_cli": "34.850999999999999 GEN",
+    "wallet_b_balance_after_withdrawal_cli": "34.870999999999999 GEN",
+    "wallet_b_balance_after_withdrawal_eth_getBalance_wei": "34870999999999999000",
+    "observed_increase_wei": "20000000000000000"
+  },
+  "accounting": {
+    "attached_value_in_this_sequence_wei": "0",
+    "withdrawn_value_wei": "20000000000000000",
+    "contract_record_kept_unverified": true,
+    "no_retry_submitted": true,
+    "no_contract_deployment": true
+  },
+  "limitations": [
+    "Challenge 1 was an existing funded challenge; walletA operated the nonpayable finalization, review and adjudication calls, while its organizer is recorded separately above.",
+    "The VALID result adjudicates frozen source-backed textual evidence and does not prove that the described real-world sequence was executed.",
+    "The contract record remains TRANSFER_EMITTED_UNVERIFIED because the contract cannot observe the external child proof itself.",
+    "No appeal settlement, stalled-review recovery, timeout recovery or failed-transfer recovery was attempted in this sequence."
+  ]
+}
