@@ -1,6 +1,6 @@
 # LOOPHOLE source-backed two-case lifecycle — 2026-10-14
 
-This record captures two new source-backed cases executed on the active Loophole monolith at [0xB87353201CeC791cc16c25e8eE1077076D90548E](https://explorer-studio.genlayer.com/address/0xB87353201CeC791cc16c25e8eE1077076D90548E) on Studionet 61999. The production source was unchanged and no deployment was performed.
+This record is a pre-appeal point-in-time snapshot of two source-backed cases executed on the active Loophole monolith at [0xB87353201CeC791cc16c25e8eE1077076D90548E](https://explorer-studio.genlayer.com/address/0xB87353201CeC791cc16c25e8eE1077076D90548E) on Studionet 61999. The production source was unchanged and no deployment was performed. Its challenge 3 `INVALID_PENDING` state predates the later finalized appeal; the current appeal, settlement and consolidated delivery evidence are in [`docs/LOOPHOLE_APPEAL_PREPARATION_2026-10-14.md`](LOOPHOLE_APPEAL_PREPARATION_2026-10-14.md).
 
 The organizer was Wallet A, 0x951e6b75530774ff82321a5ae54e14f778f0c855. The challenger and withdrawal beneficiary was Wallet B, 0xb845a69860ba4cdf19cfdc5afbaf2e20b6be86b0. The repository-local CLI was 0.39.1, both accounts were unlocked in the CLI keychain, the chain readback was 0xf22f, and the RPC gas and priority-fee quotes were zero.
 
@@ -64,7 +64,7 @@ Challenge 3 was funded with 0.01 GEN. Attempt 5 used a 0.01 GEN bond. Its frozen
 
 The adjudication finalized with result name MAJORITY_AGREE and successful leader execution. The recorded validator votes were AGREE, DISAGREE, AGREE, AGREE, DISAGREE. The authenticated decision was evidence VERIFIED, letter DISPROVEN, purpose DISPROVEN, feasible PROVEN, and verdict INVALID. This is substantive disagreement on decision-critical findings, while the accepted consensus result remained INVALID.
 
-The final state readback was challenge OPEN, active attempt 0, attempt INVALID_PENDING, appeal_used false, and no winner or entitlement. The appeal deadline is 2026-10-14T23:05:00Z. No appeal was submitted: the approved 0.05 GEN attached-value ceiling was fully consumed by the two challenge prizes and two original bonds. No appeal result is claimed.
+At this pre-appeal snapshot, the final state readback was challenge OPEN, active attempt 0, attempt INVALID_PENDING, appeal_used false, and no winner or entitlement. The appeal deadline is 2026-10-14T23:05:00Z. No appeal had yet been submitted because the approved 0.05 GEN attached-value ceiling was fully consumed by the two challenge prizes and two original bonds. This historical record makes no appeal-result claim; the later finalized appeal is consolidated in [`docs/LOOPHOLE_APPEAL_PREPARATION_2026-10-14.md`](LOOPHOLE_APPEAL_PREPARATION_2026-10-14.md).
 
 ## Accounting and scope
 

@@ -1,6 +1,6 @@
 # LOOPHOLE active-release eligible sequence — 2026-10-14
 
-This record captures the previously prepared, time-eligible sequence on the active monolith at [0xB87353201CeC791cc16c25e8eE1077076D90548E](https://explorer-studio.genlayer.com/address/0xB87353201CeC791cc16c25e8eE1077076D90548E), on Studionet 61999. The production source was unchanged and no deployment was performed.
+This record is a pre-appeal point-in-time snapshot of the previously prepared, time-eligible sequence on the active monolith at [0xB87353201CeC791cc16c25e8eE1077076D90548E](https://explorer-studio.genlayer.com/address/0xB87353201CeC791cc16c25e8eE1077076D90548E), on Studionet 61999. The production source was unchanged and no deployment was performed. The later finalized appeal is consolidated in [`docs/LOOPHOLE_APPEAL_PREPARATION_2026-10-14.md`](LOOPHOLE_APPEAL_PREPARATION_2026-10-14.md).
 
 The repository-local CLI was 0.39.1. CLI walletA, `0x951e6b75530774ff82321a5ae54e14f778f0c855`, was unlocked and sent the three nonpayable lifecycle calls. CLI walletB, `0xb845a69860ba4cdf19cfdc5afbaf2e20b6be86b0`, was unlocked, was the challenger for attempt 3, and sent the withdrawal. Challenge 1 was already funded; its recorded organizer is `0xfcef676044658b5402f590dabe9e04a0f640522f`. No new attached GEN was used by this sequence.
 

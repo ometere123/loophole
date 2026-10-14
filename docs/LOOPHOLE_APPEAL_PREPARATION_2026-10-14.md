@@ -1,4 +1,4 @@
-# LOOPHOLE bonded appeal evidence — 2026-10-14
+# LOOPHOLE final Steward evidence closeout — 2026-10-14
 
 This record began as a read-only preparation for the bonded appeal on the
 active Studionet release. After explicit approval, exactly one appeal
@@ -43,7 +43,7 @@ signing. The CLI command’s built-in contract writer hardcodes zero value, so
 the transaction was submitted through the repository-local `genlayer-js`
 value-capable client using the unlocked `walletB` keychain entry.
 
-## Appeal transaction result
+## Appeal transaction result and pre-adjudication readback
 
 - Transaction: [`appeal_invalid(5)`](https://explorer-studio.genlayer.com/tx/0x18c14608d5eb3633545b0f48d26112245a24bf5c82c69d2e8ddb4e08b43579af)
 - Sender: Wallet B, `0xb845a69860ba4cdf19cfdc5afbaf2e20b6be86b0`
@@ -52,13 +52,14 @@ value-capable client using the unlocked `walletB` keychain entry.
 - Consensus: `MAJORITY_AGREE`; all five validator votes were `agree`
 - Triggered child transactions: none
 
-The finalized state read at `2026-10-14T19:55:39Z` is:
+The finalized state read immediately after the appeal and before its separate
+adjudication, at `2026-10-14T19:55:39Z`, was:
 
 - Attempt `5`: `APPEAL_REVIEWING`, `appeal_used=true`, `appeal_bond_wei=10000000000000000`.
 - Challenge `3`: `OPEN`, `active_attempt=5`, `active_round=2`, `active_slots=1`.
 - Wallet B credit: `0`.
 - `total_locked_wei`: `30000000000000000`; `total_credit_wei`: `20000000000000000`.
-- `get_adjudication("3:5:2")`: empty because the appeal review has not yet been adjudicated.
+- `get_adjudication("3:5:2")`: empty at that pre-adjudication readback.
 
 ## Appeal adjudication result
 

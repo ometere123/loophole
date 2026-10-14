@@ -1,6 +1,6 @@
 # LOOPHOLE source-backed lifecycle — 2026-10-13
 
-This is the first source-backed lifecycle on the source-verified monolith at [`0xB87353201CeC791cc16c25e8eE1077076D90548E`](https://explorer-studio.genlayer.com/address/0xB87353201CeC791cc16c25e8eE1077076D90548E) on Studionet 61999. The organizer was `0xfcef676044658B5402f590daBe9E04A0F640522f`; the challenger was `0x81301DD9C3605a7DA743D87b803156d8445620B0`.
+This is the first source-backed lifecycle on the source-verified monolith at [`0xB87353201CeC791cc16c25e8eE1077076D90548E`](https://explorer-studio.genlayer.com/address/0xB87353201CeC791cc16c25e8eE1077076D90548E) on Studionet 61999, preserved as a historical point-in-time record. The organizer was `0xfcef676044658B5402f590daBe9E04A0F640522f`; the challenger was `0x81301DD9C3605a7DA743D87b803156d8445620B0`. Its `INVALID_PENDING` state predates the later appeal sequence; see [`docs/LOOPHOLE_APPEAL_PREPARATION_2026-10-14.md`](LOOPHOLE_APPEAL_PREPARATION_2026-10-14.md) for current consolidated evidence.
 
 ## Transactions
 
