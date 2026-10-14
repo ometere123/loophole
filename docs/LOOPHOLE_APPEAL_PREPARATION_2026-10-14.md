@@ -1,8 +1,9 @@
-# LOOPHOLE bonded appeal preparation — 2026-10-14
+# LOOPHOLE bonded appeal evidence — 2026-10-14
 
-This is a read-only preparation record for the pending appeal on the active
-Studionet release. No appeal transaction was signed or broadcast while making
-this record.
+This record began as a read-only preparation for the bonded appeal on the
+active Studionet release. After explicit approval, exactly one appeal
+transaction was signed with the repository-local CLI keychain and verified
+without exposing the private key or issuing a retry.
 
 ## Active release
 
@@ -24,8 +25,7 @@ The following state was read from `LATEST_FINAL` at `2026-10-14T19:29:19Z`.
 - Wallet B latest balance: `34.870999999999999 GEN`; CLI account status: `unlocked`.
 - `get_adjudication("3:5:1")`: `INVALID`, `evidence_state=VERIFIED`, `letter=DISPROVEN`, `purpose=DISPROVEN`, `feasible=PROVEN`, `settlement=ATOMIC`.
 
-**Appeal status: READY, pending explicit spending approval.** The exact
-unbroadcast transaction intent is:
+**Preflight status: READY.** The exact transaction intent was:
 
 ```text
 from:     0xb845a69860ba4cdf19cfdc5afbaf2e20b6be86b0  (Wallet B)
@@ -34,18 +34,31 @@ chain:    61999
 method:   appeal_invalid
 args:     [5]
 value:    10000000000000000 wei (0.01 GEN)
-sent:     false
+sent:     once, after explicit approval
 ```
 
-If accepted and finalized, the contract source predicts `attempt 5` will enter
-`APPEAL_REVIEWING`, challenge `3` will make attempt `5` active, and its review
-round will advance to `2`. Those post-transaction states do not yet exist and
-must not be represented as completed evidence.
+The CLI preflight rechecked chain `0xf22f`, the Wallet B key address, the
+appeal window, the challenger, the exact bond and challenge idleness before
+signing. The CLI command’s built-in contract writer hardcodes zero value, so
+the transaction was submitted through the repository-local `genlayer-js`
+value-capable client using the unlocked `walletB` keychain entry.
 
-The repository-local CLI is `genlayer@0.39.1` and its `write --help` has no
-payable-value option. The frontend’s existing `genlayer-js@1.1.8` injected
-EIP-1193 path supports this exact value-bearing call; the appeal must use that
-wallet-signing path or another explicitly value-capable supported path.
+## Appeal transaction result
+
+- Transaction: [`appeal_invalid(5)`](https://explorer-studio.genlayer.com/tx/0x18c14608d5eb3633545b0f48d26112245a24bf5c82c69d2e8ddb4e08b43579af)
+- Sender: Wallet B, `0xb845a69860ba4cdf19cfdc5afbaf2e20b6be86b0`
+- Attached value: `10000000000000000` wei (`0.01 GEN`)
+- Status: `FINALIZED`; EVM receipt `0x1`; leader GenVM execution `SUCCESS`
+- Consensus: `MAJORITY_AGREE`; all five validator votes were `agree`
+- Triggered child transactions: none
+
+The finalized state read at `2026-10-14T19:55:39Z` is:
+
+- Attempt `5`: `APPEAL_REVIEWING`, `appeal_used=true`, `appeal_bond_wei=10000000000000000`.
+- Challenge `3`: `OPEN`, `active_attempt=5`, `active_round=2`, `active_slots=1`.
+- Wallet B credit: `0`.
+- `total_locked_wei`: `30000000000000000`; `total_credit_wei`: `20000000000000000`.
+- `get_adjudication("3:5:2")`: empty because the appeal review has not yet been adjudicated.
 
 ## Existing live evidence
 
@@ -60,7 +73,7 @@ consensus fields, contract readbacks and the supported child-transfer fields.
 | Unappealed INVALID settlement, attempt 2 | [finalize_invalid](https://explorer-studio.genlayer.com/tx/0xfca07a7207aec6cf6f7ac25ee97572273b7611c008f7d53c385238ae4fdd1905) | `MAJORITY_AGREE`, five `agree` votes; state `DECIDED/INVALID`; organizer bond credit recorded. |
 | Source-backed VALID, attempt 3 | [adjudication](https://explorer-studio.genlayer.com/tx/0x91f7c418cac52d4695f7ccf4b16d2d8491f2c73e43792faa7cb727ab179fa996) | `MAJORITY_AGREE`, three `agree` and two `idle` votes after quorum; challenge 1 `WON`; `0.02 GEN` entitlement. |
 | Source-backed VALID, attempt 4 | [adjudication](https://explorer-studio.genlayer.com/tx/0xead922f8c61a7936209fa85f181ee2a03ab50f14e92937a6fc08be6fc441d95b) | `MAJORITY_AGREE`, three `agree` and two `idle` votes after quorum; challenge 2 `WON`; `0.03 GEN` entitlement. |
-| Pending appeal target, attempt 5 | [adjudication](https://explorer-studio.genlayer.com/tx/0x31adc6f710e14b158ebd17e358702d66ffa24177ede9a8386e5df877ff8be5dc) | `MAJORITY_AGREE`, three `agree` and two `disagree` votes; state remains `INVALID_PENDING`; no appeal has occurred. |
+| Appeal target, attempt 5 | [initial adjudication](https://explorer-studio.genlayer.com/tx/0x31adc6f710e14b158ebd17e358702d66ffa24177ede9a8386e5df877ff8be5dc) · [appeal](https://explorer-studio.genlayer.com/tx/0x18c14608d5eb3633545b0f48d26112245a24bf5c82c69d2e8ddb4e08b43579af) | Initial result was `INVALID_PENDING`; the appeal finalized with five `agree` votes and moved the attempt to `APPEAL_REVIEWING`, round 2. |
 
 ## Independently verified GEN delivery
 
@@ -80,21 +93,22 @@ challenge 3 bounty (`0.01 GEN`) plus attempt 5’s pending bond (`0.01 GEN`);
 the outstanding `0.02 GEN` credit is held by two earlier participants and is
 not Wallet B’s withdrawn entitlement.
 
-## Read-only eligibility and remaining appeal record
+## Read-only eligibility and remaining appeal review
 
 `node scripts/inspect_recovery_eligibility.mjs` now defaults to the active
 monolith and reported no stalled-review recovery candidates. Challenge 3 is
-blocked from refund or invalid finalization while attempt 5’s appeal right is
-open. No write method was called during this preparation.
+now in an active appeal review, so refund and invalid finalization remain
+blocked. No additional write was called after the appeal.
 
-The final appeal evidence is intentionally empty until it exists:
+The remaining appeal evidence is intentionally empty until adjudication and
+settlement exist:
 
 ```text
-appeal transaction:       NOT EXECUTED
-appeal finality:          NOT EXECUTED
-appeal consensus/verdict: NOT EXECUTED
-appeal settlement:        NOT EXECUTED
-post-appeal state reads:  NOT EXECUTED
+appeal transaction:       VERIFIED above
+appeal finality:          VERIFIED above
+appeal consensus/verdict: PENDING adjudicate_review(3, 5, 2)
+appeal settlement:        PENDING the finalized appeal adjudication
+post-settlement reads:    PENDING
 ```
 
 ## Reproduction checks
