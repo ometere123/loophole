@@ -1,0 +1,109 @@
+{
+  "observed_at": "2026-10-14T17:32:41.042Z",
+  "rpc": "https://studio.genlayer.com/api",
+  "chain_id": "0xf22f",
+  "contract": "0xB87353201CeC791cc16c25e8eE1077076D90548E",
+  "now_unix": 1791999161,
+  "config": {
+    "adjudication_count": "4",
+    "adjudication_mode": "DIRECT_ATOMIC",
+    "attempt_count": "5",
+    "chain": "61999",
+    "challenge_count": "3",
+    "commitment_encoding": "length-prefixed-utf8-v1",
+    "contract": "Loophole",
+    "invalid_appeal_window_seconds": "86400",
+    "max_active_attempts": "12",
+    "max_source_bytes": "16000",
+    "max_total_attempts": "64",
+    "reveal_grace_seconds": "172800",
+    "review_timeout_seconds": "432000",
+    "source_modes": "HYPOTHETICAL,PINNED_SOURCE",
+    "source_type": "raw.githubusercontent.com@40-hex-commit",
+    "total_credit_wei": "10000000000000000",
+    "total_locked_wei": "50000000000000000",
+    "validator_agreement": "EXACT_TRISTATE_FINDINGS",
+    "withdrawal_count": "1"
+  },
+  "readback": {
+    "challenge_1": {
+      "status": "OPEN",
+      "ends_at": "2026-10-14T18:11:13.000Z",
+      "active_attempt": "0",
+      "active_round": "2",
+      "attempts": [
+        "1",
+        "2",
+        "3"
+      ]
+    },
+    "attempt_2": {
+      "status": "INVALID_PENDING",
+      "verdict": "INVALID",
+      "appeal_deadline": "2026-10-14T18:38:05.000Z",
+      "appeal_used": false
+    },
+    "attempt_3": {
+      "status": "REVEALED",
+      "verdict": "",
+      "challenger": "0xb845a69860ba4cdf19cfdc5afbaf2e20b6be86b0"
+    },
+    "challenge_3": {
+      "status": "OPEN",
+      "ends_at": "2026-10-14T23:02:01.000Z",
+      "active_attempt": "0",
+      "active_round": "1"
+    },
+    "attempt_5": {
+      "status": "INVALID_PENDING",
+      "verdict": "INVALID",
+      "appeal_deadline": "2026-10-14T23:05:00.000Z",
+      "appeal_used": false,
+      "challenger": "0xb845a69860ba4cdf19cfdc5afbaf2e20b6be86b0"
+    }
+  },
+  "eligible_actions": [
+    {
+      "action": "finalize_invalid(2)",
+      "status": "NOT_YET_ELIGIBLE",
+      "earliest_utc": "2026-10-14T18:38:05.000Z",
+      "reason": "the affected INVALID appeal window is still open"
+    },
+    {
+      "action": "start_review(1)",
+      "status": "BLOCKED_UNTIL",
+      "earliest_utc": "2026-10-14T18:38:05.000Z",
+      "reason": "the earlier INVALID_PENDING attempt must first be finalized; the revealed attempt 3 remains queued"
+    },
+    {
+      "action": "adjudicate_review(1,3,3)",
+      "status": "DEPENDENT",
+      "reason": "requires a finalized successful start_review(1) and then an independent consensus result"
+    },
+    {
+      "action": "appeal_invalid(5)",
+      "status": "OPEN_UNTIL",
+      "latest_utc": "2026-10-14T23:05:00.000Z",
+      "attached_value_wei": "10000000000000000",
+      "reason": "challenger-only appeal with an equal bond; no appeal was submitted"
+    },
+    {
+      "action": "finalize_invalid(5)",
+      "status": "NOT_YET_ELIGIBLE",
+      "earliest_utc": "2026-10-14T23:05:00.000Z",
+      "reason": "attempt 5 remains INVALID_PENDING"
+    },
+    {
+      "action": "recover_stalled_review",
+      "status": "NONE_ELIGIBLE",
+      "reason": "no active review is currently stalled"
+    },
+    {
+      "action": "refund_unwon",
+      "status": "NOT_ELIGIBLE",
+      "reason": "open challenges retain unresolved legitimate rights"
+    }
+  ],
+  "write_submitted": false,
+  "interpretation": "Fresh finalized read-only state. No deadline was shortened and no blockchain write was submitted."
+}

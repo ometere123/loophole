@@ -35,9 +35,24 @@ async function probe(method, params) {
   }
 }
 
+async function probeStatus(hash) {
+  // Current hosted Studionet still accepts the legacy string parameter for
+  // status. Try the documented object form first so the report records the
+  // compatibility gap, then fall back only for this status method.
+  const documented = await probe('gen_getTransactionStatus', [{txId: hash}]);
+  if (documented.supported) {
+    return {...documented, request_shape: 'documented_object'};
+  }
+  const legacy = await probe('gen_getTransactionStatus', [hash]);
+  return {
+    ...legacy,
+    request_shape: 'legacy_string_fallback',
+    documented_probe: documented,
+  };
+}
+
 const diagnostics = [
-  ['gen_getTransactionReceipt', hash => [hash]],
-  ['gen_getTransactionStatus', hash => [hash]],
+  ['gen_getTransactionReceipt', hash => [{txId: hash}]],
   ['gen_getConsensusData', hash => [hash]],
   ['gen_getTransactionFee', hash => [hash]],
   ['gen_getTransactionFees', hash => [hash]],
@@ -46,7 +61,7 @@ const diagnostics = [
   ['gen_getTransactionExecution', hash => [hash]],
   ['gen_getTransactionLogs', hash => [hash]],
   ['gen_getTransactionHistory', hash => [hash]],
-  ['gen_getTransactionLifecycle', hash => [hash]],
+  ['gen_getTransactionLifecycle', hash => [{txId: hash}]],
   ['gen_dbg_traceTransaction', hash => [hash]],
 ];
 
@@ -60,6 +75,7 @@ for (const hash of hashes) {
   for (const [method, params] of diagnostics) {
     lifecycle[method] = await probe(method, params(hash));
   }
+  lifecycle.gen_getTransactionStatus = await probeStatus(hash);
   rows.push({
     hash,
     transaction: receipt,
