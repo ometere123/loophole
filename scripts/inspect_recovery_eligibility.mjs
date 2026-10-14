@@ -5,8 +5,12 @@ import { studionet } from 'genlayer-js/chains';
 import { TransactionHashVariant } from 'genlayer-js/types';
 
 const rpcUrl = process.env.GENLAYER_RPC ?? 'https://studio.genlayer.com/api';
-const vault = (process.env.RULE_VAULT_ADDRESS ??
-  '0xa77A29C96c30B2A5dB865a2CE35c8F396d504F26');
+// The active release is the single-contract Loophole monolith. Keep the
+// environment override for historical investigations, but never default a
+// current recovery read to the retired RuleVault deployment.
+const vault = (process.env.LOOPHOLE_ADDRESS ??
+  process.env.RULE_VAULT_ADDRESS ??
+  '0xB87353201CeC791cc16c25e8eE1077076D90548E');
 const readClient = createClient({chain: studionet});
 
 async function rpc(method, params) {
@@ -82,5 +86,5 @@ console.log(JSON.stringify({
     .filter(item => item.recovery_eligible)
     .map(item => item.id),
   write_submitted: false,
-  interpretation: 'Read-only finalized RuleVault state. A recovery candidate is reported only when the challenge is OPEN, has an active attempt, and its five-day review timeout has elapsed.',
+  interpretation: 'Read-only finalized active Loophole state. A recovery candidate is reported only when the challenge is OPEN, has an active attempt, and its five-day review timeout has elapsed.',
 }, null, 2));
