@@ -20,10 +20,13 @@ npm ci
 npm --prefix frontend ci
 python -m pip install -r requirements.txt
 python scripts/preflight.py
+python scripts/verify_v2_source.py
 python -m pytest tests -m "not direct" -q
-genvm-lint check contracts/Loophole.py
+GENVM_VERSION=v0.3.0-rc7 genvm-lint check contracts/Loophole.py
+GENVM_VERSION=v0.3.0-rc7 genvm-lint check contracts/LoopholeV2.py
 python scripts/validate_runner_headers.py
 python scripts/verify_prompt_parity.py
+npm run test:sdk
 npm --prefix frontend run typecheck
 npm --prefix frontend run build
 ```
@@ -35,6 +38,14 @@ GENVM_VERSION=v0.3.0-rc7 python -m pytest tests/direct -m direct -q
 ```
 
 The CI workflow validates the production source, historical source fixtures, diagnostics, mutation behavior, genuine Direct Mode and the frontend lockfile build.
+
+## V2 — Policy Repair & Revalidation
+
+The repository also contains a separate, self-contained V2 candidate in [`contracts/LoopholeV2.py`](contracts/LoopholeV2.py). It preserves the deployed V1 source, address, balances and evidence; it is not a migration or replacement. V2 appends bounded policy versions after a finalized `VALID` loophole, lets only the original organizer propose a correction, freezes the original winning evidence with the proposed revision, and uses independent GenLayer repair consensus over `closure`, `goal` and `coherence` findings. Only a mechanically derived `VERIFIED_FIX` becomes authoritative. A separately funded re-challenge can then be created against that verified version without touching V1 liabilities.
+
+V2 includes a read-only `/v2` audit explorer in [`frontend/src/app/v2/page.tsx`](frontend/src/app/v2/page.tsx) and a repository-local SDK in [`sdk/`](sdk/). The explorer intentionally reports that V2 is unavailable while `NEXT_PUBLIC_LOOPHOLE_V2_ADDRESS` is unset; the current public deployment remains bound to V1 and has not been repointed. Exact pinned GitHub-byte resolution is demonstrated by [`examples/v2-github-policy.mjs`](examples/v2-github-policy.mjs). V2 source, consensus, security and verification boundaries are documented in [`docs/V2_MILESTONE.md`](docs/V2_MILESTONE.md), [`docs/V2_CONSENSUS.md`](docs/V2_CONSENSUS.md), [`docs/V2_SECURITY.md`](docs/V2_SECURITY.md) and [`docs/V2_RELEASE_EVIDENCE.md`](docs/V2_RELEASE_EVIDENCE.md).
+
+V2 has passed the local compile, source-integrity, GenVM lint/schema, Direct Mode, simulator, SDK, frontend typecheck/build and desktop/mobile browser gates on the milestone branch. No V2 deployment, funded challenge, repair consensus or V2 payout is claimed until the source is reviewed and the exact irreversible transactions are explicitly approved.
 
 ## Protocol flow
 
