@@ -5,7 +5,7 @@ import {connectWallet,getWalletState,reconcilePersistedTransaction,switchStudion
 import {clearPersistedTransaction,explorerTx,getPendingTransaction,READY,short} from '@/lib/helpers';
 import type {TxInfo} from '@/lib/types';
 
-type Context = {account:string;chain:number;connect:()=>Promise<void>;switchChain:()=>Promise<void>;disconnect:()=>void;submit:(method:string,args:unknown[],value?:bigint)=>Promise<string>;busy:boolean;tx:TxInfo;setTx:(x:TxInfo)=>void;refreshWallet:()=>Promise<void>};
+type Context = {account:string;chain:number;connect:()=>Promise<void>;switchChain:()=>Promise<void>;disconnect:()=>void;submit:(method:string,args:unknown[],value?:bigint,targetAddress?:string)=>Promise<string>;busy:boolean;tx:TxInfo;setTx:(x:TxInfo)=>void;refreshWallet:()=>Promise<void>};
 const C=createContext<Context|null>(null);
 export function useWallet(){const v=useContext(C);if(!v)throw new Error('WalletProvider missing');return v;}
 const EMPTY:TxInfo={phase:'idle'};
@@ -17,12 +17,12 @@ export function Providers({children}:{children:React.ReactNode}){
  const connect=async()=>{const a=await connectWallet();setAccount(a);await refreshWallet();};
  const switchChain=async()=>{await switchStudionet();await refreshWallet();};
  const disconnect=()=>{setAccount('');setChain(0);setTx(EMPTY);};
- const submit=async(method:string,args:unknown[],value?:bigint)=>{
+ const submit=async(method:string,args:unknown[],value?:bigint,targetAddress?:string)=>{
   if(busy)throw new Error('Another transaction is in progress.');
   if(!account)throw new Error('Connect a wallet to continue.');
   if(chain!==61999)throw new Error('Switch to Studionet 61999 before writing.');
-  if(!READY)throw new Error('Deployment addresses must be configured first.');
-  setBusy(true);try{return await writeVault(method,args,value,account,setTx);}catch(e){setTx(prev=>prev.phase==='unknown'||prev.phase==='execution_failed'?prev:{phase:prev.hash?'unknown':'rejected',hash:prev.hash,title:method,error:(e as Error).message});throw e;}finally{setBusy(false);}
+  if(!targetAddress&&!READY)throw new Error('Deployment addresses must be configured first.');
+  setBusy(true);try{return await writeVault(method,args,value,account,setTx,targetAddress);}catch(e){setTx(prev=>prev.phase==='unknown'||prev.phase==='execution_failed'?prev:{phase:prev.hash?'unknown':'rejected',hash:prev.hash,title:method,error:(e as Error).message});throw e;}finally{setBusy(false);}
  };
  return <C.Provider value={{account,chain,connect,switchChain,disconnect,submit,busy,tx,setTx,refreshWallet}}>{children}<TransactionDrawer/></C.Provider>;
 }

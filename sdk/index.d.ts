@@ -1,0 +1,14 @@
+export declare const V2_METHODS: Readonly<Record<string, string>>;
+export declare function assertAddress(address: string): string;
+export declare function assertCommit(commit: string): string;
+export declare function assertSha256(digest: string): string;
+export declare function buildV2Call(input: { address: string; functionName: string; args?: unknown[]; value?: bigint | number | string }): { address: string; functionName: string; args: unknown[]; value: bigint | number | string };
+export declare function readV2<T = unknown>(readContract: (input: { functionName: string; args: unknown[] }) => Promise<unknown>, functionName: string, args?: unknown[]): Promise<T | string | null>;
+export declare function readPolicyHistory<T = unknown>(readContract: (input: { functionName: string; args: unknown[] }) => Promise<unknown>, challengeId: string | number | bigint): Promise<T | string | null>;
+export declare function readRepairProposal<T = unknown>(readContract: (input: { functionName: string; args: unknown[] }) => Promise<unknown>, proposalId: string | number | bigint): Promise<T | string | null>;
+export declare function readAuditHistory<T = unknown>(readContract: (input: { functionName: string; args: unknown[] }) => Promise<unknown>, challengeId: string | number | bigint): Promise<T | string | null>;
+export declare function explorerTx(hash: string, base?: string): string;
+export declare function explorerAddress(address: string, base?: string): string;
+export declare function resolvePinnedGithubSource(input: { owner: string; repo: string; commit: string; path: string; versionMarker?: string; fetchImpl?: typeof fetch }): Promise<{ owner: string; repo: string; commit: string; path: string; rawUrl: string; sha256: string; byteLength: number; content: string; versionMarker: string }>;
+export declare function waitForFinalized<T = unknown>(input: { hash: string; getStatus: (hash: string) => Promise<unknown>; getReceipt: (hash: string) => Promise<T>; timeoutMs?: number; intervalMs?: number }): Promise<{ hash: string; status: string; receipt: T }>;
+export declare function isSuccessfulExecution(receipt: unknown): boolean;

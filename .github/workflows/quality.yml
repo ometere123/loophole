@@ -1,7 +1,7 @@
 name: Loophole quality gates
 on:
   push:
-    branches: [main, master]
+    branches: [main, master, milestone/loophole-v2]
   pull_request:
   workflow_dispatch:
 jobs:
@@ -16,6 +16,7 @@ jobs:
       - name: Run real GenVM lint
         run: |
           GENVM_VERSION=v0.3.0-rc7 genvm-lint check contracts/Loophole.py
+          GENVM_VERSION=v0.3.0-rc7 genvm-lint check contracts/LoopholeV2.py
           GENVM_VERSION=v0.3.0-rc7 genvm-lint check contracts/historical/RuleVault.py
           GENVM_VERSION=v0.3.0-rc7 genvm-lint check contracts/historical/GapJudge.py
           GENVM_VERSION=v0.3.0-rc7 genvm-lint check diagnostics/AdjudicationProbe.py
@@ -24,13 +25,13 @@ jobs:
       - name: Compile Python
         run: python -m compileall -q contracts diagnostics scripts
       - name: Validate GenVM runner headers
-        run: python scripts/validate_runner_headers.py contracts/Loophole.py contracts/historical/RuleVault.py contracts/historical/GapJudge.py diagnostics/AdjudicationProbe.py diagnostics/CrossContractRelay.py diagnostics/DirectGapJudgeWorkloadProbe.py
+        run: python scripts/validate_runner_headers.py contracts/Loophole.py contracts/LoopholeV2.py contracts/historical/RuleVault.py contracts/historical/GapJudge.py diagnostics/AdjudicationProbe.py diagnostics/CrossContractRelay.py diagnostics/DirectGapJudgeWorkloadProbe.py
       - name: Verify production and diagnostic prompt parity
         run: python scripts/verify_prompt_parity.py
       - name: Run protocol state-machine tests
         run: python -m pytest tests -m "not direct" -q
       - name: Verify source-backed and mutation behavior explicitly
-        run: python -m pytest tests/test_monolith_protocol.py tests/test_monolith_mutation_behavior.py -q
+        run: python -m pytest tests/test_monolith_protocol.py tests/test_monolith_mutation_behavior.py tests/test_v2_mutation_behavior.py -q
       - name: Run GenVM Direct Mode tests
         env:
           GENVM_GITHUB_TOKEN: ${{ github.token }}
@@ -39,8 +40,12 @@ jobs:
         run: python scripts/preflight.py
       - name: Verify active release consistency
         run: python scripts/verify_release_integrity.py
+      - name: Verify V2 source integrity
+        run: python scripts/verify_v2_source.py
       - name: Test delivery state classification
         run: node --test scripts/delivery_classifier.test.mjs
+      - name: Test reusable V2 SDK
+        run: node --test sdk/test/sdk.test.mjs
   frontend:
     runs-on: ubuntu-latest
     steps:

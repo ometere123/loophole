@@ -165,8 +165,9 @@ export async function verifyWithdrawalDelivery(parentHash:string,beneficiary:str
 export async function connectWallet():Promise<string>{const provider=window.ethereum;if(!provider)throw new Error('No injected wallet detected. Install an EIP-1193 wallet extension.');const accounts=await provider.request({method:'eth_requestAccounts'}) as string[];if(!accounts?.[0])throw new Error('Wallet did not provide an account.');return accounts[0];}
 export async function getWalletState():Promise<{account:string;chain:number}>{if(typeof window==='undefined'||!window.ethereum)return {account:'',chain:0};const [accounts,chain]=await Promise.all([window.ethereum.request({method:'eth_accounts'}),window.ethereum.request({method:'eth_chainId'})]) as [string[],string];return {account:accounts?.[0]||'',chain:parseInt(chain,16)};}
 export async function switchStudionet(){if(!window.ethereum)throw new Error('An injected wallet is required.');try{await window.ethereum.request({method:'wallet_switchEthereumChain',params:[{chainId:'0xf22f'}]});}catch(e:any){if(e?.code!==4902)throw e;await window.ethereum.request({method:'wallet_addEthereumChain',params:[{chainId:'0xf22f',chainName:'GenLayer Studionet',nativeCurrency:{name:'GEN',symbol:'GEN',decimals:18},rpcUrls:['https://studio.genlayer.com/api'],blockExplorerUrls:['https://explorer-studio.genlayer.com']}]});}}
-export async function writeVault(method:string,args:unknown[],value:bigint|undefined,address:string,onUpdate:(s:TxInfo)=>void):Promise<string>{
- requireDeployment();if(!window.ethereum)throw new Error('Connect an injected wallet.');
+export async function writeVault(method:string,args:unknown[],value:bigint|undefined,address:string,onUpdate:(s:TxInfo)=>void,contractAddress=VAULT_ADDRESS):Promise<string>{
+ if(!/^0x[a-fA-F0-9]{40}$/.test(contractAddress))throw new Error('The target contract address is not configured.');
+ if(!window.ethereum)throw new Error('Connect an injected wallet.');
  const state=await getWalletState();if(state.chain!==61999)throw new Error('Wrong network. Switch your wallet to Studionet 61999.');
  if(state.account.toLowerCase()!==address.toLowerCase())throw new Error('Wallet changed. Reconnect before signing.');
  const client=createClient({chain:studionet,account:address as `0x${string}`,provider:window.ethereum as any});
@@ -175,7 +176,7 @@ export async function writeVault(method:string,args:unknown[],value:bigint|undef
  // an optional wallet-extension API. The chain is already selected and
  // checked above, so writeContract can use the injected EIP-1193 provider
  // directly through eth_sendTransaction.
- const tx={address:addr,functionName:method,args:args as CalldataEncodable[],value:value??0n};
+ const tx={address:contractAddress as `0x${string}`,functionName:method,args:args as CalldataEncodable[],value:value??0n};
   onUpdate({phase:'awaiting_wallet',title:method});
  const hash=await client.writeContract(tx);
  const persist=(phase:'submitted'|'accepted'|'unknown'|'execution_failed',error?:string)=>savePersistedTransaction({hash,account:address.toLowerCase(),phase,title:method,error,updatedAt:Date.now()});

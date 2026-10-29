@@ -1,0 +1,36 @@
+{
+  "protocol": "LOOPHOLE V2 Policy Repair & Revalidation",
+  "status": "SOURCE_IMPLEMENTED_NOT_DEPLOYED",
+  "chain_id": 61999,
+  "v1_active_address": "0xB87353201CeC791cc16c25e8eE1077076D90548E",
+  "v1_source_sha256": "423b42cb64edb3de95f27dcedeb12aeca42f8d82b709e3a92ec47c69f87d1222",
+  "v2_source_path": "contracts/LoopholeV2.py",
+  "v2_source_sha256": "c3ac301772a4f05dc9eb20d013bb1d4968cff6981547060219fc4947a2ba5b37",
+  "v2_deployment": null,
+  "direct_mode_runner": "v0.3.0-rc7",
+  "schema": {
+    "contract": "LoopholeV2",
+    "methods": 32,
+    "view_methods": 13,
+    "write_methods": 19,
+    "ctor_params": 0
+  },
+  "tests": {
+    "simulator_non_direct": "57 passed",
+    "direct_mode": "26 passed",
+    "v2_behavioral_mutation": "2 passed",
+    "source_backed_positive_repair": true,
+    "sdk": "4 passed",
+    "frontend_playwright": "18 passed (desktop and mobile)",
+    "frontend_audit": "0 vulnerabilities",
+    "root_production_audit": "0 vulnerabilities"
+  },
+  "claims": {
+    "versioned_policy_history": true,
+    "repair_consensus": true,
+    "rechallenge_liability_separation": true,
+    "live_v2_consensus": false,
+    "live_v2_delivery": false
+  },
+  "evidence_boundary": "V1 live receipts are not V2 evidence."
+}

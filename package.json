@@ -1,10 +1,11 @@
 {
   "name": "loophole", "version": "1.0.0", "private": true,
+  "exports": {"./sdk": "./sdk/index.js"},
   "scripts": {
     "dev": "npm --prefix frontend run dev", "build": "npm --prefix frontend run build",
     "test": "python -m pytest -q tests", "typecheck": "npm --prefix frontend run typecheck",
     "cli": "genlayer", "contract:lint": "genvm-lint check contracts/Loophole.py",
-    "preflight": "python scripts/preflight.py"
+    "preflight": "python scripts/preflight.py", "test:sdk": "node --test sdk/test/sdk.test.mjs"
   },
   "devDependencies": {"genlayer": "0.39.1"}
 }

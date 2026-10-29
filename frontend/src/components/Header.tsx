@@ -3,7 +3,7 @@ import Link from 'next/link';import {usePathname} from 'next/navigation';import 
 import {Menu,X,Wallet,ArrowUpRight,TriangleAlert,ChevronDown,Power,CheckCircle2} from 'lucide-react';
 import {useWallet} from './Providers';import {short,READY} from '@/lib/helpers';
 export function Header(){const path=usePathname(),{account,chain,connect,switchChain,disconnect,busy}=useWallet();const [open,setOpen]=useState(false),[err,setErr]=useState('');
- const items=[['/','Explore'],['/create','Create challenge'],['/how-it-works','How it works'],['/profile','My vault']];
+ const items=[['/','Explore'],['/create','Create challenge'],['/v2','Policy repair'],['/how-it-works','How it works'],['/profile','My vault']];
  const action=async()=>{try{setErr('');if(!account)await connect();else if(chain!==61999)await switchChain();else disconnect();}catch(e){setErr((e as Error).message);}};
  return <><header className="site-header"><div className="header-inner"><Link href="/" className="brand" aria-label="Loophole home"><span className="brand-mark"><span className="brand-eye"/><span className="brand-eye"/><span className="brand-smile"/></span><span>loop<span className="brand-alt">hole</span><span className="brand-dot">.</span></span></Link>
  <nav className={`nav-links ${open?'expanded':''}`} aria-label="Main navigation">{items.map(([href,label])=><Link onClick={()=>setOpen(false)} href={href} key={href} className={path===href?'active':''}>{label}</Link>)}</nav>

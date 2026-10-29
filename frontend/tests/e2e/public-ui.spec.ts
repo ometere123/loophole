@@ -120,3 +120,10 @@ test('creation wizard rejects incomplete rulebooks before any wallet submission'
   await expect(page.locator('.wizard-card .notice.danger[role="alert"]')).toContainText(/Publish at least 20 characters of rules/i);
   await expect(page.getByRole('heading', {name: /write the rulebook/i})).toBeVisible();
 });
+
+test('V2 audit surface fails closed until a separately approved address is configured', async ({page}) => {
+  await page.goto('/v2');
+  await expect(page.getByRole('heading', {name: /V2 is ready for a verified deployment/i})).toBeVisible();
+  await expect(page.getByText(/no V2 address is configured/i)).toBeVisible();
+  await expect(page.getByRole('button', {name: /submit repair proposal/i})).toHaveCount(0);
+});
